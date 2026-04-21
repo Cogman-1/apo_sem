@@ -1,0 +1,6 @@
+#build binaries
+*.o
+*.out
+
+#Clion artifacts
+*.xml
