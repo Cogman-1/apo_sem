@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include "mzapo_lib/font_types.h"
 
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 320
@@ -75,27 +76,27 @@ static void handle_input(mzapo_state* s)
             SDL_Keycode k = e.key.keysym.sym;
 
             // clockwise (789)
-            if (k == SDLK_KP_7)
+            if (k == SDLK_s)
                 s->knobs_val[0]++;
-            if (k == SDLK_KP_8)
+            if (k == SDLK_d)
                 s->knobs_val[1]++;
-            if (k == SDLK_KP_9)
+            if (k == SDLK_f)
                 s->knobs_val[2]++;
 
             // counterclockwise (123)
-            if (k == SDLK_KP_1)
+            if (k == SDLK_j)
                 s->knobs_val[0]--;
-            if (k == SDLK_KP_2)
+            if (k == SDLK_k)
                 s->knobs_val[1]--;
-            if (k == SDLK_KP_3)
+            if (k == SDLK_l)
                 s->knobs_val[2]--;
 
             // press (456)
-            if (k == SDLK_KP_4)
+            if (k == SDLK_b)
                 s->knobs_pressed[0] = !s->knobs_pressed[0];
-            if (k == SDLK_KP_5)
+            if (k == SDLK_n)
                 s->knobs_pressed[1] = !s->knobs_pressed[1];
-            if (k == SDLK_KP_6)
+            if (k == SDLK_m)
                 s->knobs_pressed[2] = !s->knobs_pressed[2];
         }
     }
@@ -222,4 +223,27 @@ void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer)
     SDL_UnlockTexture(state->lcd_texture);
 
     render(state);
+}
+
+void buffer_write_text(lcdpixel* buffer, size_t startx, size_t starty, char* text, lcdpixel color)
+{
+    size_t offx = startx;
+    size_t offy = starty;
+
+    for (size_t i = 0; text[i]; i++) {
+        if (text[i] == '\n') {
+            offy += font_rom8x16.height;
+            offx = startx;
+            continue;
+        }
+        for (size_t y = 0; y < font_rom8x16.height; y++) {
+            uint16_t line = font_rom8x16.bits[text[i] * font_rom8x16.height + y];
+            for (size_t x = 0; x < font_rom8x16.maxwidth; x++) {
+                if (line & (1 << (16 - x))) {
+                    buffer[(y + offy) * 480 + x + offx] = color;
+                }
+            }
+        }
+        offx += font_rom8x16.maxwidth;
+    }
 }

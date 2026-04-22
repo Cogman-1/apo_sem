@@ -9,13 +9,13 @@ LDFLAGS += -static
 LDLIBS += -lrt -lpthread
 #LDLIBS += -lm
 
-SOURCES = main.c mzapo_lib/all.c
+SOURCES = main.c start_menu.c mzapo_lib/all.c
 TARGET_EXE = vamp
 
 ifeq ($(MAKECMDGOALS),sdl)
 CC = gcc
 CXX = g++
-SOURCES = main.c sdl.c
+SOURCES = main.c start_menu.c sdl.c
 TARGET_EXE = vamp_sdl
 LDFLAGS :=
 LDLIBS := $(shell sdl2-config --libs) -lm
@@ -78,7 +78,7 @@ ifneq ($(filter %.cpp,$(SOURCES)),)
 endif
 
 clean:
-	rm -f *.o *.a $(OBJECTS) $(TARGET_EXE) connect.gdb depend
+	rm -f *.o *.a $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
 
 format:
 	find . -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} +

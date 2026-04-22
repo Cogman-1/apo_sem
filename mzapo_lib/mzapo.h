@@ -1,6 +1,9 @@
+#ifndef MZAPO_H
+#define MZAPO_H
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
 
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 320
@@ -20,7 +23,7 @@ typedef union ledrgb {
     };
 } ledrgb;
 
-typedef union knobs {
+typedef union {
     uint32_t raw;
     struct {
         unsigned b : 8;
@@ -48,4 +51,6 @@ void ledline_write(mzapo_state* state, uint32_t value);
 void ledrgb_write(mzapo_state* state, int side, ledrgb value);
 knobs knobs_read(mzapo_state* state);
 void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer);
-void buffer_write_text(lcdpixel* buffer, size_t offx, size_t offy, char* text, lcdpixel color);
+void buffer_write_text(lcdpixel* buffer, size_t startx, size_t starty, char* text, lcdpixel color);
+
+#endif
