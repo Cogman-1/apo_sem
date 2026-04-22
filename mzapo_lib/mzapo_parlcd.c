@@ -21,7 +21,7 @@
 #include <time.h>
 
 #include "mzapo_parlcd.h"
-#include "../mzapo_regs.h"
+#include "mzapo_regs.h"
 
 void parlcd_write_cr(unsigned char *parlcd_mem_base, uint16_t data)
 {
