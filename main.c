@@ -5,36 +5,14 @@
 
 #include "mzapo_lib/font_rom8x16.c"
 #include "mzapo_lib/mzapo.h"
-
-void buffer_write_text(lcdpixel* buffer, size_t startx, size_t starty, char* text, lcdpixel color)
-{
-    size_t offx = startx;
-    size_t offy = starty;
-
-    for (size_t i = 0; text[i]; i++) {
-        if (text[i] == '\n') {
-            offy += font_rom8x16.height;
-            offx = startx;
-            continue;
-        }
-        for (size_t y = 0; y < font_rom8x16.height; y++) {
-            uint16_t line = font_rom8x16.bits[text[i] * font_rom8x16.height + y];
-            for (size_t x = 0; x < font_rom8x16.maxwidth; x++) {
-                if (line & (1 << (16 - x))) {
-                    buffer[(y + offy) * 480 + x + offx] = color;
-                }
-            }
-        }
-        offx += font_rom8x16.maxwidth;
-    }
-}
+#include "start_menu.h"
 
 int main(int argc, char* argv[])
 {
     (void)argc;
     (void)argv;
     mzapo_state* state = init_mzapo();
-
+#if 0
     while (1) {
         knobs k = knobs_read(state);
         ledrgb ledrgb_value = {.r = k.r * 255 / 31, .g = k.g * 255 / 63, .b = k.b * 255 / 31};
@@ -63,6 +41,7 @@ int main(int argc, char* argv[])
 
         parlcd_write_screen(state, (lcdpixel*)buffer);
     }
-
+#endif
+    start_menu(state);
     return 0;
 }
