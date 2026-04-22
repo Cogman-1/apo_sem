@@ -12,7 +12,9 @@
 
  *******************************************************************/
 
+#if !defined(_POSIX_C_SOURCE)
 #define _POSIX_C_SOURCE 200112L
+#endif
 
 //#define HX8357_B
 //#define ILI9481
@@ -23,49 +25,48 @@
 #include "mzapo_parlcd.h"
 #include "mzapo_regs.h"
 
-void parlcd_write_cr(unsigned char *parlcd_mem_base, uint16_t data)
+void parlcd_write_cr(unsigned char* parlcd_mem_base, uint16_t data)
 {
-  *(volatile uint16_t*)(parlcd_mem_base + PARLCD_REG_CR_o) = data;
+    *(volatile uint16_t*)(parlcd_mem_base + PARLCD_REG_CR_o) = data;
 }
 
-void parlcd_write_cmd(unsigned char *parlcd_mem_base, uint16_t cmd)
+void parlcd_write_cmd(unsigned char* parlcd_mem_base, uint16_t cmd)
 {
-  *(volatile uint16_t*)(parlcd_mem_base + PARLCD_REG_CMD_o) = cmd;
+    *(volatile uint16_t*)(parlcd_mem_base + PARLCD_REG_CMD_o) = cmd;
 }
 
-void parlcd_write_data(unsigned char *parlcd_mem_base, uint16_t data)
+void parlcd_write_data(unsigned char* parlcd_mem_base, uint16_t data)
 {
-  *(volatile uint16_t*)(parlcd_mem_base + PARLCD_REG_DATA_o) = data;
+    *(volatile uint16_t*)(parlcd_mem_base + PARLCD_REG_DATA_o) = data;
 }
 
-void parlcd_write_data2x(unsigned char *parlcd_mem_base, uint32_t data)
+void parlcd_write_data2x(unsigned char* parlcd_mem_base, uint32_t data)
 {
-  *(volatile uint32_t*)(parlcd_mem_base + PARLCD_REG_DATA_o) = data;
+    *(volatile uint32_t*)(parlcd_mem_base + PARLCD_REG_DATA_o) = data;
 }
 
 void parlcd_delay(int msec)
 {
-  struct timespec wait_delay = {.tv_sec = msec / 1000,
-                                .tv_nsec = (msec % 1000) * 1000 * 1000};
-  clock_nanosleep(CLOCK_MONOTONIC, 0, &wait_delay, NULL);
+    struct timespec wait_delay = {.tv_sec = msec / 1000, .tv_nsec = (msec % 1000) * 1000 * 1000};
+    clock_nanosleep(CLOCK_MONOTONIC, 0, &wait_delay, NULL);
 }
 
-void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
+void parlcd_hx8357_init(unsigned char* parlcd_mem_base)
 {
-  // toggle RST low to reset
-/*
-    digitalWrite(_rst, HIGH);
-    parlcd_delay(50);
-    digitalWrite(_rst, LOW);
-    parlcd_delay(10);
-    digitalWrite(_rst, HIGH);
-    parlcd_delay(10);
-*/
+    // toggle RST low to reset
+    /*
+        digitalWrite(_rst, HIGH);
+        parlcd_delay(50);
+        digitalWrite(_rst, LOW);
+        parlcd_delay(10);
+        digitalWrite(_rst, HIGH);
+        parlcd_delay(10);
+    */
     parlcd_write_cmd(parlcd_mem_base, 0x1);
     parlcd_delay(30);
 
 #if defined(ILI9481)
-// Configure ILI9481 display
+    // Configure ILI9481 display
 
     parlcd_write_cmd(parlcd_mem_base, 0x11);
     parlcd_delay(20);
@@ -108,21 +109,21 @@ void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
     parlcd_write_data(parlcd_mem_base, 0x00);
 
     parlcd_write_cmd(parlcd_mem_base, 0x36);
-    //parlcd_write_data(parlcd_mem_base, 0x0A);
+    // parlcd_write_data(parlcd_mem_base, 0x0A);
     parlcd_write_data(parlcd_mem_base, 0x28);
 
     parlcd_write_cmd(parlcd_mem_base, 0x3A);
     parlcd_write_data(parlcd_mem_base, 0x55);
 
-    //parlcd_write_cmd(parlcd_mem_base, 0x2A);
-    parlcd_write_cmd(parlcd_mem_base,  0x2B);
+    // parlcd_write_cmd(parlcd_mem_base, 0x2A);
+    parlcd_write_cmd(parlcd_mem_base, 0x2B);
     parlcd_write_data(parlcd_mem_base, 0x00);
     parlcd_write_data(parlcd_mem_base, 0x00);
     parlcd_write_data(parlcd_mem_base, 0x01);
     parlcd_write_data(parlcd_mem_base, 0x3F);
 
-    //parlcd_write_cmd(parlcd_mem_base, 0x2B);
-    parlcd_write_cmd(parlcd_mem_base,  0x2A);
+    // parlcd_write_cmd(parlcd_mem_base, 0x2B);
+    parlcd_write_cmd(parlcd_mem_base, 0x2A);
     parlcd_write_data(parlcd_mem_base, 0x00);
     parlcd_write_data(parlcd_mem_base, 0x00);
     parlcd_write_data(parlcd_mem_base, 0x01);
@@ -134,7 +135,7 @@ void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
     parlcd_delay(25);
 
 #elif defined(HX8357_B)
-// Configure HX8357-B display
+    // Configure HX8357-B display
     parlcd_write_cmd(parlcd_mem_base, 0x11);
     parlcd_delay(20);
     parlcd_write_cmd(parlcd_mem_base, 0xD0);
@@ -199,7 +200,7 @@ void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
     parlcd_delay(25);
 
 #else
-// HX8357-C display initialisation
+    // HX8357-C display initialisation
 
     parlcd_write_cmd(parlcd_mem_base, 0xB9); // Enable extension command
     parlcd_write_data(parlcd_mem_base, 0xFF);
@@ -207,27 +208,28 @@ void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
     parlcd_write_data(parlcd_mem_base, 0x57);
     parlcd_delay(50);
 
-    parlcd_write_cmd(parlcd_mem_base, 0xB6); //Set VCOM voltage
-    //parlcd_write_data(parlcd_mem_base, 0x2C);    //0x52 for HSD 3.0"
-    parlcd_write_data(parlcd_mem_base, 0x52);    //0x52 for HSD 3.0"
+    parlcd_write_cmd(parlcd_mem_base, 0xB6); // Set VCOM voltage
+    // parlcd_write_data(parlcd_mem_base, 0x2C);    //0x52 for HSD 3.0"
+    parlcd_write_data(parlcd_mem_base, 0x52); // 0x52 for HSD 3.0"
 
     parlcd_write_cmd(parlcd_mem_base, 0x11); // Sleep off
     parlcd_delay(200);
 
-    parlcd_write_cmd(parlcd_mem_base, 0x35); // Tearing effect on
-    parlcd_write_data(parlcd_mem_base, 0x00);    // Added parameter
+    parlcd_write_cmd(parlcd_mem_base, 0x35);  // Tearing effect on
+    parlcd_write_data(parlcd_mem_base, 0x00); // Added parameter
 
-    parlcd_write_cmd(parlcd_mem_base, 0x3A); // Interface pixel format
-    parlcd_write_data(parlcd_mem_base, 0x55);    // 16 bits per pixel
+    parlcd_write_cmd(parlcd_mem_base, 0x3A);  // Interface pixel format
+    parlcd_write_data(parlcd_mem_base, 0x55); // 16 bits per pixel
 
-    //parlcd_write_cmd(parlcd_mem_base, 0xCC); // Set panel characteristic
-    //parlcd_write_data(parlcd_mem_base, 0x09);    // S960>S1, G1>G480, R-G-B, normally black
+    // parlcd_write_cmd(parlcd_mem_base, 0xCC); // Set panel characteristic
+    // parlcd_write_data(parlcd_mem_base, 0x09);    // S960>S1, G1>G480, R-G-B,
+    // normally black
 
-    //parlcd_write_cmd(parlcd_mem_base, 0xB3); // RGB interface
-    //parlcd_write_data(parlcd_mem_base, 0x43);
-    //parlcd_write_data(parlcd_mem_base, 0x00);
-    //parlcd_write_data(parlcd_mem_base, 0x06);
-    //parlcd_write_data(parlcd_mem_base, 0x06);
+    // parlcd_write_cmd(parlcd_mem_base, 0xB3); // RGB interface
+    // parlcd_write_data(parlcd_mem_base, 0x43);
+    // parlcd_write_data(parlcd_mem_base, 0x00);
+    // parlcd_write_data(parlcd_mem_base, 0x06);
+    // parlcd_write_data(parlcd_mem_base, 0x06);
 
     parlcd_write_cmd(parlcd_mem_base, 0xB1); // Power control
     parlcd_write_data(parlcd_mem_base, 0x00);
@@ -236,7 +238,6 @@ void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
     parlcd_write_data(parlcd_mem_base, 0x0D);
     parlcd_write_data(parlcd_mem_base, 0x83);
     parlcd_write_data(parlcd_mem_base, 0x48);
-
 
     parlcd_write_cmd(parlcd_mem_base, 0xC0); // Does this do anything?
     parlcd_write_data(parlcd_mem_base, 0x24);
@@ -294,11 +295,11 @@ void parlcd_hx8357_init(unsigned char *parlcd_mem_base)
     parlcd_write_data(parlcd_mem_base, 0x01);
 
     parlcd_write_cmd(parlcd_mem_base, 0x36); // MADCTL Memory access control
-    //parlcd_write_data(parlcd_mem_base, 0x48);
+    // parlcd_write_data(parlcd_mem_base, 0x48);
     parlcd_write_data(parlcd_mem_base, 0xE8);
     parlcd_delay(20);
 
-    parlcd_write_cmd(parlcd_mem_base, 0x21); //Display inversion on
+    parlcd_write_cmd(parlcd_mem_base, 0x21); // Display inversion on
     parlcd_delay(20);
 
     parlcd_write_cmd(parlcd_mem_base, 0x29); // Display on

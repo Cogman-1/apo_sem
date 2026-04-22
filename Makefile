@@ -2,17 +2,26 @@ CC = arm-linux-gnueabihf-gcc
 CXX = arm-linux-gnueabihf-g++
 
 CPPFLAGS = -I .
-CFLAGS =-g -std=gnu99 -O1 -Wall
+CFLAGS =-g -std=gnu11 -O1 -Wall -Wextra -Wpedantic
 CXXFLAGS = -g -std=gnu++11 -O1 -Wall
 #LDFLAGS +=
 LDFLAGS += -static
 LDLIBS += -lrt -lpthread
 #LDLIBS += -lm
 
-SOURCES = change_me.c mzapo_phys.c mzapo_parlcd.c serialize_lock.c
-#SOURCES += font_prop14x16.c font_rom8x16.c
-TARGET_EXE = change_me
-#TARGET_IP ?= 192.168.202.127
+SOURCES = main.c mzapo_lib/all.c
+TARGET_EXE = vamp
+
+ifeq ($(MAKECMDGOALS),sdl)
+CC = gcc
+CXX = g++
+SOURCES = main.c sdl.c
+TARGET_EXE = vamp_sdl
+LDFLAGS :=
+LDLIBS := $(shell sdl2-config --libs) -lm
+CPPFLAGS += $(shell sdl2-config --cflags)
+endif
+
 ifeq ($(TARGET_IP),)
 ifneq ($(filter debug run,$(MAKECMDGOALS)),)
 $(warning The target IP address is not set)
@@ -20,6 +29,7 @@ $(warning Run as "TARGET_IP=192.168.202.xxx make run" or modify Makefile)
 TARGET_IP ?= 192.168.202.xxx
 endif
 endif
+
 TARGET_DIR ?= /tmp/$(shell whoami)
 TARGET_USER ?= root
 # for use from Eduroam network use TARGET_IP=localhost and enable next line
@@ -52,7 +62,7 @@ all: $(TARGET_EXE)
 $(TARGET_EXE): $(OBJECTS)
 	$(LINKER) $(LDFLAGS) -L. $^ -o $@ $(LDLIBS)
 
-.PHONY : dep all run copy-executable debug
+.PHONY : dep all run copy-executable debug format clean
 
 dep: depend
 
@@ -70,6 +80,9 @@ endif
 clean:
 	rm -f *.o *.a $(OBJECTS) $(TARGET_EXE) connect.gdb depend
 
+format:
+	find . -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} +
+
 copy-executable: $(TARGET_EXE)
 	ssh $(SSH_OPTIONS) -t $(TARGET_USER)@$(TARGET_IP) killall gdbserver 1>/dev/null 2>/dev/null || true
 	ssh $(SSH_OPTIONS) $(TARGET_USER)@$(TARGET_IP) mkdir -p $(TARGET_DIR)
@@ -77,6 +90,9 @@ copy-executable: $(TARGET_EXE)
 
 run: copy-executable $(TARGET_EXE)
 	ssh $(SSH_OPTIONS) -t $(TARGET_USER)@$(TARGET_IP) $(TARGET_DIR)/$(TARGET_EXE)
+
+sdl: $(TARGET_EXE)
+	./$(TARGET_EXE)
 
 ifneq ($(filter -o ProxyJump=,$(SSH_OPTIONS))$(SSH_GDB_TUNNEL_REQUIRED),)
 SSH_GDB_PORT_FORWARD=-L 12345:127.0.0.1:12345

@@ -15,4 +15,4 @@ void serialize_unlock(void);
 } /* extern "C"*/
 #endif
 
-#endif  /*SERIALIZE_LOCK_H*/
+#endif /*SERIALIZE_LOCK_H*/
