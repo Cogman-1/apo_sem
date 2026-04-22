@@ -4,3 +4,8 @@
 
 #Clion artifacts
 *.xml
+
+.idea
+depend
+vamp
+connect.gdb
