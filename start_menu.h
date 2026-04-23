@@ -5,6 +5,4 @@
 
 int start_menu(mzapo_state* state);
 
-#endif //APO_START_MENU_H
-
-
+#endif // APO_START_MENU_H

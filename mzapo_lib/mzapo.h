@@ -2,8 +2,8 @@
 #define MZAPO_H
 
 #include <stdbool.h>
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 320

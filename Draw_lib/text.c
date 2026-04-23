@@ -1,33 +1,37 @@
 #include "text.h"
 #include <stddef.h>
 
-//helper functions
-static const font_descriptor_t* get_font_descriptor(int font) {
+// helper functions
+static const font_descriptor_t* get_font_descriptor(int font)
+{
     switch (font) {
-        case FONT_ROM8x16:
-            return &font_rom8x16;
-        case FONT_PROP14x16:
-            return &font_winFreeSystem14x16;
-        default:
-            return NULL;
+    case FONT_ROM8x16:
+        return &font_rom8x16;
+    case FONT_PROP14x16:
+        return &font_winFreeSystem14x16;
+    default:
+        return NULL;
     }
 }
 
-static inline unsigned int get_char_width(const font_descriptor_t* font, int glyph_index) {
+static inline unsigned int get_char_width(const font_descriptor_t* font, int glyph_index)
+{
     if (font->width) {
         return font->width[glyph_index];
     }
     return font->maxwidth;
 }
 
-static inline unsigned int get_char_offset(const font_descriptor_t* font, int glyph_index) {
+static inline unsigned int get_char_offset(const font_descriptor_t* font, int glyph_index)
+{
     if (font->offset) {
         return font->offset[glyph_index];
     }
-    return glyph_index*font->height;
+    return glyph_index * font->height;
 }
 
-static void draw_char(lcdpixel* fb, int dst_x, int dst_y, char ch, lcdpixel color, const font_descriptor_t* font) {
+static void draw_char(lcdpixel* fb, int dst_x, int dst_y, char ch, lcdpixel color, const font_descriptor_t* font)
+{
     if ((unsigned int)ch < font->firstchar || (unsigned int)ch > font->firstchar + font->size) {
         ch = font->defaultchar;
     }
@@ -46,9 +50,8 @@ static void draw_char(lcdpixel* fb, int dst_x, int dst_y, char ch, lcdpixel colo
             }
 
             if (line & (1 << (16 - x))) {
-                fb[py*SCREEN_WIDTH + px].raw = color.raw;
+                fb[py * SCREEN_WIDTH + px].raw = color.raw;
             }
-
         }
     }
 }

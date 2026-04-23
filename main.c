@@ -3,9 +3,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "Draw_lib/draw.h"
 #include "mzapo_lib/mzapo.h"
 #include "start_menu.h"
-#include "Draw_lib/draw.h"
 
 int main(int argc, char* argv[])
 {

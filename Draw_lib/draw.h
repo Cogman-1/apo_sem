@@ -7,9 +7,7 @@ typedef struct {
     uint16_t x, y;
 } Vertex_2D;
 
-
-
-//Basic 2D shapes
+// Basic 2D shapes
 void draw_rectangle(lcdpixel* fb, Vertex_2D topLeft, Vertex_2D bottomRight, lcdpixel color);
 void draw_line(lcdpixel* fb, Vertex_2D start, Vertex_2D end, lcdpixel color);
 void draw_ellipse(lcdpixel* fb, Vertex_2D center, int a, int b, lcdpixel color);
