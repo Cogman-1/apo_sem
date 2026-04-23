@@ -8,4 +8,5 @@
 .idea
 depend
 vamp
+vamp_sdl
 connect.gdb
