@@ -78,7 +78,7 @@ ifneq ($(filter %.cpp,$(SOURCES)),)
 endif
 
 clean:
-	rm -f *.o *.a $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
+	rm -rf *.o *.a $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
 
 format:
 	find . -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} +

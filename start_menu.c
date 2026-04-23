@@ -53,7 +53,7 @@ void draw_menu(int highlighted, mzapo_state* state) {
     for (int i = 0; i < N_OPTIONS; i++) {
         t_color.raw = i==highlighted ? HIGH_COLOR : TEXT_COLOR;
         start.y = 100 + i*25;
-        draw_text(fb, start, labels[i], t_color);
+        draw_text(fb, start, labels[i], t_color, 0);
     }
     parlcd_write_screen(state, fb);
 }
