@@ -76,26 +76,3 @@ void draw_circle(lcdpixel* fb, Vertex_2D center, int radius, lcdpixel color) {
         }
     }
 }
-
-void draw_text(lcdpixel* buffer, Vertex_2D start, char* text, lcdpixel color)
-{
-    size_t offx = start.x;
-    size_t offy = start.y;
-
-    for (size_t i = 0; text[i]; i++) {
-        if (text[i] == '\n') {
-            offy += font_rom8x16.height;
-            offx = start.x;
-            continue;
-        }
-        for (size_t y = 0; y < font_rom8x16.height; y++) {
-            uint16_t line = font_rom8x16.bits[text[i] * font_rom8x16.height + y];
-            for (size_t x = 0; x < font_rom8x16.maxwidth; x++) {
-                if (line & (1 << (16 - x))) {
-                    buffer[(y + offy) * 480 + x + offx] = color;
-                }
-            }
-        }
-        offx += font_rom8x16.maxwidth;
-    }
-}
