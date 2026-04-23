@@ -9,13 +9,13 @@ LDFLAGS += -static
 LDLIBS += -lrt -lpthread
 #LDLIBS += -lm
 
-SOURCES = main.c start_menu.c mzapo_lib/all.c Draw_lib/all.c
+SOURCES = main.c start_menu.c mzapo_lib/all.c Draw_lib/all.c levels/all.c
 TARGET_EXE = vamp
 
 ifeq ($(MAKECMDGOALS),sdl)
 CC = gcc
 CXX = g++
-SOURCES = main.c start_menu.c sdl.c Draw_lib/all.c
+SOURCES = main.c start_menu.c sdl.c Draw_lib/all.c levels/all.c
 TARGET_EXE = vamp_sdl
 LDFLAGS :=
 LDLIBS := $(shell sdl2-config --libs) -lm

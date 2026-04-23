@@ -3,7 +3,7 @@
 #include "Draw_lib/text.h"
 #include "mzapo_lib/mzapo.h"
 // Menu Options
-enum { SINGLE_PLAYER = 0, MULTI_PLAYER, SETTINGS, CONTROLS, EXIT_GAME };
+
 // text for options
 #define N_OPTIONS 5
 char* labels[N_OPTIONS] = {"Single Player", "Multi Player", "Settings", "Controls", "Exit Game"};
@@ -48,17 +48,18 @@ int start_menu(mzapo_state* state)
 void draw_menu(int highlighted, mzapo_state* state)
 {
     lcdpixel fb[SCREEN_HEIGHT * SCREEN_WIDTH];
-    for (int y = 0; y < SCREEN_HEIGHT; y++) {
-        for (int x = 0; x < SCREEN_WIDTH; x++) {
-            fb[y * SCREEN_WIDTH + x].raw = BCKG_COLOR;
-        }
-    }
+    clear_display(fb);
     lcdpixel t_color;
     Vertex_2D start = {20, 0};
     for (int i = 0; i < N_OPTIONS; i++) {
         t_color.raw = i == highlighted ? HIGH_COLOR : TEXT_COLOR;
         start.y = 100 + i * 25;
-        draw_text(fb, start, labels[i], t_color, 0);
+        draw_text(fb, start, labels[i], t_color, FONT_ROM8x16);
     }
+    start.x = 20;
+    start.y = 260;
+    t_color.raw = TEXT_COLOR;
+    draw_text(fb, start, "Use the red knob to control the menu!\nPress to select highlighted option", t_color,
+              FONT_ROM8x16);
     parlcd_write_screen(state, fb);
 }

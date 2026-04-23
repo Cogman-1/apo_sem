@@ -56,7 +56,7 @@ static void draw_char(lcdpixel* fb, int dst_x, int dst_y, char ch, lcdpixel colo
     }
 }
 
-void draw_text(lcdpixel* fb, Vertex_2D start, char* text, lcdpixel color, FontId font)
+void draw_text(lcdpixel* fb, Vertex_2D start, char* text, lcdpixel color, int font)
 {
     const font_descriptor_t* font_d = get_font_descriptor(font);
 

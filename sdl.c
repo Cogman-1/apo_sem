@@ -98,6 +98,15 @@ static void handle_input(mzapo_state* s)
             if (k == SDLK_m)
                 s->knobs_pressed[2] = !s->knobs_pressed[2];
         }
+        if (e.type == SDL_KEYUP) {
+            SDL_Keycode k = e.key.keysym.sym;
+            if (k == SDLK_b)
+                s->knobs_pressed[0] = !s->knobs_pressed[0];
+            if (k == SDLK_n)
+                s->knobs_pressed[1] = !s->knobs_pressed[1];
+            if (k == SDLK_m)
+                s->knobs_pressed[2] = !s->knobs_pressed[2];
+        }
     }
 }
 
@@ -222,4 +231,8 @@ void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer)
     SDL_UnlockTexture(state->lcd_texture);
 
     render(state);
+}
+
+void serialize_unlock(void)
+{
 }

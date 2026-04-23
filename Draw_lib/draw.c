@@ -83,3 +83,12 @@ void draw_circle(lcdpixel* fb, Vertex_2D center, int radius, lcdpixel color)
         }
     }
 }
+
+void clear_display(lcdpixel* fb)
+{
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+            fb[IDX(x, y)].raw = 0x0000;
+        }
+    }
+}
