@@ -1,5 +1,7 @@
 #include "draw.h"
 
+#include <stdlib.h>
+
 #define IDX(x, y) ((y) * SCREEN_WIDTH + (x))
 
 void draw_rectangle(lcdpixel* fb, Vertex_2D topLeft, Vertex_2D bottomRight, lcdpixel color) {
@@ -17,11 +19,11 @@ void draw_line(lcdpixel* fb, Vertex_2D start, Vertex_2D end, lcdpixel color) {
     int x1 = (int) end.x;
     int y1 = (int) end.y;
 
-    int dx = x1 - x0;
-    int sx = (x1 < x0) ? 1 : -1;
+    int dx = abs(x1 - x0);
+    int sx = (x0 < x1) ? 1 : -1;
 
-    int dy = y1 - y0;
-    int sy = (y1 < y0) ? 1 : -1;
+    int dy = -abs(y1 - y0);
+    int sy = (y0 < y1) ? 1 : -1;
 
     int err = dx + dy;
     int e2;
@@ -47,22 +49,26 @@ void draw_line(lcdpixel* fb, Vertex_2D start, Vertex_2D end, lcdpixel color) {
 void draw_ellipse(lcdpixel* fb, Vertex_2D center, int a, int b, lcdpixel color) {
     for (int y = center.y-b; y < center.y+b; y++) {
         for (int x = center.x - a; x < center.x + a; x++) {
-            if (x < SCREEN_WIDTH && y < SCREEN_HEIGHT) {
-                float ellipse_eq = ((float)x*x)/(a*a) + ((float)y*y)/(b*b);
+            if (x < SCREEN_WIDTH && y < SCREEN_HEIGHT && x>=0 && y>=0) {
+                float dx = x-center.x;
+                float dy = y-center.y;
+                float ellipse_eq = (dx*dx)/(a*a) + (dy*dy)/(b*b);
                 if (ellipse_eq <= 1.0f) {
                     fb[IDX(x, y)].raw = color.raw;
                 }
             }
         }
-    };
+    }
 }
 
 void draw_circle(lcdpixel* fb, Vertex_2D center, int radius, lcdpixel color) {
     int radsqr = radius*radius;
     for (int y = center.y - radius; y < center.y + radius; y++) {
-        for (int x = center.x - radius; y < center.x + radius; x++) {
-            int circ = x*x + y*y;
-            if (x < SCREEN_WIDTH && y < SCREEN_HEIGHT){
+        for (int x = center.x - radius; x < center.x + radius; x++) {
+            int dx = x-center.x;
+            int dy = y-center.y;
+            int circ = dx*dx + dy*dy;
+            if (x < SCREEN_WIDTH && y < SCREEN_HEIGHT && x>=0 && y>=0){
                 if (circ<radsqr) {
                     fb[IDX(x,y)].raw = color.raw;
                 }
