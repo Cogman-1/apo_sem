@@ -1,5 +1,6 @@
 #include "start_menu.h"
 #include "mzapo_lib/mzapo.h"
+#include "Draw_lib/draw.h"
 //Menu Options
 enum {
     SINGLE_PLAYER=0, MULTI_PLAYER, SETTINGS, CONTROLS, EXIT_GAME
@@ -48,9 +49,11 @@ void draw_menu(int highlighted, mzapo_state* state) {
         }
     }
     lcdpixel t_color;
+    Vertex_2D start = {20, 0};
     for (int i = 0; i < N_OPTIONS; i++) {
         t_color.raw = i==highlighted ? HIGH_COLOR : TEXT_COLOR;
-        buffer_write_text(fb, 20, (100+i*25), labels[i], t_color);
+        start.y = 100 + i*25;
+        draw_text(fb, start, labels[i], t_color);
     }
     parlcd_write_screen(state, fb);
 }

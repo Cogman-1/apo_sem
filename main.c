@@ -3,9 +3,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "mzapo_lib/font_rom8x16.c"
 #include "mzapo_lib/mzapo.h"
 #include "start_menu.h"
+#include "Draw_lib/draw.h"
 
 int main(int argc, char* argv[])
 {

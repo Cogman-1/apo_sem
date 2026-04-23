@@ -3,7 +3,6 @@
 #include <stdlib.h>
 
 #include "mzapo.h"
-#include "font_types.h"
 #include "mzapo_parlcd.h"
 #include "mzapo_phys.h"
 #include "mzapo_regs.h"
@@ -57,28 +56,5 @@ void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer)
     parlcd_write_cmd((unsigned char*)state->parlcd_reg_base, 0x2c);
     for (int i = 0; i < 480 * 320; i++) {
         parlcd_write_data((unsigned char*)state->parlcd_reg_base, buffer[i].raw);
-    }
-}
-
-void buffer_write_text(lcdpixel* buffer, size_t startx, size_t starty, char* text, lcdpixel color)
-{
-    size_t offx = startx;
-    size_t offy = starty;
-
-    for (size_t i = 0; text[i]; i++) {
-        if (text[i] == '\n') {
-            offy += font_rom8x16.height;
-            offx = startx;
-            continue;
-        }
-        for (size_t y = 0; y < font_rom8x16.height; y++) {
-            uint16_t line = font_rom8x16.bits[text[i] * font_rom8x16.height + y];
-            for (size_t x = 0; x < font_rom8x16.maxwidth; x++) {
-                if (line & (1 << (16 - x))) {
-                    buffer[(y + offy) * 480 + x + offx] = color;
-                }
-            }
-        }
-        offx += font_rom8x16.maxwidth;
     }
 }
