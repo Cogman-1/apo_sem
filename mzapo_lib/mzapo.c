@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,6 +50,22 @@ knobs knobs_read(mzapo_state* state)
 {
     knobs k = {.raw = *(volatile uint32_t*)(state->spiled_reg_base + SPILED_REG_KNOBS_8BIT_o)};
     return k;
+}
+
+void calculate_direction(knobs inputs, float* x, float* y)
+{
+    static float angle = 0.0f;
+    static uint8_t prev = 0;
+    int delta = inputs.g - prev;
+    if (delta > 127)
+        delta -= 256;
+    if (delta < -127)
+        delta += 256;
+
+    angle += (delta / 80.0f) * 2.0 * M_PI;
+    prev = inputs.g;
+    *x = cosf(angle);
+    *y = sinf(angle);
 }
 
 void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer)

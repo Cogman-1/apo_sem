@@ -1,4 +1,7 @@
 #define _POSIX_C_SOURCE 200112L
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "levels/levels.h"
 #include "mzapo_lib/mzapo.h"
@@ -15,7 +18,8 @@ int main(int argc, char* argv[])
         int selected = start_menu(state);
         switch (selected) {
         case SINGLE_PLAYER:
-            single_player();
+            single_player(state);
+
             break;
         case SETTINGS:
             settings();
@@ -33,7 +37,6 @@ int main(int argc, char* argv[])
             continue;
         }
     }
-
     lcdpixel fb[SCREEN_WIDTH * SCREEN_HEIGHT];
     clear_display(fb);
     parlcd_write_screen(state, fb);

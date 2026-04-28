@@ -50,6 +50,7 @@ uint32_t ledline_read(mzapo_state* state);
 void ledline_write(mzapo_state* state, uint32_t value);
 void ledrgb_write(mzapo_state* state, int side, ledrgb value);
 knobs knobs_read(mzapo_state* state);
+void calculate_direction(knobs inputs, float* x, float* y);
 void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer);
 void buffer_write_text(lcdpixel* buffer, size_t startx, size_t starty, char* text, lcdpixel color);
 

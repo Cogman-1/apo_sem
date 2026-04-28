@@ -205,6 +205,7 @@ void ledrgb_write(mzapo_state* state, int side, ledrgb value)
 
 knobs knobs_read(mzapo_state* state)
 {
+    handle_input(state);
     knobs k = {0};
 
     k.r = state->knobs_val[0];
@@ -235,4 +236,20 @@ void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer)
 
 void serialize_unlock(void)
 {
+}
+
+void calculate_direction(knobs inputs, float* x, float* y)
+{
+    static float angle = 0.0f;
+    static uint8_t prev = 0;
+    int delta = inputs.g - prev;
+    if (delta > 127)
+        delta -= 256;
+    if (delta < -127)
+        delta += 256;
+
+    angle += (delta / 80.0f) * 2.0 * M_PI;
+    prev = inputs.g;
+    *x = cosf(angle);
+    *y = sinf(angle);
 }

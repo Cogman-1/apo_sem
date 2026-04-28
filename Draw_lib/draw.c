@@ -67,7 +67,7 @@ void draw_ellipse(lcdpixel* fb, Vertex_2D center, int a, int b, lcdpixel color)
     }
 }
 
-void draw_circle(lcdpixel* fb, Vertex_2D center, int radius, lcdpixel color)
+void draw_circle(lcdpixel* fb, Vertex_2D center, float radius, lcdpixel color)
 {
     int radsqr = radius * radius;
     for (int y = center.y - radius; y < center.y + radius; y++) {

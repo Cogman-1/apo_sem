@@ -1,0 +1,37 @@
+#ifndef APO_SEM_CONST_H
+#define APO_SEM_CONST_H
+
+// general constants
+#define WORLD_WIDTH 1600
+#define WORLD_HEIGHT 1200
+
+// projectile constants
+#define MAX_PROJECTILE_COUNT 1
+#define PROJECTILE_COLOR 0xFFE0
+#define PROJECTILE_SPEED 20
+#define PROJECTILE_WIDTH 4
+#define PROJECTILE_HEIGHT 10
+
+// player constants
+#define PLAYER_COLOR 0x07E0
+#define PLAYER_WIDTH 16
+#define PLAYER_HEIGHT 32
+#define PLAYER_START_MAX_HEALTH 100
+#define PLAYER_START_DAMAGE 10
+#define PLAYER_START_FIRE_COOLDOWN 0.5f
+#define PLAYER_MAX_SPEED 7
+#define PLAYER_ACCELERATION_MOD 0.20f
+
+// enemy constants
+#define MAX_ENEMY_COUNT 50
+#define ENEMY_COLOR 0xF800
+#define ENEMY_SPEED 6
+#define ENEMY_SPAWN_COOL 15.0f
+#define ENEMY_SPAWN_HEALTH 100
+#define ENEMY_WIDTH 12
+#define ENEMY_HEIGHT 24
+
+// camera constants
+#define CAMERA_CONVERGENCE_RATE 2
+
+#endif // APO_SEM_CONST_H

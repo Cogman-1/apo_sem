@@ -13,7 +13,7 @@ char* labels[N_OPTIONS] = {"Single Player", "Multi Player", "Settings", "Control
 #define TEXT_COLOR 0XFFFF
 #define HIGH_COLOR 0xF800
 
-void draw_menu(int highlighted, mzapo_state* state);
+static void draw_menu(int highlighted, mzapo_state* state);
 
 int start_menu(mzapo_state* state)
 {
@@ -45,7 +45,7 @@ int start_menu(mzapo_state* state)
     }
 }
 
-void draw_menu(int highlighted, mzapo_state* state)
+static void draw_menu(int highlighted, mzapo_state* state)
 {
     lcdpixel fb[SCREEN_HEIGHT * SCREEN_WIDTH];
     clear_display(fb);

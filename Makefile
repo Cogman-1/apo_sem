@@ -7,7 +7,7 @@ CXXFLAGS = -g -std=gnu++11 -O1 -Wall
 #LDFLAGS +=
 LDFLAGS += -static
 LDLIBS += -lrt -lpthread
-#LDLIBS += -lm
+LDLIBS += -lm
 
 SOURCES = main.c start_menu.c mzapo_lib/all.c Draw_lib/all.c levels/all.c
 TARGET_EXE = vamp

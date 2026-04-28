@@ -4,6 +4,6 @@
 #include "controls.h"
 #include "multi_player.h"
 #include "settings.h"
-#include "single_player.h"
+#include "single_player/single_player.h"
 
 #endif // APO_SEM_LEVELS_H
