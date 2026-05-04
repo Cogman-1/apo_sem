@@ -60,6 +60,6 @@ static void draw_menu(int highlighted, mzapo_state* state)
     start.y = 260;
     t_color.raw = TEXT_COLOR;
     draw_text(fb, start, "Use the red knob to control the menu!\nPress to select highlighted option", t_color,
-              FONT_ROM8x16);
+              FONT_PROP14x16);
     parlcd_write_screen(state, fb);
 }

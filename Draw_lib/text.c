@@ -1,6 +1,8 @@
 #include "text.h"
 #include <stddef.h>
 
+#define CHAR_SPACING 1
+
 // helper functions
 static const font_descriptor_t* get_font_descriptor(int font)
 {
@@ -49,7 +51,7 @@ static void draw_char(lcdpixel* fb, int dst_x, int dst_y, char ch, lcdpixel colo
                 continue;
             }
 
-            if (line & (1 << (16 - x))) {
+            if (line & (1u << (15 - x))) {
                 fb[py * SCREEN_WIDTH + px].raw = color.raw;
             }
         }
@@ -70,6 +72,8 @@ void draw_text(lcdpixel* fb, Vertex_2D start, char* text, lcdpixel color, int fo
             continue;
         }
         draw_char(fb, offx, offy, text[i], color, font_d);
-        offx += get_char_width(font_d, text[i]);
+        int glyph_index = text[i] - font_d->firstchar;
+        offx += get_char_width(font_d, glyph_index);
+        if (font == FONT_PROP14x16) offx += CHAR_SPACING;
     }
 }
