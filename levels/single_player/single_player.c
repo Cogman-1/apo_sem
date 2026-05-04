@@ -163,14 +163,6 @@ void single_player(mzapo_state* hw_state)
                     take_damage(&game_state.player);
             }
         }
-        // check for collisions eneme vs. player
-        for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
-            if (game_state.enemies[i].active) {
-                if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
-                                  game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT))
-                    take_damage(&game_state.player);
-            }
-        }
         // 6. draw frame
         clear_display(fb);
         // draw player
