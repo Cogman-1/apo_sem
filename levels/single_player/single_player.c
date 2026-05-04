@@ -94,8 +94,8 @@ void single_player(mzapo_state* hw_state)
     int exit = 0;
     while (!exit) {
         // 0. get dt
-        uint64_t dt_musec = get_dt();
-        float dt = dt_musec / 1000.0f;
+        uint64_t dt_msec = get_dt();
+        float dt = dt_msec / 1000.0f;
         // 1. read inputs
         knobs k = knobs_read(hw_state);
         // check for a pause request
@@ -113,15 +113,15 @@ void single_player(mzapo_state* hw_state)
         // spawn new projectile if the player is shooting
         game_state.shoot_cooldown_timer += dt;
         if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown &&
-            game_state.projectile_count <= MAX_PROJECTILE_COUNT) {
+            game_state.projectile_count <= MAX_PROJECTILE_COUNT && game_state.enemy_count > 0) {
             spawn_projectile(game_state.projectiles, game_state.enemies, &game_state.player,
                              &game_state.projectile_count);
-            game_state.shoot_cooldown_timer = 0;
+            game_state.shoot_cooldown_timer -= game_state.player.fireCooldown;
         }
         // update all the projectiles
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
             if (game_state.projectiles[i].active) {
-                update_projectile(&game_state.projectiles[i], dt);
+                update_projectile(&game_state.projectiles[i], &game_state.cam, &game_state.projectile_count, dt);
             }
         }
         // check for collisions projectile vs enemy
@@ -154,7 +154,7 @@ void single_player(mzapo_state* hw_state)
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active)
-                update_enemy(&game_state.enemies[i], &game_state.player, dt);
+                update_enemy(&game_state.enemies[i], &game_state.player,&game_state.enemy_count, dt);
         }
         // check for collisions eneme vs. player
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {

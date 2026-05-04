@@ -6,7 +6,7 @@
 #define WORLD_HEIGHT 1200
 
 // projectile constants
-#define MAX_PROJECTILE_COUNT 1
+#define MAX_PROJECTILE_COUNT 50
 #define PROJECTILE_COLOR 0xFFE0
 #define PROJECTILE_SPEED 20
 #define PROJECTILE_WIDTH 4
@@ -21,6 +21,7 @@
 #define PLAYER_START_FIRE_COOLDOWN 0.5f
 #define PLAYER_MAX_SPEED 7
 #define PLAYER_ACCELERATION_MOD 0.20f
+#define PLAYER_SCORE_GAIN 10
 
 // enemy constants
 #define MAX_ENEMY_COUNT 50

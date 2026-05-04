@@ -21,13 +21,17 @@ static int get_closest_enemy(Enemy* enemies, Player* player, float* len)
     return idx;
 }
 
-void update_projectile(Projectile* projectile, float dt)
+void update_projectile(Projectile* projectile, Camera* camera, int* projectile_count, float dt)
 {
     projectile->x += projectile->vx * dt;
     projectile->y += projectile->vy * dt;
     // despawn if it is outside the world border
-    if (projectile->x >= WORLD_WIDTH || projectile->x <= 0 || projectile->y >= WORLD_HEIGHT || projectile->y <= 0)
+    if (projectile->x >= camera->x + SCREEN_WIDTH || projectile->x <= camera->x ||
+        projectile->y >= camera->y + SCREEN_HEIGHT || projectile->y <= camera->y) {
         projectile->active = 0;
+        (*projectile_count)--;
+    }
+
 }
 
 void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count)

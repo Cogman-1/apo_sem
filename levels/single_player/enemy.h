@@ -12,7 +12,7 @@ typedef struct {
     short health;
 } Enemy;
 
-void update_enemy(Enemy* enemy, Player* player, float dt);
+void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt);
 
 void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count);
 #endif // APO_SEM_ENEMY_H

@@ -4,8 +4,15 @@
 
 enum { EDGE_TOP, EDGE_LEFT, EDGE_BOTTOM, EDGE_RIGHT };
 
-void update_enemy(Enemy* enemy, Player* player, float dt)
+void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
 {
+    // death
+    if (enemy->health <= 0) {
+        enemy->active = 0;
+        player->playerScore += PLAYER_SCORE_GAIN;
+        (*enemy_count)--;
+    }
+    // physics update
     float dx = player->x - enemy->x;
     float dy = player->y - enemy->y;
     float length = sqrt(dx * dx + dy * dy);

@@ -12,7 +12,7 @@ typedef struct {
     int damage;
 } Projectile;
 
-void update_projectile(Projectile* projectile, float dt);
+void update_projectile(Projectile* projectile, Camera* camera, int* projectile_count, float dt);
 
 void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count);
 
