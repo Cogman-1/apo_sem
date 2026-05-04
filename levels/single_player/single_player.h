@@ -12,6 +12,7 @@
 #include "pause.h"
 #include "player.h"
 #include "projectile.h"
+#include "sp_UI.h"
 
 void single_player(mzapo_state* game_state);
 
