@@ -79,7 +79,6 @@ static void setup(GameState* state, uint32_t seed)
     state->projectile_count = 0;
     // initialize cooldown timers
     state->enemy_spawn_timer = 0;
-    state->shoot_cooldown_timer = 0;
 }
 
 // Singleplayer main function
@@ -93,8 +92,8 @@ void single_player(mzapo_state* hw_state)
     int exit = 0;
     while (!exit) {
         // 0. get dt
-        uint64_t dt_msec = get_dt();
-        float dt = dt_msec / 1000.0f;
+        uint64_t dt_musec = get_dt();
+        float dt = dt_musec / 1000.0f;
         // 1. read inputs
         knobs k = knobs_read(hw_state);
         // check for a pause request
