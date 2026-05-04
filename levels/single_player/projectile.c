@@ -31,6 +31,7 @@ void update_projectile(Projectile* projectile, Camera* camera, int* projectile_c
         projectile->active = 0;
         (*projectile_count)--;
     }
+
 }
 
 void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count)
