@@ -80,6 +80,7 @@ static void setup(GameState* state, uint32_t seed)
     state->projectile_count = 0;
     // initialize cooldown timers
     state->enemy_spawn_timer = 0;
+    state->shoot_cooldown_timer = 0;
 }
 
 // Singleplayer main function
@@ -111,7 +112,8 @@ void single_player(mzapo_state* hw_state)
         // 4. Update projectiles + check for collisions projectile vs enemies
         // spawn new projectile if the player is shooting
         game_state.shoot_cooldown_timer += dt;
-        if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown && game_state.enemy_count > 0) {
+        if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown &&
+            game_state.projectile_count <= MAX_PROJECTILE_COUNT) {
             spawn_projectile(game_state.projectiles, game_state.enemies, &game_state.player,
                              &game_state.projectile_count);
             game_state.shoot_cooldown_timer = 0;
@@ -122,7 +124,7 @@ void single_player(mzapo_state* hw_state)
                 update_projectile(&game_state.projectiles[i], dt);
             }
         }
-        // check for collisions
+        // check for collisions projectile vs enemy
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
             if (game_state.projectiles[i].active) {
                 float ax = game_state.projectiles[i].x;
@@ -144,9 +146,9 @@ void single_player(mzapo_state* hw_state)
         }
         // 5. spawn new enemies + update enemies + check for collisions enemy vs player
         game_state.enemy_spawn_timer += dt;
-        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count < MAX_ENEMY_COUNT) {
+        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count <= MAX_ENEMY_COUNT) {
             spawn_enemy(game_state.enemies, &game_state.cam, &game_state.enemy_count);
-            game_state.enemy_spawn_timer = 0;
+            game_state.enemy_spawn_timer -= ENEMY_SPAWN_COOL;
         }
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active)
