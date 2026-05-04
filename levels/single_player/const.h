@@ -30,6 +30,7 @@
 #define ENEMY_SPAWN_HEALTH 100
 #define ENEMY_WIDTH 12
 #define ENEMY_HEIGHT 24
+#define ENEMY_DAMAGE 10
 
 // camera constants
 #define CAMERA_CONVERGENCE_RATE 2

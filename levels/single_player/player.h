@@ -17,5 +17,6 @@ typedef struct {
 } Player;
 
 void update_player(Player* player, knobs inputs, float dt_msec);
+void take_damage(Player* player);
 
 #endif // APO_SEM_PLAYER_H

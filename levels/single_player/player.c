@@ -31,3 +31,8 @@ void update_player(Player* player, knobs inputs, float dt_msec)
     player->x = new_x;
     player->y = new_y;
 }
+
+void take_damage(Player* player)
+{
+    player->health -= ENEMY_DAMAGE;
+}

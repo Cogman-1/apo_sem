@@ -145,14 +145,24 @@ void single_player(mzapo_state* hw_state)
             }
         }
         // 5. spawn new enemies + update enemies + check for collisions enemy vs player
+        // spawn new enemies
         game_state.enemy_spawn_timer += dt;
         if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count <= MAX_ENEMY_COUNT) {
             spawn_enemy(game_state.enemies, &game_state.cam, &game_state.enemy_count);
             game_state.enemy_spawn_timer -= ENEMY_SPAWN_COOL;
         }
+        // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active)
                 update_enemy(&game_state.enemies[i], &game_state.player, dt);
+        }
+        // check for collisions eneme vs. player
+        for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
+            if (game_state.enemies[i].active) {
+                if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
+                                  game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT))
+                    take_damage(&game_state.player);
+            }
         }
         // 6. draw frame
         clear_display(fb);
