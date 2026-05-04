@@ -1,7 +1,3 @@
-//
-// Created by cogman on 4/24/26.
-//
-
 #ifndef APO_SEM_PAUSE_H
 #define APO_SEM_PAUSE_H
 #include "../../Draw_lib/draw.h"

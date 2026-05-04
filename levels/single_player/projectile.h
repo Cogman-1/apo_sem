@@ -1,10 +1,10 @@
 #ifndef APO_SEM_PROJECTILE_H
 #define APO_SEM_PROJECTILE_H
 
-#include "../../mzapo_lib/mzapo.h"
 #include "const.h"
 #include "enemy.h"
 #include "player.h"
+
 typedef struct {
     char active;
     float x, y;
