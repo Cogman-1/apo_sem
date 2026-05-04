@@ -116,7 +116,7 @@ void single_player(mzapo_state* hw_state)
             game_state.projectile_count <= MAX_PROJECTILE_COUNT && game_state.enemy_count > 0) {
             spawn_projectile(game_state.projectiles, game_state.enemies, &game_state.player,
                              &game_state.projectile_count);
-            game_state.shoot_cooldown_timer -= game_state.player.fireCooldown;
+            game_state.shoot_cooldown_timer = 0.0f;
         }
         // update all the projectiles
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
@@ -154,9 +154,9 @@ void single_player(mzapo_state* hw_state)
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active)
-                update_enemy(&game_state.enemies[i], &game_state.player,&game_state.enemy_count, dt);
+                update_enemy(&game_state.enemies[i], &game_state.player, &game_state.enemy_count, dt);
         }
-        // check for collisions eneme vs. player
+        // check for collisions enemy vs. player
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {
                 if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
