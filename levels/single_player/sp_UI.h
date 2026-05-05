@@ -1,12 +1,12 @@
 #ifndef APO_SEM_SP_UI_H
 #define APO_SEM_SP_UI_H
 
-#include "../../mzapo_lib/mzapo.h"
 #include "../../Draw_lib/draw.h"
 #include "../../Draw_lib/text.h"
+#include "../../mzapo_lib/mzapo.h"
 #include "const.h"
 #include "player.h"
 
 void draw_ui(lcdpixel* fb, Player* player);
 
-#endif //APO_SEM_SP_UI_H
+#endif // APO_SEM_SP_UI_H
