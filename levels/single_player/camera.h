@@ -1,7 +1,6 @@
 #ifndef APO_SEM_CAMERA_H
 #define APO_SEM_CAMERA_H
 
-
 typedef struct {
     float x, y;
     float vx, vy;

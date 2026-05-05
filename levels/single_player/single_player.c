@@ -1,7 +1,6 @@
 #include "single_player.h"
 
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -80,6 +79,7 @@ static void setup(GameState* state, uint32_t seed)
     state->projectile_count = 0;
     // initialize cooldown timers
     state->enemy_spawn_timer = 0;
+    state->shoot_cooldown_timer = 0;
 }
 
 // Singleplayer main function
@@ -93,8 +93,8 @@ void single_player(mzapo_state* hw_state)
     int exit = 0;
     while (!exit) {
         // 0. get dt
-        uint64_t dt_musec = get_dt();
-        float dt = dt_musec / 1000.0f;
+        uint64_t dt_msec = get_dt();
+        float dt = dt_msec / 1000.0f;
         // 1. read inputs
         knobs k = knobs_read(hw_state);
         // check for a pause request
@@ -111,18 +111,19 @@ void single_player(mzapo_state* hw_state)
         // 4. Update projectiles + check for collisions projectile vs enemies
         // spawn new projectile if the player is shooting
         game_state.shoot_cooldown_timer += dt;
-        if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown && game_state.enemy_count > 0) {
+        if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown &&
+            game_state.projectile_count <= MAX_PROJECTILE_COUNT && game_state.enemy_count > 0) {
             spawn_projectile(game_state.projectiles, game_state.enemies, &game_state.player,
                              &game_state.projectile_count);
-            game_state.shoot_cooldown_timer = 0;
+            game_state.shoot_cooldown_timer = 0.0f;
         }
         // update all the projectiles
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
             if (game_state.projectiles[i].active) {
-                update_projectile(&game_state.projectiles[i], dt);
+                update_projectile(&game_state.projectiles[i], &game_state.cam, &game_state.projectile_count, dt);
             }
         }
-        // check for collisions
+        // check for collisions projectile vs enemy
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
             if (game_state.projectiles[i].active) {
                 float ax = game_state.projectiles[i].x;
@@ -143,14 +144,24 @@ void single_player(mzapo_state* hw_state)
             }
         }
         // 5. spawn new enemies + update enemies + check for collisions enemy vs player
+        // spawn new enemies
         game_state.enemy_spawn_timer += dt;
-        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count < MAX_ENEMY_COUNT) {
+        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count <= MAX_ENEMY_COUNT) {
             spawn_enemy(game_state.enemies, &game_state.cam, &game_state.enemy_count);
-            game_state.enemy_spawn_timer = 0;
+            game_state.enemy_spawn_timer -= ENEMY_SPAWN_COOL;
         }
+        // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active)
-                update_enemy(&game_state.enemies[i], &game_state.player, dt);
+                update_enemy(&game_state.enemies[i], &game_state.player, &game_state.enemy_count, dt);
+        }
+        // check for collisions enemy vs. player
+        for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
+            if (game_state.enemies[i].active) {
+                if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
+                                  game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT))
+                    take_damage(&game_state.player);
+            }
         }
         // 6. draw frame
         clear_display(fb);

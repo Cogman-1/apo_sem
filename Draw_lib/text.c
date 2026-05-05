@@ -74,6 +74,7 @@ void draw_text(lcdpixel* fb, Vertex_2D start, char* text, lcdpixel color, int fo
         draw_char(fb, offx, offy, text[i], color, font_d);
         int glyph_index = text[i] - font_d->firstchar;
         offx += get_char_width(font_d, glyph_index);
-        if (font == FONT_PROP14x16) offx += CHAR_SPACING;
+        if (font == FONT_PROP14x16)
+            offx += CHAR_SPACING;
     }
 }
