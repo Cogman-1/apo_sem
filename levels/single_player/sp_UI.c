@@ -1,12 +1,22 @@
 #include "sp_UI.h"
 
-//health bar params
+#include <stdio.h>
+#include <string.h>
+
+// health bar params
 #define HEALTH_BAR_X 3
 #define HEALTH_BAR_Y 5
 #define HEALTH_BAR_WIDTH 100
 #define HEALTH_BAR_HEIGHT 30
 #define HEALTH_BAR_SPACING 4
 
+// score counter params
+#define SCORE_X 280
+#define SCORE_Y 5
+#define SCORE_DIGITS 10
+#define SCORE_TEXT "Score: "
+#define SCORE_CHARS strlen(SCORE_TEXT)
+#define SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
 
 // color macros
 #define RED 0XF800
@@ -14,7 +24,7 @@
 #define GRAY 0X9CF3
 #define WHITE 0XFFFF
 
-void draw_healthbar(lcdpixel* fb, Player* player)
+static void draw_healthbar(lcdpixel* fb, Player* player)
 {
     lcdpixel color = {GRAY};
     // draw base
@@ -35,8 +45,18 @@ void draw_healthbar(lcdpixel* fb, Player* player)
                    color);
 }
 
+static void draw_score(lcdpixel* fb, Player* player)
+{
+    char score_text[SCORE_TEXT_LENGTH];
+    const char* text = SCORE_TEXT;
+    memcpy(score_text, text, SCORE_CHARS);
+    sprintf(score_text + SCORE_CHARS, "%d", player->playerScore);
+    score_text[SCORE_TEXT_LENGTH - 1] = '\0';
+    draw_text(fb, (Vertex_2D){SCORE_X, SCORE_Y}, score_text, (lcdpixel){WHITE}, FONT_PROP14x16);
+}
+
 void draw_ui(lcdpixel* fb, Player* player)
 {
     draw_healthbar(fb, player);
-
+    draw_score(fb, player);
 }

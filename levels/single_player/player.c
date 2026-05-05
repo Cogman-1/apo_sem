@@ -34,5 +34,6 @@ void update_player(Player* player, knobs inputs, float dt_msec)
 
 void take_damage(Player* player)
 {
-    player->health -= ENEMY_DAMAGE;
+    if (player->health >= 0)
+        player->health -= ENEMY_DAMAGE;
 }

@@ -197,7 +197,7 @@ void single_player(mzapo_state* hw_state)
                 draw_circle(fb, (Vertex_2D){cx, cy}, PROJECTILE_HEIGHT / 2, (lcdpixel){.raw = PROJECTILE_COLOR});
             }
         }
-        //draw UI - MUST RENDER LAST!!!
+        // draw UI - MUST RENDER LAST!!!
         draw_ui(fb, &game_state.player);
         // show frame buffer
         parlcd_write_screen(hw_state, fb);
