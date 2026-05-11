@@ -2,9 +2,8 @@
 #include "Draw_lib/draw.h"
 #include "Draw_lib/text.h"
 #include "mzapo_lib/mzapo.h"
-// Menu Options
 
-// text for options
+// Menu options definitions
 #define N_OPTIONS 5
 char* labels[N_OPTIONS] = {"Single Player", "Multi Player", "Settings", "Controls", "Exit Game"};
 
@@ -38,7 +37,7 @@ int start_menu(mzapo_state* state)
                 highlighted = EXIT_GAME;
             last_knob_val = knob_val;
         }
-        /* On click return the currently picked option*/
+        /* On click return the currently picked option */
         if (inputs.rdown) {
             return highlighted;
         }

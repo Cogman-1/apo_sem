@@ -4,6 +4,11 @@
 
 enum { EDGE_TOP, EDGE_LEFT, EDGE_BOTTOM, EDGE_RIGHT };
 
+void initialize_enemy(Enemy* enemy)
+{
+    enemy->active = 0;
+}
+
 void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
 {
     // death
@@ -53,4 +58,17 @@ void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count)
     enemies[i].vx = 0;
     enemies[i].vy = 0;
     (*enemy_count)++;
+}
+
+void draw_enemy(Enemy* enemy, Camera* cam, lcdpixel* fb)
+{
+    Vertex_2D top_left;
+    top_left.x = enemy->x - cam->x;
+    top_left.y = enemy->y - cam->y;
+    Vertex_2D bot_right;
+    bot_right.x = top_left.x + ENEMY_WIDTH;
+    bot_right.y = top_left.y + ENEMY_HEIGHT;
+    lcdpixel enemy_color;
+    enemy_color.raw = ENEMY_COLOR;
+    draw_rectangle(fb, top_left, bot_right, enemy_color);
 }

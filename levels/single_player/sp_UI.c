@@ -3,45 +3,22 @@
 #include <stdio.h>
 #include <string.h>
 
-// health bar params
-#define HEALTH_BAR_X 3
-#define HEALTH_BAR_Y 5
-#define HEALTH_BAR_WIDTH 100
-#define HEALTH_BAR_HEIGHT 30
-#define HEALTH_BAR_SPACING 4
-
-// score counter params
-#define SCORE_X 280
-#define SCORE_Y 5
-#define SCORE_DIGITS 10
-#define SCORE_TEXT "Score: "
-#define SCORE_CHARS strlen(SCORE_TEXT)
-#define SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
-
 // color macros
-#define RED 0XF800
-#define GREEN 0X07E0
-#define GRAY 0X9CF3
-#define WHITE 0XFFFF
 
 static void draw_healthbar(lcdpixel* fb, Player* player)
 {
-    lcdpixel color = {GRAY};
+    lcdpixel color = {HEALTH_BAR_BACKGROUND};
     // draw base
-    draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X, HEALTH_BAR_Y},
-                   (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_WIDTH, HEALTH_BAR_Y + HEALTH_BAR_HEIGHT}, color);
+    draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X, HEALTH_BAR_Y}, (Vertex_2D){HEALTH_BAR_ENDX, HEALTH_BAR_ENDY}, color);
     // draw red background
-    color.raw = RED;
+    color.raw = HEALTH_BAR_FOREGROUND_ONE;
     draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING, HEALTH_BAR_Y + HEALTH_BAR_SPACING},
-                   (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_WIDTH - HEALTH_BAR_SPACING,
-                               HEALTH_BAR_Y + HEALTH_BAR_HEIGHT - HEALTH_BAR_SPACING},
-                   color);
+                   (Vertex_2D){HEALTH_BAR_ENDX - HEALTH_BAR_SPACING, HEALTH_BAR_ENDY - HEALTH_BAR_SPACING}, color);
     // calculate and draw green part
-    color.raw = GREEN;
+    color.raw = HEALTH_BAR_FOREGROUND_TWO;
     int health_pixels = (((float)player->health) / (player->maxHealth)) * (HEALTH_BAR_WIDTH - 2 * HEALTH_BAR_SPACING);
     draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING, HEALTH_BAR_Y + HEALTH_BAR_SPACING},
-                   (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING + health_pixels,
-                               HEALTH_BAR_Y + HEALTH_BAR_HEIGHT - HEALTH_BAR_SPACING},
+                   (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING + health_pixels, HEALTH_BAR_ENDY - HEALTH_BAR_SPACING},
                    color);
 }
 

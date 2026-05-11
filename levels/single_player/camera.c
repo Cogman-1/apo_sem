@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "player.h"
 
 #include <math.h>
 
@@ -22,7 +23,7 @@ void update_camera(Camera* camera, Player* player, float dt_msec)
     float dir_x = c_target_x - camera->x;
     float dir_y = c_target_y - camera->y;
 
-    // move towards the target coordinates
+    // move towards the target coordinates using the alpha decay
     float alpha = 1 - expf(-CAMERA_CONVERGENCE_RATE * dt_msec);
     camera->x += alpha * dir_x;
     camera->y += alpha * dir_y;
@@ -36,4 +37,12 @@ void update_camera(Camera* camera, Player* player, float dt_msec)
         camera->y = 0;
     if (camera->y > WORLD_HEIGHT - SCREEN_HEIGHT)
         camera->y = WORLD_HEIGHT - SCREEN_HEIGHT;
+}
+
+void initialize_camera(Camera* camera)
+{
+    camera->x = (float)WORLD_WIDTH / 2 - SCREEN_WIDTH / 2;
+    camera->y = (float)WORLD_HEIGHT / 2 - SCREEN_HEIGHT / 2;
+    camera->vx = 0;
+    camera->vy = 0;
 }

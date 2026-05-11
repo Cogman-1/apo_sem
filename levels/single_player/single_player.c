@@ -51,28 +51,15 @@ static void setup(GameState* state, uint32_t seed)
 {
     state->gameSeed = seed;
     srand(seed);
-    // initialize player
-    state->player.x = (float)WORLD_WIDTH / 2;
-    state->player.y = (float)WORLD_HEIGHT / 2;
-    state->player.vx = 0;
-    state->player.vy = 0;
-    state->player.maxHealth = PLAYER_START_MAX_HEALTH;
-    state->player.health = state->player.maxHealth;
-    state->player.damage = PLAYER_START_DAMAGE;
-    state->player.fireCooldown = PLAYER_START_FIRE_COOLDOWN;
-    state->player.playerScore = 0;
-    // initialize camera
-    state->cam.x = (float)WORLD_WIDTH / 2 - SCREEN_WIDTH / 2;
-    state->cam.y = (float)WORLD_HEIGHT / 2 - SCREEN_HEIGHT / 2;
-    state->cam.vx = 0;
-    state->cam.vy = 0;
+    initialize_player(&state->player);
+    initialize_camera(&state->cam);
     // prepare enemies
     for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
-        state->enemies[i].active = 0;
+        initialize_enemy(&state->enemies[i]);
     }
     // prepare projectiles
     for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
-        state->projectiles[i].active = 0;
+        initialize_projectile(&state->projectiles[i]);
     }
     // initialize counters for projectiles and enemies
     state->enemy_count = 0;
@@ -165,41 +152,18 @@ void single_player(mzapo_state* hw_state)
         }
         // 6. draw frame
         clear_display(fb);
-        // draw player
-        Vertex_2D player_top_left = {0};
-        player_top_left.x = game_state.player.x - game_state.cam.x;
-        player_top_left.y = game_state.player.y - game_state.cam.y;
-        Vertex_2D player_Bot_right = {0};
-        player_Bot_right.x = player_top_left.x + PLAYER_WIDTH;
-        player_Bot_right.y = player_top_left.y + PLAYER_HEIGHT;
-        lcdpixel player_color;
-        player_color.raw = PLAYER_COLOR;
-        draw_rectangle(fb, player_top_left, player_Bot_right, player_color);
-        // draw enemies
+        draw_player(&game_state.player, &game_state.cam, fb);
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {
-                Vertex_2D top_left;
-                top_left.x = game_state.enemies[i].x - game_state.cam.x;
-                top_left.y = game_state.enemies[i].y - game_state.cam.y;
-                Vertex_2D bot_right;
-                bot_right.x = top_left.x + ENEMY_WIDTH;
-                bot_right.y = top_left.y + ENEMY_HEIGHT;
-                lcdpixel enemy_color;
-                enemy_color.raw = ENEMY_COLOR;
-                draw_rectangle(fb, top_left, bot_right, enemy_color);
+                draw_enemy(&game_state.enemies[i], &game_state.cam, fb);
             }
         }
-        // draw projectiles
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
             if (game_state.projectiles[i].active) {
-                int cx = (int)game_state.projectiles[i].x + PROJECTILE_WIDTH / 2 - game_state.cam.x;
-                int cy = (int)game_state.projectiles[i].y + PROJECTILE_HEIGHT / 2 - game_state.cam.y;
-                draw_circle(fb, (Vertex_2D){cx, cy}, PROJECTILE_HEIGHT / 2, (lcdpixel){.raw = PROJECTILE_COLOR});
+                draw_projectile(&game_state.projectiles[i], &game_state.cam, fb);
             }
         }
-        // draw UI - MUST RENDER LAST!!!
         draw_ui(fb, &game_state.player);
-        // show frame buffer
         parlcd_write_screen(hw_state, fb);
     }
 }

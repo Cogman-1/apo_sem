@@ -1,8 +1,4 @@
 #define _POSIX_C_SOURCE 200112L
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "levels/levels.h"
 #include "mzapo_lib/mzapo.h"
 #include "mzapo_lib/serialize_lock.h"

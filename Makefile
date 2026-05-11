@@ -4,18 +4,37 @@ CXX = arm-linux-gnueabihf-g++
 CPPFLAGS = -I .
 CFLAGS =-g -std=gnu11 -O1 -Wall -Wextra -Wpedantic
 CXXFLAGS = -g -std=gnu++11 -O1 -Wall
-#LDFLAGS +=
 LDFLAGS += -static
 LDLIBS += -lrt -lpthread
 LDLIBS += -lm
 
-SOURCES = main.c start_menu.c mzapo_lib/all.c Draw_lib/all.c levels/all.c
+SOURCES = main.c start_menu.c
+#draw_lib compilation
+SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c
+#mzapo_lib compilation
+SOURCES += mzapo_lib/mzapo.c mzapo_lib/mzapo_parlcd.c mzapo_lib/mzapo_phys.c mzapo_lib/serialize_lock.c
+#levels compilation
+#singleplayer compilation
+SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
+SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
+SOURCES += levels/single_player/sp_UI.c
+#other levels
+SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 TARGET_EXE = vamp
 
 ifeq ($(MAKECMDGOALS),sdl)
 CC = gcc
 CXX = g++
-SOURCES = main.c start_menu.c sdl.c Draw_lib/all.c levels/all.c
+SOURCES = main.c start_menu.c sdl.c
+#draw_lib compilation
+SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c
+#levels compilation
+#singleplayer compilation
+SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
+SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
+SOURCES += levels/single_player/sp_UI.c
+#other levels
+SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 TARGET_EXE = vamp_sdl
 LDFLAGS :=
 LDLIBS := $(shell sdl2-config --libs) -lm
@@ -78,7 +97,7 @@ ifneq ($(filter %.cpp,$(SOURCES)),)
 endif
 
 clean:
-	rm -rf *.o *.a $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
+	rm -rf $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
 
 format:
 	find . -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} +

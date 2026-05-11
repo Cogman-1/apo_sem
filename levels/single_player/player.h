@@ -1,12 +1,12 @@
 #ifndef APO_SEM_PLAYER_H
 #define APO_SEM_PLAYER_H
 
-#include <math.h>
-
+#include "../../Draw_lib/draw.h"
 #include "../../mzapo_lib/mzapo.h"
+#include "camera.h"
 #include "const.h"
 
-typedef struct {
+typedef struct Player {
     float x, y;
     float vx, vy;
     int playerScore;
@@ -16,7 +16,9 @@ typedef struct {
     float fireCooldown;
 } Player;
 
+void initialize_player(Player* player);
 void update_player(Player* player, knobs inputs, float dt_msec);
 void take_damage(Player* player);
+void draw_player(Player* player, Camera* camera, lcdpixel* fb);
 
 #endif // APO_SEM_PLAYER_H

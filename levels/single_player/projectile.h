@@ -12,8 +12,12 @@ typedef struct {
     int damage;
 } Projectile;
 
+void initialize_projectile(Projectile* projectile);
+
 void update_projectile(Projectile* projectile, Camera* camera, int* projectile_count, float dt);
 
 void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count);
+
+void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb);
 
 #endif // APO_SEM_PROJECTILE_H

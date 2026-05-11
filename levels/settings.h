@@ -1,7 +1,3 @@
-//
-// Created by cogman on 4/23/26.
-//
-
 #ifndef APO_SEM_SETTINGS_H
 #define APO_SEM_SETTINGS_H
 

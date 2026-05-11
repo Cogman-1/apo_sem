@@ -1,4 +1,10 @@
 #include "projectile.h"
+#include <math.h>
+
+void initialize_projectile(Projectile* projectile)
+{
+    projectile->active = 0;
+}
 
 static int get_closest_enemy(Enemy* enemies, Player* player, float* len)
 {
@@ -10,14 +16,14 @@ static int get_closest_enemy(Enemy* enemies, Player* player, float* len)
         if (enemies[i].active) {
             dx = enemies[i].x - player->x;
             dy = enemies[i].y - player->y;
-            dist = sqrt(dx * dx + dy * dy);
+            dist = dx * dx + dy * dy;
             if (best_dist == -1 || dist < best_dist) {
                 best_dist = dist;
                 idx = i;
             }
         }
     }
-    (*len) = best_dist;
+    (*len) = sqrtf(best_dist);
     return idx;
 }
 
@@ -25,7 +31,7 @@ void update_projectile(Projectile* projectile, Camera* camera, int* projectile_c
 {
     projectile->x += projectile->vx * dt;
     projectile->y += projectile->vy * dt;
-    // despawn if it is outside the world border
+    // despawn if it is outside the screen
     if (projectile->x >= camera->x + SCREEN_WIDTH || projectile->x <= camera->x ||
         projectile->y >= camera->y + SCREEN_HEIGHT || projectile->y <= camera->y) {
         projectile->active = 0;
@@ -49,4 +55,11 @@ void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, i
     projectiles[i].vy = diry * PROJECTILE_SPEED;
     projectiles[i].damage = player->damage;
     (*projectile_count)++;
+}
+
+void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb)
+{
+    int cx = (int)projectile->x + PROJECTILE_WIDTH / 2 - camera->x;
+    int cy = (int)projectile->y + PROJECTILE_HEIGHT / 2 - camera->y;
+    draw_circle(fb, (Vertex_2D){cx, cy}, PROJECTILE_HEIGHT / 2, (lcdpixel){.raw = PROJECTILE_COLOR});
 }

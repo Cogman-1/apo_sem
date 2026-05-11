@@ -1,4 +1,18 @@
 #include "player.h"
+#include <math.h>
+
+void initialize_player(Player* player)
+{
+    player->x = (float)WORLD_WIDTH / 2;
+    player->y = (float)WORLD_HEIGHT / 2;
+    player->vx = 0;
+    player->vy = 0;
+    player->maxHealth = PLAYER_START_MAX_HEALTH;
+    player->health = player->maxHealth;
+    player->damage = PLAYER_START_DAMAGE;
+    player->fireCooldown = PLAYER_START_FIRE_COOLDOWN;
+    player->playerScore = 0;
+}
 
 void update_player(Player* player, knobs inputs, float dt_msec)
 {
@@ -36,4 +50,17 @@ void take_damage(Player* player)
 {
     if (player->health >= 0)
         player->health -= ENEMY_DAMAGE;
+}
+
+void draw_player(Player* player, Camera* camera, lcdpixel* fb)
+{
+    Vertex_2D player_top_left = {0};
+    player_top_left.x = player->x - camera->x;
+    player_top_left.y = player->y - camera->y;
+    Vertex_2D player_Bot_right = {0};
+    player_Bot_right.x = player_top_left.x + PLAYER_WIDTH;
+    player_Bot_right.y = player_top_left.y + PLAYER_HEIGHT;
+    lcdpixel player_color;
+    player_color.raw = PLAYER_COLOR;
+    draw_rectangle(fb, player_top_left, player_Bot_right, player_color);
 }

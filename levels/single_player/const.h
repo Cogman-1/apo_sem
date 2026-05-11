@@ -5,15 +5,22 @@
 #define WORLD_WIDTH 1600
 #define WORLD_HEIGHT 1200
 
+// colors
+#define RED 0XF800
+#define GREEN 0X07E0
+#define GRAY 0X9CF3
+#define WHITE 0XFFFF
+#define YELLOW 0XFFE0
+
 // projectile constants
 #define MAX_PROJECTILE_COUNT 50
-#define PROJECTILE_COLOR 0xFFE0
+#define PROJECTILE_COLOR YELLOW
 #define PROJECTILE_SPEED 20
 #define PROJECTILE_WIDTH 4
 #define PROJECTILE_HEIGHT 10
 
 // player constants
-#define PLAYER_COLOR 0x07E0
+#define PLAYER_COLOR GREEN
 #define PLAYER_WIDTH 16
 #define PLAYER_HEIGHT 32
 #define PLAYER_START_MAX_HEALTH 100
@@ -25,7 +32,7 @@
 
 // enemy constants
 #define MAX_ENEMY_COUNT 50
-#define ENEMY_COLOR 0xF800
+#define ENEMY_COLOR RED
 #define ENEMY_SPEED 6
 #define ENEMY_SPAWN_COOL 15.0f
 #define ENEMY_SPAWN_HEALTH 100
@@ -35,5 +42,27 @@
 
 // camera constants
 #define CAMERA_CONVERGENCE_RATE 2
+
+// UI constants
+//  health bar parameters
+#define HEALTH_BAR_X 3
+#define HEALTH_BAR_Y 5
+#define HEALTH_BAR_WIDTH 100
+#define HEALTH_BAR_HEIGHT 30
+#define HEALTH_BAR_ENDX (HEALTH_BAR_X + HEALTH_BAR_WIDTH)
+#define HEALTH_BAR_ENDY (HEALTH_BAR_Y + HEALTH_BAR_HEIGHT)
+#define HEALTH_BAR_SPACING 4
+
+#define HEALTH_BAR_BACKGROUND GRAY
+#define HEALTH_BAR_FOREGROUND_ONE RED
+#define HEALTH_BAR_FOREGROUND_TWO GREEN
+
+// score counter parameters
+#define SCORE_X 280
+#define SCORE_Y 5
+#define SCORE_DIGITS 10
+#define SCORE_TEXT "Score: "
+#define SCORE_CHARS (sizeof(SCORE_TEXT))
+#define SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
 
 #endif // APO_SEM_CONST_H
