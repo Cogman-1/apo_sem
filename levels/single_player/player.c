@@ -35,20 +35,16 @@ void initialize_player(Player* player)
     initialize_abilities(player);
 }
 
-void update_player(Player* player, knobs inputs, float dt_msec)
+void update_player(Player* player, knob_directions inputs, float dt)
 {
     if (player->stun_frames <= 0) {
         // 1. Handle inputs
-        knobs_state knobstate;
-        knobs_state_init(&knobstate, (knobs){.r = 0, .g = 0, .b = 0});
-        knobs_update(&knobstate, inputs);
-        knob_directions directions = calculate_direction(&knobstate);
-        float dirx = directions.rx;
-        float diry = directions.ry;
+        float dirx = inputs.rx;
+        float diry = inputs.ry;
         // 2. Update physics
         // update velocity
-        float new_vx = player->vx + PLAYER_ACCELERATION_MOD * dirx * dt_msec;
-        float new_vy = player->vy + PLAYER_ACCELERATION_MOD * diry * dt_msec;
+        float new_vx = player->vx + PLAYER_ACCELERATION_MOD * dirx * dt;
+        float new_vy = player->vy + PLAYER_ACCELERATION_MOD * diry * dt;
         // clamp velocity
         if (fabsf(new_vx) > PLAYER_MAX_SPEED)
             new_vx = (new_vx > 0) ? PLAYER_MAX_SPEED : -PLAYER_MAX_SPEED;
@@ -65,8 +61,8 @@ void update_player(Player* player, knobs inputs, float dt_msec)
         if (fabsf(player->kvy) < 0.001f)
             player->kvy = 0;
         // calculate new position
-        float new_x = player->x + (player->vx + player->kvx) * dt_msec;
-        float new_y = player->y + (player->vy + player->kvy) * dt_msec;
+        float new_x = player->x + (player->vx + player->kvx) * dt;
+        float new_y = player->y + (player->vy + player->kvy) * dt;
         if (new_x < 0)
             new_x = 0;
         if (new_x > (WORLD_WIDTH - PLAYER_WIDTH))
