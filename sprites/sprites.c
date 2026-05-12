@@ -1,7 +1,10 @@
 #include "sprites.h"
 
 #include <stddef.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+#include "arrow.c"
 #include "bg.c"
 
 #include "Human_Soldier_Sword_Shield/Human_Soldier_Sword_Shield_Attack1/Human_Soldier_Sword_Shield_Attack1_000.c"
@@ -41,13 +44,41 @@
 #define FRAME_TO_SPRITE(symbol)                                                                                        \
     {#symbol, (uint16_t)(symbol).width, (uint16_t)(symbol).height, (const uint16_t*)(symbol).pixel_data}
 
+Sprite flip_sprite(Sprite sprite)
+{
+    uint16_t* flipped_data = malloc(sizeof(*flipped_data) * sprite.width * sprite.height);
+    for (int y = 0; y < sprite.height; y++) {
+        for (int x = 0; x < sprite.width / 2; x++) {
+            flipped_data[y * sprite.width + x] = sprite.data[y * sprite.width + (sprite.width - x)];
+            flipped_data[y * sprite.width + (sprite.width - x)] = sprite.data[y * sprite.width + x];
+        }
+    }
+    return (Sprite){sprite.name, sprite.width, sprite.height, flipped_data};
+}
+Sprite rotate_sprite(Sprite sprite)
+{
+    uint16_t* rotated_data = malloc(sizeof(*rotated_data) * sprite.width * sprite.height);
+    for (int y = 0; y < sprite.height; y++) {
+        for (int x = 0; x < sprite.width; x++) {
+            rotated_data[x * sprite.height + (sprite.height - 1 - y)] = sprite.data[y * sprite.width + x];
+        }
+    }
+
+    return (Sprite){sprite.name, sprite.height, sprite.width, rotated_data};
+}
+
 typedef struct {
     const Sprite* frames;
     size_t frame_count;
     char default_loop;
 } SpriteAnimationClip;
 
-static const Sprite bg_sprite = FRAME_TO_SPRITE(bg);
+static Sprite bg_sprite = FRAME_TO_SPRITE(bg);
+static Sprite arrow_sprite0 = FRAME_TO_SPRITE(arrow);
+Sprite arrow_sprite1;
+Sprite arrow_sprite2;
+Sprite arrow_sprite3;
+Sprite* arrow_sprites;
 
 static const Sprite human_idle[] = {FRAME_TO_SPRITE(Human_Soldier_Sword_Shield_Idle_000),
                                     FRAME_TO_SPRITE(Human_Soldier_Sword_Shield_Idle_001)};
@@ -112,6 +143,18 @@ static const SpriteAnimationClip* sprite_class_animations(SpriteClass sprite_cla
     default:
         return NULL;
     }
+}
+
+void sprite_init()
+{
+    arrow_sprite1 = rotate_sprite(arrow_sprite0);
+    arrow_sprite2 = rotate_sprite(arrow_sprite1);
+    arrow_sprite3 = rotate_sprite(arrow_sprite2);
+    arrow_sprites = malloc(sizeof(*arrow_sprites) * 4);
+    arrow_sprites[0] = arrow_sprite0;
+    arrow_sprites[1] = arrow_sprite1;
+    arrow_sprites[2] = arrow_sprite2;
+    arrow_sprites[3] = arrow_sprite3;
 }
 
 size_t sprite_animation_frame_count(SpriteClass sprite_class, SpriteAnimation animation)
@@ -182,4 +225,14 @@ void sprite_animator_update(SpriteAnimator* animator, float dt_sec)
 Sprite* sprite_animator_current_frame(const SpriteAnimator* animator)
 {
     return sprite_class_frame(animator->sprite_class, animator->animation, animator->frame_index);
+}
+
+Sprite* get_bg_sprite()
+{
+    return &bg_sprite;
+}
+
+Sprite* get_arrow_sprites()
+{
+    return arrow_sprites;
 }

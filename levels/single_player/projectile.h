@@ -18,6 +18,6 @@ void update_projectile(Projectile* projectile, Camera* camera, int* projectile_c
 
 void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count);
 
-void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb);
+void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb, Sprite* sprites);
 
 #endif // APO_SEM_PROJECTILE_H

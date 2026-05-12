@@ -61,9 +61,22 @@ void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, i
     (*projectile_count)++;
 }
 
-void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb)
+void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb, Sprite* sprites)
 {
     int cx = (int)projectile->x + PROJECTILE_WIDTH / 2 - camera->x;
     int cy = (int)projectile->y + PROJECTILE_HEIGHT / 2 - camera->y;
-    draw_circle(fb, (Vertex_2D){cx, cy}, PROJECTILE_HEIGHT / 2, (lcdpixel){.raw = PROJECTILE_COLOR});
+    // draw_circle(fb, (Vertex_2D){cx, cy}, PROJECTILE_HEIGHT / 2, (lcdpixel){.raw = PROJECTILE_COLOR});
+    int direction = 0;
+    if (fabs(camera->vy) > fabs(camera->vx)) {
+        if (camera->vy > 0)
+            direction = 1;
+        else
+            direction = 3;
+    } else {
+        if (camera->vx > 0)
+            direction = 1;
+        else
+            direction = 2;
+    }
+    draw_sprite_centered(fb, (Vertex_2D){cx, cy}, &sprites[direction]);
 }

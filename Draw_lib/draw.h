@@ -36,5 +36,6 @@ void draw_sprite(lcdpixel* fb, Vertex_2D position, const Sprite* sprite);
 void draw_sprite_centered(lcdpixel* fb, Vertex_2D center, const Sprite* sprite);
 
 void clear_display(lcdpixel* fb);
+void draw_tiled_background(lcdpixel* fb, Vertex_2D offset, const Sprite* sprite);
 
 #endif

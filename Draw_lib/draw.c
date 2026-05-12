@@ -1,4 +1,5 @@
 #include "draw.h"
+#include "../sprites/sprites.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -121,6 +122,17 @@ void clear_display(lcdpixel* fb)
     for (int y = 0; y < SCREEN_HEIGHT; y++) {
         for (int x = 0; x < SCREEN_WIDTH; x++) {
             fb[IDX(x, y)].raw = 0x0000;
+        }
+    }
+}
+
+void draw_tiled_background(lcdpixel* fb, Vertex_2D offset, const Sprite* sprite)
+{
+    int orig_x = offset.x % sprite->width - sprite->width;
+    int orig_y = offset.y % sprite->height - sprite->height;
+    for (int y = orig_y; y < SCREEN_HEIGHT + sprite->height; y += sprite->height) {
+        for (int x = orig_x; x < SCREEN_WIDTH + sprite->width; x += sprite->width) {
+            draw_sprite(fb, (Vertex_2D){.x = x, .y = y}, sprite);
         }
     }
 }

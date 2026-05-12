@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
 {
     (void)argc;
     (void)argv;
+    sprite_init();
     mzapo_state* state = init_mzapo();
     int exit = 0;
     while (!exit) {
