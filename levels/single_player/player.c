@@ -13,6 +13,7 @@ void initialize_player(Player* player)
     player->damage = PLAYER_START_DAMAGE;
     player->fireCooldown = PLAYER_START_FIRE_COOLDOWN;
     player->playerScore = 0;
+    player->invincible_frames = 0;
 }
 
 void update_player(Player* player, knobs inputs, float dt_msec)
@@ -49,14 +50,22 @@ void update_player(Player* player, knobs inputs, float dt_msec)
         new_y = (WORLD_HEIGHT - PLAYER_HEIGHT);
     player->x = new_x;
     player->y = new_y;
+
+    //invincibility decay
+    if (player->invincible_frames > 0) {
+        player->invincible_frames--;
+    }
 }
 
 void take_damage(Player* player)
 {
-    if (player->health >= 0)
-        player->health -= ENEMY_DAMAGE;
-    // set the LED_RGB Effect
-    set_effect(DAMAGE);
+    if (player->invincible_frames <= 0) {
+        if (player->health >= 0)
+            player->health -= ENEMY_DAMAGE;
+        // set the LED_RGB Effect
+        set_effect(DAMAGE);
+        player->invincible_frames = PLAYER_INVINCIBLE_GAIN;
+    }
 }
 
 void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel* fb)

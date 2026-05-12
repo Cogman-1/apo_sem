@@ -29,6 +29,7 @@
 #define PLAYER_MAX_SPEED 100
 #define PLAYER_ACCELERATION_MOD 1.00f
 #define PLAYER_SCORE_GAIN 10
+#define PLAYER_INVINCIBLE_GAIN 40
 
 // enemy constants
 #define MAX_ENEMY_COUNT 50

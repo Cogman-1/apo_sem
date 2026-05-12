@@ -16,6 +16,7 @@ typedef struct Player {
     short health;
     int damage;
     float fireCooldown;
+    int invincible_frames;
 } Player;
 
 void initialize_player(Player* player);
