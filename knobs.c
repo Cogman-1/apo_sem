@@ -65,9 +65,9 @@ knob_directions calculate_direction(knobs_state* state)
         .ry = sinf(r),
         .g = g,
         .gx = cosf(g),
-        .gy = sinf(r),
+        .gy = sinf(g),
         .b = b,
         .bx = cosf(b),
-        .by = sinf(r),
+        .by = sinf(b),
     };
 }

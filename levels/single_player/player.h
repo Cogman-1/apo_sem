@@ -4,6 +4,7 @@
 #include "../../Draw_lib/draw.h"
 #include "../../LEDRGB_Effects/effects.h"
 #include "../../mzapo_lib/mzapo.h"
+#include "../../knobs.h"
 #include "ability.h"
 #include "camera.h"
 #include "const.h"
@@ -26,7 +27,7 @@ typedef struct Player {
 } Player;
 
 void initialize_player(Player* player);
-void update_player(Player* player, knobs inputs, float dt_msec);
+void update_player(Player* player, knob_directions inputs, float dt);
 void take_damage(Player* player, Enemy* enemy);
 void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel* fb);
 

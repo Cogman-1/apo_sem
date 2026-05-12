@@ -103,7 +103,8 @@ int single_player(mzapo_state* hw_state)
         game_state.player.selected_active_ability = (game_state.player.selected_active_ability + kd.b + 2) % 2;
 
         // 2. Update player
-        update_player(&game_state.player, k, dt);
+        knob_directions dirs = calculate_direction(ks);
+        update_player(&game_state.player, dirs, dt);
         if (fabsf(game_state.player.vx) + fabsf(game_state.player.vy) > 0.1f)
             sprite_animator_play(&game_state.player_animator, SPRITE_ANIM_WALK, 1);
         else
