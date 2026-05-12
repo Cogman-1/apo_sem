@@ -10,7 +10,7 @@ LDLIBS += -lm
 
 SOURCES = main.c knobs.c start_menu.c
 #draw_lib compilation
-SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c
+SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c Draw_lib/effect.c
 #mzapo_lib compilation
 SOURCES += mzapo_lib/mzapo.c mzapo_lib/mzapo_parlcd.c mzapo_lib/mzapo_phys.c mzapo_lib/serialize_lock.c
 #levels compilation
@@ -31,7 +31,7 @@ CC = gcc
 CXX = g++
 SOURCES = main.c start_menu.c knobs.c sdl.c
 #draw_lib compilation
-SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c
+SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c Draw_lib/effect.c
 #sprites compilation
 SOURCES += sprites/sprites.c
 #levels compilation

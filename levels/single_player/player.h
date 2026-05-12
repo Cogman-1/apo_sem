@@ -18,7 +18,8 @@ typedef struct Player {
     int damage;
     float fireCooldown;
     int invincible_frames;
-    ActiveAbility activeAbilities[1];
+    ActiveAbility activeAbilities[2];
+    int selected_active_ability;
 } Player;
 
 void initialize_player(Player* player);

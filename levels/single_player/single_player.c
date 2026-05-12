@@ -1,11 +1,13 @@
 #include "single_player.h"
 
 #include "../../sprites/sprites.h"
+#include "../../knobs.h"
 
 #include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdio.h>
 
 // Type definitions
 
@@ -74,12 +76,16 @@ void single_player(mzapo_state* hw_state)
     clear_display(fb);
     // Main Game loop
     int exit = 0;
+    knobs_state* ks = malloc(sizeof(*ks));
+    knobs_state_init(ks, knobs_read(hw_state));
     while (!exit) {
         // 0. get dt
         uint64_t dt_msec = get_dt();
         float dt = dt_msec / 1000.0f;
         // 1. read inputs
         knobs k = knobs_read(hw_state);
+        knobs_update(ks, k);
+        knobs_delta kd = knobs_get_clamped_delta(ks);
         // check for a pause request
         if (k.gdown) {
             int p_ret = pause(hw_state, fb);
@@ -87,6 +93,14 @@ void single_player(mzapo_state* hw_state)
                 exit = 1;
             }
         }
+        ActiveAbility* ab  = &game_state.player.activeAbilities[game_state.player.selected_active_ability];
+        if (k.bdown && ab->cooldown_end < time_ms() / 1000.0) {
+            ab->ability.effect((void*)&game_state);
+            ab->cooldown_end = time_ms() / 1000.0 + ab->ability.cooldown;
+            fprintf(stderr, "active ability %d: %f -> %f\n", game_state.player.selected_active_ability, time_ms() / 1000.0, ab->cooldown_end);
+        }
+        game_state.player.selected_active_ability = (game_state.player.selected_active_ability + kd.b + 2) % 2;
+        
         // 2. Update player
         update_player(&game_state.player, k, dt);
         if (fabsf(game_state.player.vx) + fabsf(game_state.player.vy) > 0.1f)

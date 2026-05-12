@@ -1,7 +1,21 @@
 #include "sp_UI.h"
+#include "../../Draw_lib/effect.h"
+#include "single_player.h"
 
 #include <stdio.h>
 #include <string.h>
+
+#include <math.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <time.h>
+
+static uint64_t time_ms()
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+}
 
 static void draw_healthbar(mzapo_state* state, lcdpixel* fb, Player* player)
 {
@@ -44,8 +58,30 @@ static void draw_score(lcdpixel* fb, Player* player)
     draw_text(fb, (Vertex_2D){SCORE_X, SCORE_Y}, score_text, (lcdpixel){WHITE}, FONT_PROP14x16);
 }
 
+static void draw_abilities(lcdpixel* fb, Player* player)
+{
+    for (size_t i = 0; i < 2; i++) {
+        Vertex_2D center = (Vertex_2D){420, 80 + 40 * i};
+        Vertex_2D topleft = (Vertex_2D){center.x - 16, center.y - 16};
+        Vertex_2D botright = (Vertex_2D){center.x +16, center.y + 16};
+        if (player->selected_active_ability == i) {
+            draw_rectangle(fb, (Vertex_2D){center.x - 17, center.y - 17}, (Vertex_2D){center.x +17, center.y + 17}, (lcdpixel){.r=31, .g=63, .b=0});
+        }
+        draw_rectangle(fb, topleft, botright, (lcdpixel){.r=16, .g=32, .b=16});
+        draw_sprite_centered(fb, center, player->activeAbilities[i].ability.sprite);
+        float delta = player->activeAbilities[i].cooldown_end - time_ms() / 1000.0;
+        if (delta > 0) {
+            darken_region(fb, topleft, botright, 0.5);
+            char buffer[6] = "00.0s";
+            sprintf(buffer, "%2.1f", delta);
+            draw_text(fb, topleft, buffer, (lcdpixel){WHITE}, FONT_PROP14x16);
+        }
+    }
+}
+
 void draw_ui(lcdpixel* fb, mzapo_state* state, Player* player)
 {
     draw_healthbar(state, fb, player);
     draw_score(fb, player);
+    draw_abilities(fb, player);
 }

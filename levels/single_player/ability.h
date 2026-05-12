@@ -5,7 +5,7 @@
 typedef struct Ability {
     void (*effect)(void*);
     float cooldown;
-    Sprite sprite;
+    Sprite* sprite;
 } Ability;
 
 typedef struct ActiveAbility {
