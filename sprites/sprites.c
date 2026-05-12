@@ -2,6 +2,8 @@
 
 #include <stddef.h>
 
+#include "bg.c"
+
 #include "Human_Soldier_Sword_Shield/Human_Soldier_Sword_Shield_Attack1/Human_Soldier_Sword_Shield_Attack1_000.c"
 #include "Human_Soldier_Sword_Shield/Human_Soldier_Sword_Shield_Attack1/Human_Soldier_Sword_Shield_Attack1_001.c"
 #include "Human_Soldier_Sword_Shield/Human_Soldier_Sword_Shield_Attack2/Human_Soldier_Sword_Shield_Attack2_000.c"
@@ -46,6 +48,8 @@ typedef struct {
     size_t frame_count;
     char default_loop;
 } SpriteAnimationClip;
+
+static const Sprite bg_sprite = FRAME_TO_SPRITE(bg);
 
 static const Sprite human_idle[] = {FRAME_TO_SPRITE(Human_Soldier_Sword_Shield_Idle_000),
                                     FRAME_TO_SPRITE(Human_Soldier_Sword_Shield_Idle_001)};

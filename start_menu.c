@@ -1,4 +1,6 @@
 #include "start_menu.h"
+#include <stdlib.h>
+#include "knobs.h"
 #include "Draw_lib/draw.h"
 #include "Draw_lib/text.h"
 #include "mzapo_lib/mzapo.h"
@@ -15,27 +17,19 @@ static void draw_menu(int highlighted, mzapo_state* state);
 int start_menu(mzapo_state* state)
 {
     int highlighted = SINGLE_PLAYER;
-    knobs inputs = knobs_read(state);
-    unsigned knob_val = inputs.r;
-    unsigned last_knob_val = knob_val;
+
+    knobs_state* inputs = malloc(sizeof(*inputs));
+    knobs_state_init(inputs, knobs_read(state));
 
     while (1) {
         draw_menu(highlighted, state);
-        inputs = knobs_read(state);
-        knob_val = inputs.r;
-        if (last_knob_val != knob_val) {
-            if (last_knob_val < knob_val)
-                highlighted++;
-            else
-                highlighted--;
-            if (highlighted > EXIT_GAME)
-                highlighted = 0;
-            else if (highlighted < 0)
-                highlighted = EXIT_GAME;
-            last_knob_val = knob_val;
-        }
-        /* On click return the currently picked option */
-        if (inputs.rdown) {
+    
+        knobs k = knobs_read(state);
+        knobs_update(inputs, k);
+        knobs_delta inputs_delta = knobs_get_clamped_delta(inputs);
+        highlighted = (highlighted + inputs_delta.r) % N_OPTIONS;
+        if (k.rdown) {
+            free(inputs);
             return highlighted;
         }
     }
