@@ -5,7 +5,7 @@
 #include "enemy.h"
 #include "player.h"
 
-typedef struct {
+typedef struct Projectile{
     char active;
     float x, y;
     float vx, vy;

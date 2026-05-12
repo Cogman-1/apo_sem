@@ -136,8 +136,9 @@ void single_player(mzapo_state* hw_state)
                         int colliding = AABBCollision(ax, ay, PROJECTILE_WIDTH, PROJECTILE_HEIGHT, bx, by, ENEMY_WIDTH,
                                                       ENEMY_HEIGHT);
                         if (colliding) {
-                            game_state.enemies[j].health -= game_state.projectiles[i].damage;
+                            deal_damage_enemy(&game_state.enemies[j], &game_state.projectiles[i]);
                             game_state.projectiles[i].active = 0;
+                            game_state.projectile_count--;
                             break;
                         }
                     }
@@ -166,8 +167,10 @@ void single_player(mzapo_state* hw_state)
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {
                 if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
-                                  game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT))
-                    take_damage(&game_state.player);
+                                  game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT)) {
+                    take_damage(&game_state.player, &game_state.enemies[i]);
+                    deal_knockback_enemy(&game_state.enemies[i], (Vertex_2D){game_state.player.x, game_state.player.y});
+                }
             }
         }
         // 6. draw frame
