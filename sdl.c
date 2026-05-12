@@ -97,11 +97,11 @@ static void handle_input(mzapo_state* s)
         }
         if (e.type == SDL_KEYUP) {
             SDL_Keycode k = e.key.keysym.sym;
-            if (k == SDLK_b)
+            if (k == SDLK_b || k == SDLK_KP_4)
                 s->knobs_pressed[0] = false;
-            if (k == SDLK_n)
+            if (k == SDLK_n || k == SDLK_KP_5)
                 s->knobs_pressed[1] = false;
-            if (k == SDLK_m)
+            if (k == SDLK_m || k == SDLK_KP_6)
                 s->knobs_pressed[2] = false;
         }
     }
