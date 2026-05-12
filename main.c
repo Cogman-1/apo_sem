@@ -2,6 +2,7 @@
 #include "levels/levels.h"
 #include "mzapo_lib/mzapo.h"
 #include "mzapo_lib/serialize_lock.h"
+#include "sprites/sprites.h"
 #include "start_menu.h"
 
 int main(int argc, char* argv[])

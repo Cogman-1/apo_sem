@@ -7,8 +7,6 @@
 #define N_OPTIONS 5
 char* labels[N_OPTIONS] = {"Single Player", "Multi Player", "Settings", "Controls", "Exit Game"};
 
-// Color definitions
-#define BCKG_COLOR 0x0000
 #define TEXT_COLOR 0XFFFF
 #define HIGH_COLOR 0xF800
 
@@ -16,14 +14,13 @@ static void draw_menu(int highlighted, mzapo_state* state);
 
 int start_menu(mzapo_state* state)
 {
-    /*Init of values*/
     int highlighted = SINGLE_PLAYER;
     knobs inputs = knobs_read(state);
     unsigned knob_val = inputs.r;
     unsigned last_knob_val = knob_val;
+
     while (1) {
         draw_menu(highlighted, state);
-        /* compare if the knob position has changed */
         inputs = knobs_read(state);
         knob_val = inputs.r;
         if (last_knob_val != knob_val) {

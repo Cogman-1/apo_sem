@@ -11,7 +11,6 @@
 typedef struct mzapo_state {
     char* spiled_reg_base;
     char* parlcd_reg_base;
-    uint8_t calibrated_knobs[3];
 } mzapo_state;
 
 typedef union ledrgb {
@@ -37,12 +36,13 @@ typedef union {
 
 typedef union lcdpixel {
     uint16_t raw;
-    struct {
+    struct __attribute__((__packed__)) {
         unsigned b : 5;
         unsigned g : 6;
         unsigned r : 5;
     };
 } lcdpixel;
+_Static_assert(sizeof(lcdpixel) == 2, "lcdpixel must be 2 bytes");
 
 // All functions now take a pointer to mzapo_state
 mzapo_state* init_mzapo();
@@ -50,7 +50,6 @@ uint32_t ledline_read(mzapo_state* state);
 void ledline_write(mzapo_state* state, uint32_t value);
 void ledrgb_write(mzapo_state* state, int side, ledrgb value);
 knobs knobs_read(mzapo_state* state);
-void calculate_direction(knobs inputs, float* x, float* y);
 void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer);
 void buffer_write_text(lcdpixel* buffer, size_t startx, size_t starty, char* text, lcdpixel color);
 

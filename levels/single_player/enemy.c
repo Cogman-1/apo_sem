@@ -16,6 +16,7 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
         enemy->active = 0;
         player->playerScore += PLAYER_SCORE_GAIN;
         (*enemy_count)--;
+        return;
     }
     // physics update
     float dx = player->x - enemy->x;
@@ -35,6 +36,8 @@ void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count)
     int i = 0;
     while (i < MAX_ENEMY_COUNT && enemies[i].active)
         i++;
+    if (i >= MAX_ENEMY_COUNT)
+        return;
     enemies[i].active = 1;
     enemies[i].health = ENEMY_SPAWN_HEALTH;
     // generate random position to spawn the enemy
@@ -60,15 +63,10 @@ void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count)
     (*enemy_count)++;
 }
 
-void draw_enemy(Enemy* enemy, Camera* cam, lcdpixel* fb)
+void draw_enemy(Enemy* enemy, Camera* cam, const Sprite* sprite, lcdpixel* fb)
 {
-    Vertex_2D top_left;
-    top_left.x = enemy->x - cam->x;
-    top_left.y = enemy->y - cam->y;
-    Vertex_2D bot_right;
-    bot_right.x = top_left.x + ENEMY_WIDTH;
-    bot_right.y = top_left.y + ENEMY_HEIGHT;
-    lcdpixel enemy_color;
-    enemy_color.raw = ENEMY_COLOR;
-    draw_rectangle(fb, top_left, bot_right, enemy_color);
+    Vertex_2D enemy_center = {0};
+    enemy_center.x = (int)(enemy->x - cam->x) + ENEMY_WIDTH / 2;
+    enemy_center.y = (int)(enemy->y - cam->y) + ENEMY_HEIGHT / 2;
+    draw_sprite_centered(fb, enemy_center, sprite);
 }

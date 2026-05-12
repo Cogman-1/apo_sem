@@ -1,8 +1,11 @@
 #include "draw.h"
 
 #include <stdlib.h>
+#include <string.h>
 
-#define IDX(x, y) ((y) * SCREEN_WIDTH + (x))
+#define IDX(x, y) ((y)*SCREEN_WIDTH + (x))
+
+
 
 void draw_rectangle(lcdpixel* fb, Vertex_2D topLeft, Vertex_2D bottomRight, lcdpixel color)
 {
@@ -82,6 +85,37 @@ void draw_circle(lcdpixel* fb, Vertex_2D center, float radius, lcdpixel color)
             }
         }
     }
+}
+
+static void draw_sprite_data(lcdpixel* fb, Vertex_2D start, uint16_t width, uint16_t height, const uint16_t* data)
+{
+    for (uint16_t y = 0; y < height; y++) {
+        for (uint16_t x = 0; x < width; x++) {
+            uint16_t pixel = data[y * width + x];
+            int px = start.x + (int)x;
+            int py = start.y + (int)y;
+            if (pixel && px >= 0 && py >= 0 && px < SCREEN_WIDTH && py < SCREEN_HEIGHT) {
+                fb[IDX(px, py)].raw = pixel;
+            }
+        }
+    }
+}
+
+void draw_sprite(lcdpixel* fb, Vertex_2D position, const Sprite* sprite)
+{
+    if (!sprite)
+        return;
+    draw_sprite_data(fb, position, sprite->width, sprite->height, sprite->data);
+}
+
+void draw_sprite_centered(lcdpixel* fb, Vertex_2D center, const Sprite* sprite)
+{
+    if (!sprite)
+        return;
+    Vertex_2D top_left;
+    top_left.x = center.x - (int)sprite->width / 2;
+    top_left.y = center.y - (int)sprite->height / 2;
+    draw_sprite_data(fb, top_left, sprite->width, sprite->height, sprite->data);
 }
 
 void clear_display(lcdpixel* fb)

@@ -47,7 +47,7 @@ typedef union knobs {
 
 typedef union lcdpixel {
     uint16_t raw;
-    struct {
+    struct __attribute__((__packed__)) {
         unsigned b : 5;
         unsigned g : 6;
         unsigned r : 5;
@@ -74,51 +74,55 @@ static void handle_input(mzapo_state* s)
         if (e.type == SDL_KEYDOWN) {
             SDL_Keycode k = e.key.keysym.sym;
 
-            // clockwise (789)
-            if (k == SDLK_s)
-                s->knobs_val[0]++;
-            if (k == SDLK_d)
-                s->knobs_val[1]++;
-            if (k == SDLK_f)
-                s->knobs_val[2]++;
+            if (k == SDLK_s || k == SDLK_KP_1)
+                s->knobs_val[0] += 4;
+            if (k == SDLK_d || k == SDLK_KP_2)
+                s->knobs_val[1] += 4;
+            if (k == SDLK_f || k == SDLK_KP_3)
+                s->knobs_val[2] += 4;
 
-            // counterclockwise (123)
-            if (k == SDLK_j)
-                s->knobs_val[0]--;
-            if (k == SDLK_k)
-                s->knobs_val[1]--;
-            if (k == SDLK_l)
-                s->knobs_val[2]--;
+            if (k == SDLK_j || k == SDLK_KP_7)
+                s->knobs_val[0] -= 4;
+            if (k == SDLK_k || k == SDLK_KP_8)
+                s->knobs_val[1] -= 4;
+            if (k == SDLK_l || k == SDLK_KP_9)
+                s->knobs_val[2] -= 4;
 
-            // press (456)
-            if (k == SDLK_b)
-                s->knobs_pressed[0] = !s->knobs_pressed[0];
-            if (k == SDLK_n)
-                s->knobs_pressed[1] = !s->knobs_pressed[1];
-            if (k == SDLK_m)
-                s->knobs_pressed[2] = !s->knobs_pressed[2];
+            if (k == SDLK_b || k == SDLK_KP_4)
+                s->knobs_pressed[0] = true;
+            if (k == SDLK_n || k == SDLK_KP_5)
+                s->knobs_pressed[1] = true;
+            if (k == SDLK_m || k == SDLK_KP_6)
+                s->knobs_pressed[2] = true;
         }
         if (e.type == SDL_KEYUP) {
             SDL_Keycode k = e.key.keysym.sym;
             if (k == SDLK_b)
-                s->knobs_pressed[0] = !s->knobs_pressed[0];
+                s->knobs_pressed[0] = false;
             if (k == SDLK_n)
-                s->knobs_pressed[1] = !s->knobs_pressed[1];
+                s->knobs_pressed[1] = false;
             if (k == SDLK_m)
-                s->knobs_pressed[2] = !s->knobs_pressed[2];
+                s->knobs_pressed[2] = false;
         }
     }
 }
 
 static void draw_ledline(mzapo_state* s)
 {
-    int start_x = (WINDOW_WIDTH - (32 * 6)) / 2;
+    const int led_count = 32;
+    const int led_group_size = 8;
+    const int led_spacing = 6;
+    const int led_gap_slots = led_count + (led_count / led_group_size) - 1;
+
+    int start_x = (WINDOW_WIDTH - (led_gap_slots * led_spacing)) / 2;
     int y = SCREEN_HEIGHT + 20;
 
-    for (int i = 0; i < 32; i++) {
-        bool on = (s->ledline >> i) & 1;
+    for (int i = 0; i < led_count; i++) {
+        int bit = led_count - 1 - i;
+        int slot = i + (i / led_group_size);
+        bool on = (s->ledline >> bit) & 1;
 
-        SDL_Rect r = {start_x + i * 6, y, 4, 4};
+        SDL_Rect r = {start_x + slot * led_spacing, y, 4, 4};
 
         if (on)
             SDL_SetRenderDrawColor(s->renderer, 255, 255, 0, 255);
@@ -236,20 +240,4 @@ void parlcd_write_screen(mzapo_state* state, const lcdpixel* buffer)
 
 void serialize_unlock(void)
 {
-}
-
-void calculate_direction(knobs inputs, float* x, float* y)
-{
-    static float angle = 0.0f;
-    static uint8_t prev = 0;
-    int delta = inputs.g - prev;
-    if (delta > 127)
-        delta -= 256;
-    if (delta < -127)
-        delta += 256;
-
-    angle += (delta / 80.0f) * 2.0 * M_PI;
-    prev = inputs.g;
-    *x = cosf(angle);
-    *y = sinf(angle);
 }

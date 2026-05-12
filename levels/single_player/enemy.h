@@ -15,6 +15,6 @@ typedef struct {
 void initialize_enemy(Enemy* enemy);
 void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt);
 void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count);
-void draw_enemy(Enemy* enemy, Camera* cam, lcdpixel* fb);
+void draw_enemy(Enemy* enemy, Camera* cam, const Sprite* sprite, lcdpixel* fb);
 
 #endif // APO_SEM_ENEMY_H

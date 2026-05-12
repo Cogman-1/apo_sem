@@ -49,6 +49,10 @@ void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, i
     projectiles[i].y = player->y + PLAYER_HEIGHT / 2;
     float len;
     int closest_idx = get_closest_enemy(enemies, player, &len);
+    if (closest_idx < 0 || len <= 0.001f) {
+        projectiles[i].active = 0;
+        return;
+    }
     float dirx = (enemies[closest_idx].x - player->x) / len;
     float diry = (enemies[closest_idx].y - player->y) / len;
     projectiles[i].vx = dirx * PROJECTILE_SPEED;

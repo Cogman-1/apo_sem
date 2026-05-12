@@ -19,6 +19,6 @@ typedef struct Player {
 void initialize_player(Player* player);
 void update_player(Player* player, knobs inputs, float dt_msec);
 void take_damage(Player* player);
-void draw_player(Player* player, Camera* camera, lcdpixel* fb);
+void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel* fb);
 
 #endif // APO_SEM_PLAYER_H

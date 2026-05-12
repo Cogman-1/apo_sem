@@ -1,4 +1,5 @@
 #include "player.h"
+#include "../../knobs.h"
 #include <math.h>
 
 void initialize_player(Player* player)
@@ -17,8 +18,12 @@ void initialize_player(Player* player)
 void update_player(Player* player, knobs inputs, float dt_msec)
 {
     // 1. Handle inputs
-    float dirx, diry;
-    calculate_direction(inputs, &dirx, &diry);
+    knobs_state knobstate;
+    knobs_state_init(&knobstate, (knobs){.r = 0, .g = 0, .b = 0});
+    knobs_update(&knobstate, inputs);
+    knob_directions directions = calculate_direction(&knobstate);
+    float dirx = directions.rx;
+    float diry = directions.ry;
     // 2. Update physics
     // update velocity
     float new_vx = player->vx + PLAYER_ACCELERATION_MOD * dirx * dt_msec;
@@ -52,15 +57,20 @@ void take_damage(Player* player)
         player->health -= ENEMY_DAMAGE;
 }
 
-void draw_player(Player* player, Camera* camera, lcdpixel* fb)
+void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel* fb)
 {
     Vertex_2D player_top_left = {0};
-    player_top_left.x = player->x - camera->x;
-    player_top_left.y = player->y - camera->y;
-    Vertex_2D player_Bot_right = {0};
-    player_Bot_right.x = player_top_left.x + PLAYER_WIDTH;
-    player_Bot_right.y = player_top_left.y + PLAYER_HEIGHT;
-    lcdpixel player_color;
-    player_color.raw = PLAYER_COLOR;
-    draw_rectangle(fb, player_top_left, player_Bot_right, player_color);
+    player_top_left.x = (int)(player->x - camera->x);
+    player_top_left.y = (int)(player->y - camera->y);
+
+    Vertex_2D player_bottom_right = {0};
+    player_bottom_right.x = player_top_left.x + PLAYER_WIDTH;
+    player_bottom_right.y = player_top_left.y + PLAYER_HEIGHT;
+
+    draw_rectangle(fb, player_top_left, player_bottom_right, (lcdpixel){.raw = GRAY});
+
+    Vertex_2D player_center = {0};
+    player_center.x = (int)(player->x - camera->x) + PLAYER_WIDTH / 2;
+    player_center.y = (int)(player->y - camera->y) + PLAYER_HEIGHT / 2;
+    draw_sprite_centered(fb, player_center, sprite);
 }

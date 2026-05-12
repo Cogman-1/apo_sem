@@ -2,18 +2,20 @@ CC = arm-linux-gnueabihf-gcc
 CXX = arm-linux-gnueabihf-g++
 
 CPPFLAGS = -I .
-CFLAGS =-g -std=gnu11 -O1 -Wall -Wextra -Wpedantic
+CFLAGS =-g -std=gnu11 -O1 -Wall -Wextra -Wpedantic -Wno-overlength-strings
 CXXFLAGS = -g -std=gnu++11 -O1 -Wall
 LDFLAGS += -static
 LDLIBS += -lrt -lpthread
 LDLIBS += -lm
 
-SOURCES = main.c start_menu.c
+SOURCES = main.c knobs.c start_menu.c
 #draw_lib compilation
 SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c
 #mzapo_lib compilation
 SOURCES += mzapo_lib/mzapo.c mzapo_lib/mzapo_parlcd.c mzapo_lib/mzapo_phys.c mzapo_lib/serialize_lock.c
 #levels compilation
+#sprites compilation
+SOURCES += sprites/sprites.c
 #singleplayer compilation
 SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
 SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
@@ -22,12 +24,14 @@ SOURCES += levels/single_player/sp_UI.c
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 TARGET_EXE = vamp
 
-ifeq ($(MAKECMDGOALS),sdl)
+ifneq ($(filter sdl buildsdl,$(MAKECMDGOALS)),)
 CC = gcc
 CXX = g++
-SOURCES = main.c start_menu.c sdl.c
+SOURCES = main.c start_menu.c knobs.c sdl.c
 #draw_lib compilation
 SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c
+#sprites compilation
+SOURCES += sprites/sprites.c
 #levels compilation
 #singleplayer compilation
 SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
@@ -113,6 +117,8 @@ run: copy-executable $(TARGET_EXE)
 sdl: $(TARGET_EXE)
 	./$(TARGET_EXE)
 
+buildsdl: $(TARGET_EXE)
+
 ifneq ($(filter -o ProxyJump=,$(SSH_OPTIONS))$(SSH_GDB_TUNNEL_REQUIRED),)
 SSH_GDB_PORT_FORWARD=-L 12345:127.0.0.1:12345
 TARGET_GDB_PORT=127.0.0.1:12345
@@ -128,4 +134,3 @@ debug: copy-executable $(TARGET_EXE)
 	echo >>connect.gdb "c"
 	ddd --debugger gdb-multiarch -x connect.gdb $(TARGET_EXE)
 
--include depend

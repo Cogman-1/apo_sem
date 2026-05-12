@@ -1,5 +1,8 @@
 #include "single_player.h"
 
+#include "../../sprites/sprites.h"
+
+#include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,8 +13,10 @@ typedef struct {
     Camera cam;
     int enemy_count;
     Enemy enemies[MAX_ENEMY_COUNT];
+    SpriteAnimator enemy_animators[MAX_ENEMY_COUNT];
     int projectile_count;
     Projectile projectiles[MAX_PROJECTILE_COUNT];
+    SpriteAnimator player_animator;
     uint32_t gameSeed;
     float enemy_spawn_timer;
     float shoot_cooldown_timer;
@@ -56,6 +61,8 @@ static void setup(GameState* state, uint32_t seed)
     // prepare enemies
     for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
         initialize_enemy(&state->enemies[i]);
+        state->enemies[i].active = 0;
+        sprite_animator_init(&state->enemy_animators[i], SPRITE_CLASS_MONSTER_SLIME, SPRITE_ANIM_IDLE, 0.1f);
     }
     // prepare projectiles
     for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
@@ -67,6 +74,7 @@ static void setup(GameState* state, uint32_t seed)
     // initialize cooldown timers
     state->enemy_spawn_timer = 0;
     state->shoot_cooldown_timer = 0;
+    sprite_animator_init(&state->player_animator, SPRITE_CLASS_HUMAN_SOLDIER, SPRITE_ANIM_IDLE, 0.1f);
 }
 
 // Singleplayer main function
@@ -93,13 +101,17 @@ void single_player(mzapo_state* hw_state)
         }
         // 2. Update player
         update_player(&game_state.player, k, dt);
+        if (fabsf(game_state.player.vx) + fabsf(game_state.player.vy) > 0.1f)
+            sprite_animator_play(&game_state.player_animator, SPRITE_ANIM_WALK, 1);
+        else
+            sprite_animator_play(&game_state.player_animator, SPRITE_ANIM_IDLE, 1);
+        sprite_animator_update(&game_state.player_animator, dt);
         // 3. Update Camera
         update_camera(&game_state.cam, &game_state.player, dt);
         // 4. Update projectiles + check for collisions projectile vs enemies
         // spawn new projectile if the player is shooting
         game_state.shoot_cooldown_timer += dt;
-        if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown &&
-            game_state.projectile_count <= MAX_PROJECTILE_COUNT && game_state.enemy_count > 0) {
+        if (game_state.shoot_cooldown_timer >= game_state.player.fireCooldown && game_state.enemy_count > 0) {
             spawn_projectile(game_state.projectiles, game_state.enemies, &game_state.player,
                              &game_state.projectile_count);
             game_state.shoot_cooldown_timer = 0.0f;
@@ -133,14 +145,20 @@ void single_player(mzapo_state* hw_state)
         // 5. spawn new enemies + update enemies + check for collisions enemy vs player
         // spawn new enemies
         game_state.enemy_spawn_timer += dt;
-        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count <= MAX_ENEMY_COUNT) {
+        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count < MAX_ENEMY_COUNT) {
             spawn_enemy(game_state.enemies, &game_state.cam, &game_state.enemy_count);
             game_state.enemy_spawn_timer -= ENEMY_SPAWN_COOL;
         }
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
-            if (game_state.enemies[i].active)
+            if (game_state.enemies[i].active) {
                 update_enemy(&game_state.enemies[i], &game_state.player, &game_state.enemy_count, dt);
+                if (fabsf(game_state.enemies[i].vx) + fabsf(game_state.enemies[i].vy) > 0.1f)
+                    sprite_animator_play(&game_state.enemy_animators[i], SPRITE_ANIM_WALK, 1);
+                else
+                    sprite_animator_play(&game_state.enemy_animators[i], SPRITE_ANIM_IDLE, 1);
+                sprite_animator_update(&game_state.enemy_animators[i], dt);
+            }
         }
         // check for collisions enemy vs. player
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
@@ -152,10 +170,11 @@ void single_player(mzapo_state* hw_state)
         }
         // 6. draw frame
         clear_display(fb);
-        draw_player(&game_state.player, &game_state.cam, fb);
+        draw_player(&game_state.player, &game_state.cam, sprite_animator_current_frame(&game_state.player_animator), fb);
+        // draw enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {
-                draw_enemy(&game_state.enemies[i], &game_state.cam, fb);
+                draw_enemy(&game_state.enemies[i], &game_state.cam, sprite_animator_current_frame(&game_state.enemy_animators[i]), fb);
             }
         }
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {

@@ -6,8 +6,8 @@
 void update_camera(Camera* camera, Player* player, float dt_msec)
 {
     // get the target coordinates
-    float c_target_x = player->x - SCREEN_WIDTH * 0.5f;
-    float c_target_y = player->y - SCREEN_HEIGHT * 0.5f;
+    float c_target_x = player->x + PLAYER_WIDTH * 0.5f - SCREEN_WIDTH * 0.5f;
+    float c_target_y = player->y + PLAYER_HEIGHT * 0.5f - SCREEN_HEIGHT * 0.5f;
 
     // clamp the target position to the world dimensions
     if (c_target_x < 0)
@@ -41,8 +41,8 @@ void update_camera(Camera* camera, Player* player, float dt_msec)
 
 void initialize_camera(Camera* camera)
 {
-    camera->x = (float)WORLD_WIDTH / 2 - SCREEN_WIDTH / 2;
-    camera->y = (float)WORLD_HEIGHT / 2 - SCREEN_HEIGHT / 2;
+    camera->x = (float)WORLD_WIDTH / 2 + PLAYER_WIDTH * 0.5f - SCREEN_WIDTH * 0.5f;
+    camera->y = (float)WORLD_HEIGHT / 2 + PLAYER_HEIGHT * 0.5f - SCREEN_HEIGHT * 0.5f;
     camera->vx = 0;
     camera->vy = 0;
 }
