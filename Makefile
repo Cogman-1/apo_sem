@@ -22,6 +22,8 @@ SOURCES += levels/single_player/player.c levels/single_player/projectile.c level
 SOURCES += levels/single_player/sp_UI.c
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
+#compile effects
+SOURCES += LEDRGB_Effects/effects.c LEDRGB_Effects/effects/take_damage.c
 TARGET_EXE = vamp
 
 ifneq ($(filter sdl buildsdl,$(MAKECMDGOALS)),)
@@ -39,6 +41,8 @@ SOURCES += levels/single_player/player.c levels/single_player/projectile.c level
 SOURCES += levels/single_player/sp_UI.c
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
+#compile effects
+SOURCES += LEDRGB_Effects/effects.c LEDRGB_Effects/effects/take_damage.c
 TARGET_EXE = vamp_sdl
 LDFLAGS :=
 LDLIBS := $(shell sdl2-config --libs) -lm
@@ -101,7 +105,7 @@ ifneq ($(filter %.cpp,$(SOURCES)),)
 endif
 
 clean:
-	rm -rf $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
+	rm -rf *.o $(OBJECTS) $(TARGET_EXE) connect.gdb depend vamp_sdl
 
 format:
 	find . -type f \( -name '*.c' -o -name '*.h' \) -exec clang-format -i {} +

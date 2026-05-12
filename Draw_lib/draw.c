@@ -3,9 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define IDX(x, y) ((y)*SCREEN_WIDTH + (x))
-
-
+#define IDX(x, y) ((y) * SCREEN_WIDTH + (x))
 
 void draw_rectangle(lcdpixel* fb, Vertex_2D topLeft, Vertex_2D bottomRight, lcdpixel color)
 {

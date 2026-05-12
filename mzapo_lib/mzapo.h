@@ -8,6 +8,8 @@
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 320
 
+#define LED_LINE_COUNT 32
+
 typedef struct mzapo_state {
     char* spiled_reg_base;
     char* parlcd_reg_base;

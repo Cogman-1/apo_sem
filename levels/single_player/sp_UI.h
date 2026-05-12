@@ -7,6 +7,6 @@
 #include "const.h"
 #include "player.h"
 
-void draw_ui(lcdpixel* fb, Player* player);
+void draw_ui(lcdpixel* fb, mzapo_state* state, Player* player);
 
 #endif // APO_SEM_SP_UI_H

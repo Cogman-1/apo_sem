@@ -2,7 +2,9 @@
 #define APO_SEM_PLAYER_H
 
 #include "../../Draw_lib/draw.h"
+#include "../../LEDRGB_Effects/effects.h"
 #include "../../mzapo_lib/mzapo.h"
+#include "../../LEDRGB_Effects/effects.h"
 #include "camera.h"
 #include "const.h"
 

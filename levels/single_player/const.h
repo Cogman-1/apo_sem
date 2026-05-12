@@ -33,7 +33,7 @@
 // enemy constants
 #define MAX_ENEMY_COUNT 50
 #define ENEMY_COLOR RED
-#define ENEMY_SPEED 6
+#define ENEMY_SPEED 25
 #define ENEMY_SPAWN_COOL 15.0f
 #define ENEMY_SPAWN_HEALTH 100
 #define ENEMY_WIDTH 12
@@ -62,7 +62,7 @@
 #define SCORE_Y 5
 #define SCORE_DIGITS 10
 #define SCORE_TEXT "Score: "
-#define SCORE_CHARS (sizeof(SCORE_TEXT))
+#define SCORE_CHARS (strlen(SCORE_TEXT))
 #define SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
 
 #endif // APO_SEM_CONST_H

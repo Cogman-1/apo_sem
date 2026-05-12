@@ -39,9 +39,7 @@
 #include "Monster_Slime/Monster_Slime_Walk/Monster_Slime_Walk_001.c"
 
 #define FRAME_TO_SPRITE(symbol)                                                                                        \
-    {                                                                                                                  \
-#symbol, (uint16_t)(symbol).width, (uint16_t)(symbol).height, (const uint16_t*)(symbol).pixel_data             \
-    }
+    {#symbol, (uint16_t)(symbol).width, (uint16_t)(symbol).height, (const uint16_t*)(symbol).pixel_data}
 
 typedef struct {
     const Sprite* frames;
@@ -115,7 +113,6 @@ static const SpriteAnimationClip* sprite_class_animations(SpriteClass sprite_cla
         return NULL;
     }
 }
-
 
 size_t sprite_animation_frame_count(SpriteClass sprite_class, SpriteAnimation animation)
 {

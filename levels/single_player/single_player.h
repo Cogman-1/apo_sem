@@ -3,7 +3,9 @@
 
 // libraries for hardware interaction and graphics
 #include "../../Draw_lib/draw.h"
+#include "../../LEDRGB_Effects/effects.h"
 #include "../../mzapo_lib/mzapo.h"
+#include "../../LEDRGB_Effects/effects.h"
 
 // files containing different objects in the game
 #include "camera.h"

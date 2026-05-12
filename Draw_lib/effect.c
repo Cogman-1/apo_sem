@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define IDX(x, y) ((y)*SCREEN_WIDTH + (x))
+#define IDX(x, y) ((y) * SCREEN_WIDTH + (x))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 

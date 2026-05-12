@@ -170,11 +170,13 @@ void single_player(mzapo_state* hw_state)
         }
         // 6. draw frame
         clear_display(fb);
-        draw_player(&game_state.player, &game_state.cam, sprite_animator_current_frame(&game_state.player_animator), fb);
+        draw_player(&game_state.player, &game_state.cam, sprite_animator_current_frame(&game_state.player_animator),
+                    fb);
         // draw enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {
-                draw_enemy(&game_state.enemies[i], &game_state.cam, sprite_animator_current_frame(&game_state.enemy_animators[i]), fb);
+                draw_enemy(&game_state.enemies[i], &game_state.cam,
+                           sprite_animator_current_frame(&game_state.enemy_animators[i]), fb);
             }
         }
         for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
@@ -182,7 +184,9 @@ void single_player(mzapo_state* hw_state)
                 draw_projectile(&game_state.projectiles[i], &game_state.cam, fb);
             }
         }
-        draw_ui(fb, &game_state.player);
+        draw_ui(fb, hw_state, &game_state.player);
         parlcd_write_screen(hw_state, fb);
+        // 7. update rgb leds
+        update_effect(hw_state, dt);
     }
 }

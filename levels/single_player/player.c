@@ -55,6 +55,8 @@ void take_damage(Player* player)
 {
     if (player->health >= 0)
         player->health -= ENEMY_DAMAGE;
+    // set the LED_RGB Effect
+    set_effect(DAMAGE);
 }
 
 void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel* fb)
