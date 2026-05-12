@@ -1,8 +1,9 @@
-#include "single_player.h"
+#pragma once
+#include "player.h"
 
 
 typedef struct Ability {
-    void effect(GameState*);
+    void (*effect)(void*);
     float cooldown;
     Sprite sprite;
 } Ability;
@@ -13,5 +14,5 @@ typedef struct ActiveAbility {
 } ActiveAbility;
 
 void initialize_abilities(Player* player);
-void damage_all(GameState* game_state);
+void damage_all(void* game_state);
 

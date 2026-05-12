@@ -19,7 +19,7 @@ SOURCES += sprites/sprites.c
 #singleplayer compilation
 SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
 SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
-SOURCES += levels/single_player/sp_UI.c
+SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 #compile effects
@@ -38,7 +38,7 @@ SOURCES += sprites/sprites.c
 #singleplayer compilation
 SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
 SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
-SOURCES += levels/single_player/sp_UI.c
+SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 #compile effects

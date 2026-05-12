@@ -157,7 +157,7 @@ void single_player(mzapo_state* hw_state)
             }
         }
         // 6. draw frame
-        draw_tiled_background(fb, (Vertex_2D){.x = game_state.cam.x, .y = game_state.cam.y}, get_bg_sprite());
+        draw_tiled_background(fb, (Vertex_2D){.x = -game_state.cam.x, .y = -game_state.cam.y}, get_bg_sprite());
         draw_player(&game_state.player, &game_state.cam, sprite_animator_current_frame(&game_state.player_animator),
                     fb);
         // draw enemies
