@@ -20,8 +20,10 @@ static const Effect* get_effect(Effect_Type type)
 
 void set_effect(Effect_Type type)
 {
-    current_effect = type;
-    time = 0.0f;
+    if (current_effect != NONE) {
+        current_effect = type;
+        time = 0.0f;
+    }
 }
 
 void update_effect(mzapo_state* hw_state, float dt)
@@ -37,6 +39,9 @@ void update_effect(mzapo_state* hw_state, float dt)
         if (time >= effect->duration) {
             current_effect = NONE;
             time = 0.0f;
+            //reset LEDS to off
+            ledrgb_write(hw_state, LEFT, (ledrgb){.raw=0});
+            ledrgb_write(hw_state, RIGHT, (ledrgb){.raw=0});
         }
         // find the current state the interval should be in
         float interval_start = 0;
@@ -50,5 +55,9 @@ void update_effect(mzapo_state* hw_state, float dt)
             interval_start += effect->intervals[i].sec;
             interval_end += i != effect->n_intervals - 1 ? effect->intervals[i + 1].sec : 0;
         }
+    }
+    else {
+        ledrgb_write(hw_state, LEFT, (ledrgb){.raw=0});
+        ledrgb_write(hw_state, RIGHT, (ledrgb){.raw=0});
     }
 }
