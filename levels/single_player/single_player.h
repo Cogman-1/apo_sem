@@ -6,6 +6,7 @@
 #include "../../LEDRGB_Effects/effects.h"
 #include "../../mzapo_lib/mzapo.h"
 #include "../../LEDRGB_Effects/effects.h"
+#include "../../sprites/sprites.h"
 
 // files containing different objects in the game
 #include "camera.h"
@@ -15,6 +16,20 @@
 #include "player.h"
 #include "projectile.h"
 #include "sp_UI.h"
+
+typedef struct GameState {
+    Player player;
+    Camera cam;
+    int enemy_count;
+    Enemy enemies[MAX_ENEMY_COUNT];
+    SpriteAnimator enemy_animators[MAX_ENEMY_COUNT];
+    int projectile_count;
+    Projectile projectiles[MAX_PROJECTILE_COUNT];
+    SpriteAnimator player_animator;
+    uint32_t gameSeed;
+    float enemy_spawn_timer;
+    float shoot_cooldown_timer;
+} GameState;
 
 void single_player(mzapo_state* game_state);
 

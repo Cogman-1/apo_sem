@@ -27,7 +27,7 @@ int start_menu(mzapo_state* state)
         knobs k = knobs_read(state);
         knobs_update(inputs, k);
         knobs_delta inputs_delta = knobs_get_clamped_delta(inputs);
-        highlighted = (highlighted + inputs_delta.r) % N_OPTIONS;
+        highlighted = (highlighted + inputs_delta.r + N_OPTIONS) % N_OPTIONS;
         if (k.rdown) {
             free(inputs);
             return highlighted;

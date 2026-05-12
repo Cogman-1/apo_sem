@@ -7,6 +7,7 @@
 #include "../../LEDRGB_Effects/effects.h"
 #include "camera.h"
 #include "const.h"
+#include "ability.h"
 
 typedef struct Player {
     float x, y;
@@ -17,6 +18,7 @@ typedef struct Player {
     int damage;
     float fireCooldown;
     int invincible_frames;
+    ActiveAbility activeAbilities[1];
 } Player;
 
 void initialize_player(Player* player);

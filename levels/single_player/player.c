@@ -1,4 +1,5 @@
 #include "player.h"
+#include "ability.h"
 #include "../../knobs.h"
 #include <math.h>
 
@@ -14,6 +15,8 @@ void initialize_player(Player* player)
     player->fireCooldown = PLAYER_START_FIRE_COOLDOWN;
     player->playerScore = 0;
     player->invincible_frames = 0;
+
+    initialize_abilities(player);
 }
 
 void update_player(Player* player, knobs inputs, float dt_msec)
@@ -70,16 +73,6 @@ void take_damage(Player* player)
 
 void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel* fb)
 {
-    Vertex_2D player_top_left = {0};
-    player_top_left.x = (int)(player->x - camera->x);
-    player_top_left.y = (int)(player->y - camera->y);
-
-    Vertex_2D player_bottom_right = {0};
-    player_bottom_right.x = player_top_left.x + PLAYER_WIDTH;
-    player_bottom_right.y = player_top_left.y + PLAYER_HEIGHT;
-
-    draw_rectangle(fb, player_top_left, player_bottom_right, (lcdpixel){.raw = GRAY});
-
     Vertex_2D player_center = {0};
     player_center.x = (int)(player->x - camera->x) + PLAYER_WIDTH / 2;
     player_center.y = (int)(player->y - camera->y) + PLAYER_HEIGHT / 2;

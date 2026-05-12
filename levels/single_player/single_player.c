@@ -8,19 +8,7 @@
 #include <time.h>
 
 // Type definitions
-typedef struct {
-    Player player;
-    Camera cam;
-    int enemy_count;
-    Enemy enemies[MAX_ENEMY_COUNT];
-    SpriteAnimator enemy_animators[MAX_ENEMY_COUNT];
-    int projectile_count;
-    Projectile projectiles[MAX_PROJECTILE_COUNT];
-    SpriteAnimator player_animator;
-    uint32_t gameSeed;
-    float enemy_spawn_timer;
-    float shoot_cooldown_timer;
-} GameState;
+
 
 // helper functions
 // get current time in miliseconds
