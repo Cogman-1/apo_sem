@@ -12,12 +12,15 @@ int main(int argc, char* argv[])
     sprite_init();
     mzapo_state* state = init_mzapo();
     int exit = 0;
+    int restart = 0;
     while (!exit) {
         int selected = start_menu(state);
         switch (selected) {
         case SINGLE_PLAYER:
-            single_player(state);
-
+            restart = single_player(state);
+            while (restart) {
+                restart = single_player(state);
+            }
             break;
         case SETTINGS:
             settings();

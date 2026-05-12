@@ -32,6 +32,7 @@ void invert_region(lcdpixel* fb, Vertex_2D top_left, Vertex_2D bottom_right);
 // Darken/Lighten region
 void darken_region(lcdpixel* fb, Vertex_2D top_left, Vertex_2D bottom_right, float factor);
 void lighten_region(lcdpixel* fb, Vertex_2D top_left, Vertex_2D bottom_right, float factor);
+void darken_background(lcdpixel* fb);
 
 // Wave distortion
 void wave_distortion(lcdpixel* fb, float amplitude, float frequency, float time);

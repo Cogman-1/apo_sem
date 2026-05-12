@@ -1,17 +1,18 @@
 #include "player.h"
-#include "enemy.h"
-#include "ability.h"
 #include "../../knobs.h"
+#include "ability.h"
+#include "enemy.h"
 #include <math.h>
 
-static void knockback_player(Player* player, Enemy* enemy) {
+static void knockback_player(Player* player, Enemy* enemy)
+{
     int dx = player->x - enemy->x;
     int dy = player->y - enemy->y;
-    float length = sqrtf(dx*dx + dy*dy);
-    //prevent division by zero
+    float length = sqrtf(dx * dx + dy * dy);
+    // prevent division by zero
     if (length > 0.001f) {
-        player->kvx = (dx/length)*PLAYER_KNOCKBACK_GAIN;
-        player->kvy = (dy/length)*PLAYER_KNOCKBACK_GAIN;
+        player->kvx = (dx / length) * PLAYER_KNOCKBACK_GAIN;
+        player->kvy = (dy / length) * PLAYER_KNOCKBACK_GAIN;
         player->stun_frames = PLAYER_STUN_GAIN;
     }
 }
@@ -36,7 +37,7 @@ void initialize_player(Player* player)
 
 void update_player(Player* player, knobs inputs, float dt_msec)
 {
-    if (player->stun_frames<=0){
+    if (player->stun_frames <= 0) {
         // 1. Handle inputs
         knobs_state knobstate;
         knobs_state_init(&knobstate, (knobs){.r = 0, .g = 0, .b = 0});
@@ -56,11 +57,13 @@ void update_player(Player* player, knobs inputs, float dt_msec)
         // assign velocity to player
         player->vx = new_vx;
         player->vy = new_vy;
-        //knockback friction
+        // knockback friction
         player->kvx *= PLAYER_KNOCKBACK_FRICTION;
         player->kvy *= PLAYER_KNOCKBACK_FRICTION;
-        if (fabsf(player->kvx) < 0.001f) player->kvx = 0;
-        if (fabsf(player->kvy) < 0.001f) player->kvy = 0;
+        if (fabsf(player->kvx) < 0.001f)
+            player->kvx = 0;
+        if (fabsf(player->kvy) < 0.001f)
+            player->kvy = 0;
         // calculate new position
         float new_x = player->x + (player->vx + player->kvx) * dt_msec;
         float new_y = player->y + (player->vy + player->kvy) * dt_msec;
@@ -76,12 +79,12 @@ void update_player(Player* player, knobs inputs, float dt_msec)
         player->y = new_y;
     }
 
-    //invincibility decay
+    // invincibility decay
     if (player->invincible_frames > 0) {
         player->invincible_frames--;
     }
-    //stun decay
-    if (player->stun_frames>0) {
+    // stun decay
+    if (player->stun_frames > 0) {
         player->stun_frames--;
     }
 }
@@ -105,4 +108,3 @@ void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel*
     player_center.y = (int)(player->y - camera->y) + PLAYER_HEIGHT / 2;
     draw_sprite_centered(fb, player_center, sprite);
 }
-

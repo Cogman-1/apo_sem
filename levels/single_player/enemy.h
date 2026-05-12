@@ -7,7 +7,7 @@
 
 typedef struct Projectile Projectile;
 
-typedef struct Enemy{
+typedef struct Enemy {
     char active;
     float x, y;
     float vx, vy;

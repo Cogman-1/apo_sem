@@ -72,4 +72,10 @@
 #define SCORE_CHARS (strlen(SCORE_TEXT))
 #define SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
 
+// define death menu score counter
+#define DEATH_SCORE_DIGITS 10
+#define DEATH_SCORE_TEXT "Final Score: "
+#define DEATH_SCORE_CHARS (strlen(DEATH_SCORE_TEXT))
+#define DEATH_SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
+
 #endif // APO_SEM_CONST_H

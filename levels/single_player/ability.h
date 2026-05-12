@@ -1,6 +1,4 @@
 #pragma once
-#include "player.h"
-
 
 typedef struct Ability {
     void (*effect)(void*);
@@ -13,6 +11,7 @@ typedef struct ActiveAbility {
     float cooldown_end;
 } ActiveAbility;
 
+typedef struct Player Player;
+
 void initialize_abilities(Player* player);
 void damage_all(void* game_state);
-

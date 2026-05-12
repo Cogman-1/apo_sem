@@ -60,14 +60,15 @@ static void draw_score(lcdpixel* fb, Player* player)
 
 static void draw_abilities(lcdpixel* fb, Player* player)
 {
-    for (size_t i = 0; i < 2; i++) {
+    for (int i = 0; i < 2; i++) {
         Vertex_2D center = (Vertex_2D){420, 80 + 40 * i};
         Vertex_2D topleft = (Vertex_2D){center.x - 16, center.y - 16};
-        Vertex_2D botright = (Vertex_2D){center.x +16, center.y + 16};
+        Vertex_2D botright = (Vertex_2D){center.x + 16, center.y + 16};
         if (player->selected_active_ability == i) {
-            draw_rectangle(fb, (Vertex_2D){center.x - 17, center.y - 17}, (Vertex_2D){center.x +17, center.y + 17}, (lcdpixel){.r=31, .g=63, .b=0});
+            draw_rectangle(fb, (Vertex_2D){center.x - 17, center.y - 17}, (Vertex_2D){center.x + 17, center.y + 17},
+                           (lcdpixel){.r = 31, .g = 63, .b = 0});
         }
-        draw_rectangle(fb, topleft, botright, (lcdpixel){.r=16, .g=32, .b=16});
+        draw_rectangle(fb, topleft, botright, (lcdpixel){.r = 16, .g = 32, .b = 16});
         draw_sprite_centered(fb, center, player->activeAbilities[i].ability.sprite);
         float delta = player->activeAbilities[i].cooldown_end - time_ms() / 1000.0;
         if (delta > 0) {

@@ -18,18 +18,6 @@ static void draw_pause(mzapo_state* state, int highlighted, lcdpixel* fb)
     parlcd_write_screen(state, fb);
 }
 
-// darkens the screen the background screen by 50%
-static void darken_background(lcdpixel* fb)
-{
-    for (int y = 0; y < SCREEN_HEIGHT; y++) {
-        for (int x = 0; x < SCREEN_WIDTH; x++) {
-            fb[y * SCREEN_WIDTH + x].r >>= 1;
-            fb[y * SCREEN_WIDTH + x].g >>= 1;
-            fb[y * SCREEN_WIDTH + x].b >>= 1;
-        }
-    }
-}
-
 static void wait_for_release(mzapo_state* state)
 {
     knobs k;

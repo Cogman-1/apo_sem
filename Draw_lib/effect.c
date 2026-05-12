@@ -235,6 +235,17 @@ void lighten_region(lcdpixel* fb, Vertex_2D top_left, Vertex_2D bottom_right, fl
     }
 }
 
+void darken_background(lcdpixel* fb)
+{
+    for (int y = 0; y < SCREEN_HEIGHT; y++) {
+        for (int x = 0; x < SCREEN_WIDTH; x++) {
+            fb[y * SCREEN_WIDTH + x].r >>= 1;
+            fb[y * SCREEN_WIDTH + x].g >>= 1;
+            fb[y * SCREEN_WIDTH + x].b >>= 1;
+        }
+    }
+}
+
 void wave_distortion(lcdpixel* fb, float amplitude, float frequency, float time)
 {
     amplitude = MAX(0, MIN(50, amplitude));

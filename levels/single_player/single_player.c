@@ -1,16 +1,15 @@
 #include "single_player.h"
 
-#include "../../sprites/sprites.h"
 #include "../../knobs.h"
+#include "../../sprites/sprites.h"
 
 #include <math.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdio.h>
 
 // Type definitions
-
 
 // helper functions
 // get current time in miliseconds
@@ -68,12 +67,13 @@ static void setup(GameState* state, uint32_t seed)
 }
 
 // Singleplayer main function
-void single_player(mzapo_state* hw_state)
+int single_player(mzapo_state* hw_state)
 {
     GameState game_state;
     setup(&game_state, (uint32_t)time_ms());
     lcdpixel fb[SCREEN_WIDTH * SCREEN_HEIGHT];
     clear_display(fb);
+    int start_again = 0;
     // Main Game loop
     int exit = 0;
     knobs_state* ks = malloc(sizeof(*ks));
@@ -93,14 +93,15 @@ void single_player(mzapo_state* hw_state)
                 exit = 1;
             }
         }
-        ActiveAbility* ab  = &game_state.player.activeAbilities[game_state.player.selected_active_ability];
+        ActiveAbility* ab = &game_state.player.activeAbilities[game_state.player.selected_active_ability];
         if (k.bdown && ab->cooldown_end < time_ms() / 1000.0) {
             ab->ability.effect((void*)&game_state);
             ab->cooldown_end = time_ms() / 1000.0 + ab->ability.cooldown;
-            fprintf(stderr, "active ability %d: %f -> %f\n", game_state.player.selected_active_ability, time_ms() / 1000.0, ab->cooldown_end);
+            fprintf(stderr, "active ability %d: %f -> %f\n", game_state.player.selected_active_ability,
+                    time_ms() / 1000.0, ab->cooldown_end);
         }
         game_state.player.selected_active_ability = (game_state.player.selected_active_ability + kd.b + 2) % 2;
-        
+
         // 2. Update player
         update_player(&game_state.player, k, dt);
         if (fabsf(game_state.player.vx) + fabsf(game_state.player.vy) > 0.1f)
@@ -193,5 +194,14 @@ void single_player(mzapo_state* hw_state)
         parlcd_write_screen(hw_state, fb);
         // 7. update rgb leds
         update_effect(hw_state, dt);
+        //8. check if the player is dead
+        if (game_state.player.health <= 0) {
+            exit = 1;
+            int option = death(&game_state.player, fb, hw_state);
+            if (option == RESTART) {
+                start_again = 1;
+            }
+        }
     }
+    return start_again;
 }

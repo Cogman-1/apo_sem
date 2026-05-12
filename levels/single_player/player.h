@@ -4,17 +4,16 @@
 #include "../../Draw_lib/draw.h"
 #include "../../LEDRGB_Effects/effects.h"
 #include "../../mzapo_lib/mzapo.h"
-#include "../../LEDRGB_Effects/effects.h"
+#include "ability.h"
 #include "camera.h"
 #include "const.h"
-#include "ability.h"
 
 typedef struct Enemy Enemy;
 
 typedef struct Player {
-    float x, y; //current pos
-    float vx, vy; //native vel
-    float kvx, kvy; //knockback vel
+    float x, y;     // current pos
+    float vx, vy;   // native vel
+    float kvx, kvy; // knockback vel
     int playerScore;
     short maxHealth;
     short health;

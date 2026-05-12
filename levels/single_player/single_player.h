@@ -5,7 +5,6 @@
 #include "../../Draw_lib/draw.h"
 #include "../../LEDRGB_Effects/effects.h"
 #include "../../mzapo_lib/mzapo.h"
-#include "../../LEDRGB_Effects/effects.h"
 #include "../../sprites/sprites.h"
 
 // files containing different objects in the game
@@ -16,6 +15,7 @@
 #include "player.h"
 #include "projectile.h"
 #include "sp_UI.h"
+#include "death.h"
 
 typedef struct GameState {
     Player player;
@@ -31,6 +31,6 @@ typedef struct GameState {
     float shoot_cooldown_timer;
 } GameState;
 
-void single_player(mzapo_state* game_state);
+int single_player(mzapo_state* game_state);
 
 #endif // APO_SEM_SINGLE_PLAYER_H
