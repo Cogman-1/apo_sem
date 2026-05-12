@@ -10,12 +10,12 @@
 // files containing different objects in the game
 #include "camera.h"
 #include "const.h"
+#include "death.h"
 #include "enemy.h"
 #include "pause.h"
 #include "player.h"
 #include "projectile.h"
 #include "sp_UI.h"
-#include "death.h"
 
 typedef struct GameState {
     Player player;

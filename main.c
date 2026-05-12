@@ -38,9 +38,11 @@ int main(int argc, char* argv[])
             continue;
         }
     }
+    //reset peripherals
     lcdpixel fb[SCREEN_WIDTH * SCREEN_HEIGHT];
     clear_display(fb);
     parlcd_write_screen(state, fb);
+    ledline_write(state, (uint32_t)0);
 #ifndef SDL
     serialize_unlock();
 #endif

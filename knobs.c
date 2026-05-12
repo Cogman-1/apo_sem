@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 static int16_t normalize_mod_80(int16_t value)
 {
@@ -87,4 +88,21 @@ knob_directions calculate_direction(knobs_state* state)
         .bx = cosf(b),
         .by = sinf(b),
     };
+}
+
+int knobs_any_button_down(knobs k)
+{
+    return k.rdown || k.gdown || k.bdown;
+}
+
+int knobs_red_pressed(knobs_state* state)
+{
+    return !state->last_knobs.rdown && state->current_knobs.rdown;
+}
+
+void knobs_wait_for_buttons_released(mzapo_state* state)
+{
+    while (knobs_any_button_down(knobs_read(state))) {
+        usleep(1000);
+    }
 }

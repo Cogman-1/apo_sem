@@ -3,8 +3,8 @@
 
 #include "../../Draw_lib/draw.h"
 #include "../../LEDRGB_Effects/effects.h"
-#include "../../mzapo_lib/mzapo.h"
 #include "../../knobs.h"
+#include "../../mzapo_lib/mzapo.h"
 #include "ability.h"
 #include "camera.h"
 #include "const.h"

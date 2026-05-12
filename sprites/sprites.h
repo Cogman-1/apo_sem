@@ -44,5 +44,7 @@ void sprite_animator_update(SpriteAnimator* animator, float dt_sec);
 Sprite* sprite_animator_current_frame(const SpriteAnimator* animator);
 Sprite* get_bg_sprite();
 Sprite* get_arrow_sprites();
+Sprite* get_start_menu_sprite();
+Sprite* get_title_banner_sprite();
 
 #endif

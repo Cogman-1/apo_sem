@@ -195,7 +195,7 @@ int single_player(mzapo_state* hw_state)
         parlcd_write_screen(hw_state, fb);
         // 7. update rgb leds
         update_effect(hw_state, dt);
-        //8. check if the player is dead
+        // 8. check if the player is dead
         if (game_state.player.health <= 0) {
             exit = 1;
             int option = death(&game_state.player, fb, hw_state);

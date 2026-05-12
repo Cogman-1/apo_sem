@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "Start_Menu_BCKG.c"
+#include "Title_Banner.c"
 #include "arrow.c"
 #include "bg.c"
 
@@ -75,6 +77,8 @@ typedef struct {
 
 static Sprite bg_sprite = FRAME_TO_SPRITE(bg);
 static Sprite arrow_sprite0 = FRAME_TO_SPRITE(arrow);
+static Sprite start_menu_sprite = FRAME_TO_SPRITE(start_menu);
+static Sprite title_banner_sprite = FRAME_TO_SPRITE(title_banner);
 Sprite arrow_sprite1;
 Sprite arrow_sprite2;
 Sprite arrow_sprite3;
@@ -235,4 +239,13 @@ Sprite* get_bg_sprite()
 Sprite* get_arrow_sprites()
 {
     return arrow_sprites;
+}
+
+Sprite* get_start_menu_sprite()
+{
+    return &start_menu_sprite;
+}
+
+Sprite* get_title_banner_sprite() {
+    return &title_banner_sprite;
 }

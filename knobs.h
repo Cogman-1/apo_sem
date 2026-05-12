@@ -32,4 +32,8 @@ void knobs_update(knobs_state* state, knobs current_knobs);
 knobs_delta knobs_get_clamped_delta(knobs_state* state);
 knobs_delta knobs_get_delta(knobs_state* state);
 
+int knobs_any_button_down(knobs k);
+int knobs_red_pressed(knobs_state* state);
+void knobs_wait_for_buttons_released(mzapo_state* state);
+
 knob_directions calculate_direction(knobs_state* state);

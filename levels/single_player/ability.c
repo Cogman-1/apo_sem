@@ -15,12 +15,13 @@ static uint64_t time_ms()
     return (uint64_t)ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
 }
 
-
-void spawn_many_projectiles(void* gs) {
+void spawn_many_projectiles(void* gs)
+{
     GameState* game_state = (GameState*)gs;
     for (int y = -1; y <= 1; y++) {
         for (int x = -1; x <= 1; x++) {
-            size_t idx = spawn_projectile(game_state->projectiles, game_state->enemies, &game_state->player, &game_state->projectile_count);
+            size_t idx = spawn_projectile(game_state->projectiles, game_state->enemies, &game_state->player,
+                                          &game_state->projectile_count);
             game_state->projectiles[idx].x += x * 32;
             game_state->projectiles[idx].y += y * 32;
             game_state->projectiles[idx].vx -= x * 4;
@@ -37,10 +38,11 @@ void damage_all(void* gs)
     }
 }
 
-
-
-void initialize_abilities(Player* player) {
-    player->activeAbilities[0] = (ActiveAbility){(Ability){spawn_many_projectiles, 20.0f, &get_arrow_sprites()[0]}, time_ms() / 1000 +5.0f};
-    player->activeAbilities[1] = (ActiveAbility){(Ability){damage_all, 10.0f, &get_arrow_sprites()[0]}, time_ms() / 1000 +2.5f};
+void initialize_abilities(Player* player)
+{
+    player->activeAbilities[0] =
+        (ActiveAbility){(Ability){spawn_many_projectiles, 20.0f, &get_arrow_sprites()[0]}, time_ms() / 1000 + 5.0f};
+    player->activeAbilities[1] =
+        (ActiveAbility){(Ability){damage_all, 10.0f, &get_arrow_sprites()[0]}, time_ms() / 1000 + 2.5f};
     player->selected_active_ability = 0;
 }
