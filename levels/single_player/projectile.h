@@ -16,7 +16,7 @@ void initialize_projectile(Projectile* projectile);
 
 void update_projectile(Projectile* projectile, Camera* camera, int* projectile_count, float dt);
 
-void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count);
+size_t spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count);
 
 void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb, Sprite* sprites);
 

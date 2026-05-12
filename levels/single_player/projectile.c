@@ -39,7 +39,7 @@ void update_projectile(Projectile* projectile, Camera* camera, int* projectile_c
     }
 }
 
-void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count)
+size_t spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, int* projectile_count)
 {
     int i = 0;
     while (i < MAX_PROJECTILE_COUNT && projectiles[i].active)
@@ -51,7 +51,7 @@ void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, i
     int closest_idx = get_closest_enemy(enemies, player, &len);
     if (closest_idx < 0 || len <= 0.001f) {
         projectiles[i].active = 0;
-        return;
+        return i;
     }
     float dirx = (enemies[closest_idx].x - player->x) / len;
     float diry = (enemies[closest_idx].y - player->y) / len;
@@ -59,6 +59,7 @@ void spawn_projectile(Projectile* projectiles, Enemy* enemies, Player* player, i
     projectiles[i].vy = diry * PROJECTILE_SPEED;
     projectiles[i].damage = player->damage;
     (*projectile_count)++;
+    return i;
 }
 
 void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb, Sprite* sprites)
