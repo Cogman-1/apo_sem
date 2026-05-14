@@ -29,6 +29,7 @@ typedef struct GameState {
     uint32_t gameSeed;
     float enemy_spawn_timer;
     float shoot_cooldown_timer;
+    float enemy_spawn_cooldown;
 } GameState;
 
 int single_player(mzapo_state* game_state);

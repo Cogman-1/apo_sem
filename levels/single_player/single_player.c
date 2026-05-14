@@ -76,6 +76,7 @@ static void setup(GameState* state, uint32_t seed)
     // initialize cooldown timers
     state->enemy_spawn_timer = 0;
     state->shoot_cooldown_timer = 0;
+    state->enemy_spawn_cooldown = ENEMY_SPAWN_COOL_MAX;
     sprite_animator_init(&state->player_animator, SPRITE_CLASS_HUMAN_SOLDIER, SPRITE_ANIM_IDLE, 0.1f);
 }
 
@@ -94,10 +95,13 @@ int single_player(mzapo_state* hw_state)
     knobs_state_init(ks, knobs_read(hw_state));
     // reset dt timer
     reset_dt_timer();
+    // start measuring the elapsed time
+    float elapsed = 0.0f;
     while (!exit) {
-        // 0. get dt
+        // 0. get dt and write elapsed time
         uint64_t dt_msec = get_dt();
         float dt = dt_msec / 1000.0f;
+        elapsed += dt;
         // 1. read inputs
         knobs k = knobs_read(hw_state);
         knobs_update(ks, k);
@@ -167,9 +171,18 @@ int single_player(mzapo_state* hw_state)
         // 5. spawn new enemies + update enemies + check for collisions enemy vs player
         // spawn new enemies
         game_state.enemy_spawn_timer += dt;
-        if (game_state.enemy_spawn_timer >= ENEMY_SPAWN_COOL && game_state.enemy_count < MAX_ENEMY_COUNT) {
+        if (game_state.enemy_spawn_timer >= game_state.enemy_spawn_cooldown &&
+            game_state.enemy_count < MAX_ENEMY_COUNT) {
             spawn_enemy(game_state.enemies, &game_state.cam, &game_state.enemy_count);
-            game_state.enemy_spawn_timer -= ENEMY_SPAWN_COOL;
+            game_state.enemy_spawn_timer -= game_state.enemy_spawn_cooldown;
+        }
+        // calculate the new spawn cooldown
+        if (elapsed < ENEMY_INTRO_SPAWN_TIME) {
+            game_state.enemy_spawn_cooldown = ENEMY_INTRO_SPAWN_COOLDOWN;
+        } else {
+            float t = elapsed - ENEMY_INTRO_SPAWN_TIME;
+            game_state.enemy_spawn_cooldown = ENEMY_SPAWN_COOL_MIN + (ENEMY_SPAWN_COOL_MAX - ENEMY_SPAWN_COOL_MIN) *
+                                                                         expf(-ENEMY_SPAWN_COOL_DECAY * t);
         }
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
@@ -193,6 +206,7 @@ int single_player(mzapo_state* hw_state)
             }
         }
         // 6. draw frame
+        // draw background and player
         draw_tiled_background(fb, (Vertex_2D){.x = -game_state.cam.x, .y = -game_state.cam.y}, get_bg_sprite());
         draw_player(&game_state.player, &game_state.cam, sprite_animator_current_frame(&game_state.player_animator),
                     fb);
