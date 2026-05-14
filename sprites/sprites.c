@@ -246,6 +246,7 @@ Sprite* get_start_menu_sprite()
     return &start_menu_sprite;
 }
 
-Sprite* get_title_banner_sprite() {
+Sprite* get_title_banner_sprite()
+{
     return &title_banner_sprite;
 }

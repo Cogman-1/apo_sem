@@ -20,6 +20,7 @@ int death(Player* player, lcdpixel* fb, mzapo_state* state)
     knobs_wait_for_buttons_released(state);
     int highlighted = EXIT;
     darken_background(fb);
+    clear_effect();
     knobs_state* inputs = malloc(sizeof(knobs_state));
     knobs_state_init(inputs, knobs_read(state));
     while (1) {
@@ -38,7 +39,7 @@ int death(Player* player, lcdpixel* fb, mzapo_state* state)
 static void draw_menu(int highlighted, lcdpixel* fb, mzapo_state* state, Player* player)
 {
     lcdpixel t_color;
-    Vertex_2D start = {SCREEN_WIDTH/2- 60, 80};
+    Vertex_2D start = {SCREEN_WIDTH / 2 - 60, 80};
     // title
     t_color.raw = TEXT_COLOR;
     draw_text(fb, start, "You Died!", t_color, FONT_ROM8x16);
@@ -48,7 +49,7 @@ static void draw_menu(int highlighted, lcdpixel* fb, mzapo_state* state, Player*
     memcpy(score_text, text, DEATH_SCORE_CHARS);
     sprintf(score_text + DEATH_SCORE_CHARS, "%d", player->playerScore);
     score_text[DEATH_SCORE_TEXT_LENGTH - 1] = '\0';
-    start.x = SCREEN_WIDTH/2 - 80;
+    start.x = SCREEN_WIDTH / 2 - 80;
     start.y = 120;
     draw_text(fb, start, score_text, t_color, FONT_ROM8x16);
     start.x = 20;

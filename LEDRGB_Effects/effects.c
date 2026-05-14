@@ -13,6 +13,8 @@ static const Effect* get_effect(Effect_Type type)
     switch (type) {
     case DAMAGE:
         return &damage;
+    case MENU:
+        return &menu;
     default:
         return NULL;
     }
@@ -20,7 +22,7 @@ static const Effect* get_effect(Effect_Type type)
 
 void set_effect(Effect_Type type)
 {
-    if (current_effect != NONE) {
+    if (current_effect == NONE) {
         current_effect = type;
         time = 0.0f;
     }
@@ -59,4 +61,10 @@ void update_effect(mzapo_state* hw_state, float dt)
         ledrgb_write(hw_state, LEFT, (ledrgb){.raw = 0});
         ledrgb_write(hw_state, RIGHT, (ledrgb){.raw = 0});
     }
+}
+
+void clear_effect()
+{
+    current_effect = NONE;
+    time = 0.0f;
 }

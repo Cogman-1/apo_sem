@@ -21,21 +21,34 @@ uint64_t time_ms()
 }
 
 // get delta time between frames in miliseconds
-uint64_t get_dt()
+static uint64_t last_dt_time = 0;
+
+static void reset_dt_timer(void)
 {
-    static uint64_t last = 0;
+    last_dt_time = time_ms();
+}
+
+static uint64_t get_dt()
+{
     uint64_t now = time_ms();
-    if (last == 0) {
-        last = now;
+
+    if (last_dt_time == 0) {
+        last_dt_time = now;
         return 0;
     }
-    uint64_t dt = now - last;
-    last = now;
+
+    uint64_t dt = now - last_dt_time;
+    last_dt_time = now;
+
+    if (dt > 100) {
+        dt = 100;
+    }
+
     return dt;
 }
 
 // collision check
-int AABBCollision(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh)
+static int AABBCollision(float ax, float ay, float aw, float ah, float bx, float by, float bw, float bh)
 {
     return (ax < bx + bw) && (ax + aw > bx) && (ay < by + bh) && (ay + ah > by);
 }
@@ -71,13 +84,16 @@ int single_player(mzapo_state* hw_state)
 {
     GameState game_state;
     setup(&game_state, (uint32_t)time_ms());
+    // prepare and clear frame buffer and RGB LEDs
     lcdpixel fb[SCREEN_WIDTH * SCREEN_HEIGHT];
     clear_display(fb);
-    int start_again = 0;
-    // Main Game loop
+    clear_effect();
     int exit = 0;
+    int start_again = 0;
     knobs_state* ks = malloc(sizeof(*ks));
     knobs_state_init(ks, knobs_read(hw_state));
+    // reset dt timer
+    reset_dt_timer();
     while (!exit) {
         // 0. get dt
         uint64_t dt_msec = get_dt();
@@ -89,6 +105,7 @@ int single_player(mzapo_state* hw_state)
         // check for a pause request
         if (k.gdown) {
             int p_ret = pause(hw_state, fb);
+            reset_dt_timer();
             if (p_ret == P_EXIT_MAIN_MENU) {
                 exit = 1;
             }

@@ -6,7 +6,7 @@
 
 #define MAX_INTERVALS 20
 
-typedef enum { NONE = -1, DAMAGE = 0 } Effect_Type;
+typedef enum { NONE = -1, DAMAGE = 0, MENU } Effect_Type;
 
 typedef struct {
     float sec;
@@ -22,8 +22,10 @@ typedef struct {
 } Effect;
 
 extern const Effect damage;
+extern const Effect menu;
 
 void set_effect(Effect_Type type);
 void update_effect(mzapo_state* hw_state, float dt);
+void clear_effect();
 
 #endif // APO_SEM_EFFECTS_H

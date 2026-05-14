@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200112L
+#include "LEDRGB_Effects/effects.h"
 #include "levels/levels.h"
 #include "mzapo_lib/mzapo.h"
 #include "mzapo_lib/serialize_lock.h"
@@ -38,10 +39,11 @@ int main(int argc, char* argv[])
             continue;
         }
     }
-    //reset peripherals
+    // reset peripherals
     lcdpixel fb[SCREEN_WIDTH * SCREEN_HEIGHT];
     clear_display(fb);
     parlcd_write_screen(state, fb);
+    clear_effect();
     ledline_write(state, (uint32_t)0);
 #ifndef SDL
     serialize_unlock();

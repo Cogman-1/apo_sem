@@ -23,7 +23,7 @@ SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c levels/si
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 #compile effects
-SOURCES += LEDRGB_Effects/effects.c LEDRGB_Effects/effects/take_damage.c
+SOURCES += LEDRGB_Effects/effects.c LEDRGB_Effects/effects/take_damage.c LEDRGB_Effects/effects/menu_color_blinking.c
 TARGET_EXE = vamp
 
 ifneq ($(filter sdl buildsdl,$(MAKECMDGOALS)),)
@@ -42,7 +42,7 @@ SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c levels/si
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 #compile effects
-SOURCES += LEDRGB_Effects/effects.c LEDRGB_Effects/effects/take_damage.c
+SOURCES += LEDRGB_Effects/effects.c LEDRGB_Effects/effects/take_damage.c LEDRGB_Effects/effects/menu_color_blinking.c
 TARGET_EXE = vamp_sdl
 LDFLAGS :=
 LDLIBS := $(shell sdl2-config --libs) -lm

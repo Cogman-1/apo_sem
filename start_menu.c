@@ -1,10 +1,12 @@
 #include "start_menu.h"
 #include "Draw_lib/draw.h"
 #include "Draw_lib/text.h"
+#include "LEDRGB_Effects/effects.h"
 #include "knobs.h"
 #include "mzapo_lib/mzapo.h"
 #include "sprites/sprites.h"
 #include <stdlib.h>
+#include <time.h>
 
 // Menu options definitions
 #define N_OPTIONS 5
@@ -13,16 +15,45 @@ char* labels[N_OPTIONS] = {"Single Player", "Multi Player", "Settings", "Control
 #define TEXT_COLOR 0XFFFF
 #define HIGH_COLOR 0xF800
 
+// helpers for dt for LEDRGB updates:
+static uint64_t menu_last_time = 0;
+
+static uint64_t menu_time_ms(void)
+{
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return (uint64_t)ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+}
+
+static void menu_reset_dt(void)
+{
+    menu_last_time = menu_time_ms();
+}
+
+static float menu_get_dt(void)
+{
+    uint64_t now = menu_time_ms();
+    uint64_t dt_ms = now - menu_last_time;
+    menu_last_time = now;
+
+    if (dt_ms > 100) {
+        dt_ms = 100;
+    }
+
+    return dt_ms / 1000.0f;
+}
+
 static void draw_menu(int highlighted, mzapo_state* state);
 
 int start_menu(mzapo_state* state)
 {
     knobs_wait_for_buttons_released(state);
     int highlighted = SINGLE_PLAYER;
-
+    clear_effect();
     knobs_state* inputs = malloc(sizeof(*inputs));
     knobs_state_init(inputs, knobs_read(state));
-
+    menu_reset_dt();
+    set_effect(MENU);
     while (1) {
         draw_menu(highlighted, state);
 
@@ -42,7 +73,7 @@ static void draw_menu(int highlighted, mzapo_state* state)
 {
     lcdpixel fb[SCREEN_HEIGHT * SCREEN_WIDTH];
     clear_display(fb);
-    //background, draw first!!!!
+    // background, draw first!!!!
     draw_sprite(fb, (Vertex_2D){0, 0}, get_start_menu_sprite());
     draw_sprite(fb, (Vertex_2D){250, 0}, get_title_banner_sprite());
     lcdpixel t_color;
@@ -58,4 +89,8 @@ static void draw_menu(int highlighted, mzapo_state* state)
     draw_text(fb, start, "Use the red knob to control the menu!\nPress to select highlighted option", t_color,
               FONT_PROP14x16);
     parlcd_write_screen(state, fb);
+    // add blinking RGB_LEDS
+    set_effect(MENU);
+    float dt = menu_get_dt();
+    update_effect(state, dt);
 }
