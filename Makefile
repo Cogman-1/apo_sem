@@ -13,13 +13,13 @@ SOURCES = main.c knobs.c start_menu.c
 SOURCES += Draw_lib/draw.c Draw_lib/font_prop14x16.c Draw_lib/font_rom8x16.c Draw_lib/text.c Draw_lib/effect.c
 #mzapo_lib compilation
 SOURCES += mzapo_lib/mzapo.c mzapo_lib/mzapo_parlcd.c mzapo_lib/mzapo_phys.c mzapo_lib/serialize_lock.c
-#levels compilation
 #sprites compilation
 SOURCES += sprites/sprites.c
+#levels compilation
 #singleplayer compilation
 SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
 SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
-SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c levels/single_player/death.c
+SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c levels/single_player/death.c levels/single_player/leveling.c
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 #compile effects
@@ -38,7 +38,7 @@ SOURCES += sprites/sprites.c
 #singleplayer compilation
 SOURCES += levels/single_player/camera.c levels/single_player/enemy.c levels/single_player/pause.c
 SOURCES += levels/single_player/player.c levels/single_player/projectile.c levels/single_player/single_player.c
-SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c levels/single_player/death.c
+SOURCES += levels/single_player/sp_UI.c levels/single_player/ability.c levels/single_player/death.c levels/single_player/leveling.c
 #other levels
 SOURCES += levels/controls.c levels/multi_player.c levels/settings.c
 #compile effects

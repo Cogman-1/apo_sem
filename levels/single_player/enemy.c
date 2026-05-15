@@ -45,7 +45,7 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
     }
 }
 
-void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count)
+void spawn_enemy(Enemy* enemies, Player* player, Camera* cam, int* enemy_count)
 {
     int i = 0;
     while (i < MAX_ENEMY_COUNT && enemies[i].active)
@@ -53,7 +53,7 @@ void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count)
     if (i >= MAX_ENEMY_COUNT)
         return;
     enemies[i].active = 1;
-    enemies[i].health = ENEMY_SPAWN_HEALTH;
+    enemies[i].health = ENEMY_SPAWN_HEALTH + ENEMY_HEALTH_SCALING_FACTOR * player->level;
     // generate random position to spawn the enemy
     int edge = rand() % 4;
     switch (edge) {

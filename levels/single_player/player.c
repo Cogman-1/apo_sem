@@ -2,6 +2,7 @@
 #include "../../knobs.h"
 #include "ability.h"
 #include "enemy.h"
+#include "leveling.h"
 #include <math.h>
 
 static void knockback_player(Player* player, Enemy* enemy)
@@ -27,11 +28,14 @@ void initialize_player(Player* player)
     player->kvy = 0;
     player->maxHealth = PLAYER_START_MAX_HEALTH;
     player->health = player->maxHealth;
-    player->damage = PLAYER_START_DAMAGE;
-    player->fireCooldown = PLAYER_START_FIRE_COOLDOWN;
+    player->damage = (float)PLAYER_START_DAMAGE;
+    player->fireCooldown = (float)PLAYER_START_FIRE_COOLDOWN;
+    player->maxSpeed = PLAYER_MAX_SPEED;
     player->playerScore = 0;
     player->invincible_frames = 0;
     player->stun_frames = 0;
+    player->level = 0;
+    player->requiredScore = PLAYER_BASE_XP_NEEDED;
     initialize_abilities(player);
 }
 
@@ -46,10 +50,10 @@ void update_player(Player* player, knob_directions inputs, float dt)
         float new_vx = player->vx + PLAYER_ACCELERATION_MOD * dirx * dt;
         float new_vy = player->vy + PLAYER_ACCELERATION_MOD * diry * dt;
         // clamp velocity
-        if (fabsf(new_vx) > PLAYER_MAX_SPEED)
-            new_vx = (new_vx > 0) ? PLAYER_MAX_SPEED : -PLAYER_MAX_SPEED;
-        if (fabsf(new_vy) > PLAYER_MAX_SPEED)
-            new_vy = (new_vy > 0) ? PLAYER_MAX_SPEED : -PLAYER_MAX_SPEED;
+        if (fabsf(new_vx) > player->maxSpeed)
+            new_vx = (new_vx > 0) ? player->maxSpeed : -player->maxSpeed;
+        if (fabsf(new_vy) > player->maxSpeed)
+            new_vy = (new_vy > 0) ? player->maxSpeed : -player->maxSpeed;
         // assign velocity to player
         player->vx = new_vx;
         player->vy = new_vy;
@@ -89,7 +93,7 @@ void take_damage(Player* player, Enemy* enemy)
 {
     if (player->invincible_frames <= 0) {
         if (player->health >= 0)
-            player->health -= ENEMY_DAMAGE;
+            player->health -= ENEMY_DAMAGE + ENEMY_DAMAGE_SCALING_FACTOR * player->level;
         // set the LED_RGB Effect
         set_effect(DAMAGE);
         player->invincible_frames = PLAYER_INVINCIBLE_GAIN;
@@ -103,4 +107,36 @@ void draw_player(Player* player, Camera* camera, const Sprite* sprite, lcdpixel*
     player_center.x = (int)(player->x - camera->x) + PLAYER_WIDTH / 2;
     player_center.y = (int)(player->y - camera->y) + PLAYER_HEIGHT / 2;
     draw_sprite_centered(fb, player_center, sprite);
+}
+
+void level_up(Player* player, int stat)
+{
+    switch (stat) {
+    case L_DAMAGE:
+        player->damage *= 1.1f;
+        break;
+    case L_HEALTH:
+        player->maxHealth *= 1.1f;
+        player->health *= 1.1f;
+        break;
+    case L_FIRERATE:
+        player->fireCooldown *= 0.9f;
+        break;
+    case L_ABILITY_COOLDOWN:
+        for (int i = 0; i < ACTIVE_ABIlITY_COUNT; i++) {
+            player->activeAbilities[i].ability.cooldown *= 0.9f;
+        }
+        break;
+    case L_MOVE_SPEED:
+        player->maxSpeed *= 1.1f;
+        break;
+    case L_HEAL:
+        player->health = player->maxHealth;
+        break;
+    default:
+        break;
+    }
+    player->level++;
+    // scale the required XP proportionally to player level
+    player->requiredScore += PLAYER_NEEDED_XP_GAIN * 0.5f * player->level;
 }

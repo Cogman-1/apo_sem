@@ -12,6 +12,7 @@
 #include "const.h"
 #include "death.h"
 #include "enemy.h"
+#include "leveling.h"
 #include "pause.h"
 #include "player.h"
 #include "projectile.h"

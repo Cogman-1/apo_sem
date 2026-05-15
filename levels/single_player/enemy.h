@@ -18,7 +18,7 @@ typedef struct Enemy {
 
 void initialize_enemy(Enemy* enemy);
 void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt);
-void spawn_enemy(Enemy* enemies, Camera* cam, int* enemy_count);
+void spawn_enemy(Enemy* enemies, Player* player, Camera* cam, int* enemy_count);
 void draw_enemy(Enemy* enemy, Camera* cam, const Sprite* sprite, lcdpixel* fb);
 void deal_damage_enemy(Enemy* enemy, Projectile* projectile);
 void deal_knockback_enemy(Enemy* enemy, Vertex_2D from);

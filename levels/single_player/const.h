@@ -33,6 +33,8 @@
 #define PLAYER_STUN_GAIN 10
 #define PLAYER_KNOCKBACK_GAIN 150
 #define PLAYER_KNOCKBACK_FRICTION 0.6F
+#define PLAYER_BASE_XP_NEEDED 30
+#define PLAYER_NEEDED_XP_GAIN 30
 
 // enemy constants
 #define MAX_ENEMY_COUNT 50
@@ -50,6 +52,8 @@
 #define ENEMY_SPAWN_COOL_MAX 8.0f
 #define ENEMY_SPAWN_COOL_MIN 1.5f
 #define ENEMY_SPAWN_COOL_DECAY 0.004f
+#define ENEMY_HEALTH_SCALING_FACTOR 5.0f
+#define ENEMY_DAMAGE_SCALING_FACTOR 2.0f
 
 // camera constants
 #define CAMERA_CONVERGENCE_RATE 2
@@ -69,17 +73,28 @@
 #define HEALTH_BAR_FOREGROUND_TWO GREEN
 
 // score counter parameters
-#define SCORE_X 280
+#define SCORE_X (SCREEN_WIDTH / 2 - 100)
 #define SCORE_Y 5
 #define SCORE_DIGITS 10
 #define SCORE_TEXT "Score: "
 #define SCORE_CHARS (strlen(SCORE_TEXT))
 #define SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
 
+// required score counter parameters
+#define REQUIRED_SCORE_X (SCORE_X + 90)
+#define REQUIRED_SCORE_Y SCORE_Y
+#define REQUIRED_SCORE_DIGITS SCORE_DIGITS
+#define REQUIRED_SCORE_TEXT "Next level: "
+#define REQUIRED_SCORE_CHARS (strlen(REQUIRED_SCORE_TEXT))
+#define REQUIRED_SCORE_TEXT_LENGTH (REQUIRED_SCORE_DIGITS + REQUIRED_SCORE_CHARS + 1)
+
 // define death menu score counter
 #define DEATH_SCORE_DIGITS 10
 #define DEATH_SCORE_TEXT "Final Score: "
 #define DEATH_SCORE_CHARS (strlen(DEATH_SCORE_TEXT))
 #define DEATH_SCORE_TEXT_LENGTH (SCORE_DIGITS + SCORE_CHARS + 1)
+
+// active abilities constants
+#define ACTIVE_ABIlITY_COUNT 2
 
 #endif // APO_SEM_CONST_H

@@ -80,9 +80,21 @@ static void draw_abilities(lcdpixel* fb, Player* player)
     }
 }
 
+static void draw_level_tracker(lcdpixel* fb, Player* player)
+{
+    char required_score_text[REQUIRED_SCORE_TEXT_LENGTH];
+    const char* text = REQUIRED_SCORE_TEXT;
+    memcpy(required_score_text, text, REQUIRED_SCORE_CHARS);
+    sprintf(required_score_text + REQUIRED_SCORE_CHARS, "%d", player->requiredScore);
+    required_score_text[REQUIRED_SCORE_TEXT_LENGTH - 1] = '\0';
+    draw_text(fb, (Vertex_2D){REQUIRED_SCORE_X, REQUIRED_SCORE_Y}, required_score_text, (lcdpixel){WHITE},
+              FONT_PROP14x16);
+}
+
 void draw_ui(lcdpixel* fb, mzapo_state* state, Player* player)
 {
     draw_healthbar(state, fb, player);
     draw_score(fb, player);
+    draw_level_tracker(fb, player);
     draw_abilities(fb, player);
 }

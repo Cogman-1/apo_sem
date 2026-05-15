@@ -114,6 +114,7 @@ int single_player(mzapo_state* hw_state)
                 exit = 1;
             }
         }
+        //trigger active abilities
         ActiveAbility* ab = &game_state.player.activeAbilities[game_state.player.selected_active_ability];
         if (k.bdown && ab->cooldown_end < time_ms() / 1000.0) {
             ab->ability.effect((void*)&game_state);
@@ -122,10 +123,15 @@ int single_player(mzapo_state* hw_state)
                     time_ms() / 1000.0, ab->cooldown_end);
         }
         game_state.player.selected_active_ability = (game_state.player.selected_active_ability + kd.b + 2) % 2;
-
         // 2. Update player
         knob_directions dirs = calculate_direction(ks);
         update_player(&game_state.player, dirs, dt);
+        // check if player has enough Score to level up
+        if (game_state.player.playerScore >= game_state.player.requiredScore) {
+            level(hw_state, fb, &game_state.player);
+            reset_dt_timer();
+        }
+        //update animations for player
         if (fabsf(game_state.player.vx) + fabsf(game_state.player.vy) > 0.1f)
             sprite_animator_play(&game_state.player_animator, SPRITE_ANIM_WALK, 1);
         else
@@ -173,7 +179,7 @@ int single_player(mzapo_state* hw_state)
         game_state.enemy_spawn_timer += dt;
         if (game_state.enemy_spawn_timer >= game_state.enemy_spawn_cooldown &&
             game_state.enemy_count < MAX_ENEMY_COUNT) {
-            spawn_enemy(game_state.enemies, &game_state.cam, &game_state.enemy_count);
+            spawn_enemy(game_state.enemies, &game_state.player, &game_state.cam, &game_state.enemy_count);
             game_state.enemy_spawn_timer -= game_state.enemy_spawn_cooldown;
         }
         // calculate the new spawn cooldown
