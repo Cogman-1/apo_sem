@@ -5,10 +5,12 @@
 
 #include <math.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+#if DEBUG_IO_INCLUDE
+#include <stdio.h>
+#endif
 // Type definitions
 
 // helper functions
@@ -52,6 +54,77 @@ static int AABBCollision(float ax, float ay, float aw, float ah, float bx, float
 {
     return (ax < bx + bw) && (ax + aw > bx) && (ay < by + bh) && (ay + ah > by);
 }
+
+#if DEBUG_HITBOXES
+static int clamp_int(int v, int min, int max)
+{
+    if (v < min) return min;
+    if (v > max) return max;
+    return v;
+}
+
+static void draw_debug_rect(
+    lcdpixel* fb,
+    Camera* cam,
+    float world_x,
+    float world_y,
+    int w,
+    int h,
+    lcdpixel color)
+{
+    int x0 = (int)(world_x - cam->x);
+    int y0 = (int)(world_y - cam->y);
+    int x1 = x0 + w;
+    int y1 = y0 + h;
+
+    x0 = clamp_int(x0, 0, SCREEN_WIDTH);
+    y0 = clamp_int(y0, 0, SCREEN_HEIGHT);
+    x1 = clamp_int(x1, 0, SCREEN_WIDTH);
+    y1 = clamp_int(y1, 0, SCREEN_HEIGHT);
+
+    if (x0 < x1 && y0 < y1) {
+        draw_rectangle(fb, (Vertex_2D){x0, y0}, (Vertex_2D){x1, y1}, color);
+    }
+}
+
+static void draw_hitboxes_debug(GameState* game_state, lcdpixel* fb)
+{
+    draw_debug_rect(
+        fb,
+        &game_state->cam,
+        game_state->player.x,
+        game_state->player.y,
+        PLAYER_WIDTH,
+        PLAYER_HEIGHT,
+        (lcdpixel){GREEN});
+
+    for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
+        if (game_state->enemies[i].active) {
+            draw_debug_rect(
+                fb,
+                &game_state->cam,
+                game_state->enemies[i].x,
+                game_state->enemies[i].y,
+                ENEMY_WIDTH,
+                ENEMY_HEIGHT,
+                (lcdpixel){RED});
+        }
+    }
+
+    for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
+        if (game_state->projectiles[i].active) {
+            draw_debug_rect(
+                fb,
+                &game_state->cam,
+                game_state->projectiles[i].x,
+                game_state->projectiles[i].y,
+                PROJECTILE_WIDTH,
+                PROJECTILE_HEIGHT,
+                (lcdpixel){YELLOW});
+        }
+    }
+}
+#endif
 
 // prepare the gamestate
 static void setup(GameState* state, uint32_t seed)
@@ -119,8 +192,10 @@ int single_player(mzapo_state* hw_state)
         if (k.bdown && ab->cooldown_end < time_ms() / 1000.0) {
             ab->ability.effect((void*)&game_state);
             ab->cooldown_end = time_ms() / 1000.0 + ab->ability.cooldown;
+#if DEBUG_ABILITY_MESSAGES
             fprintf(stderr, "active ability %d: %f -> %f\n", game_state.player.selected_active_ability,
                     time_ms() / 1000.0, ab->cooldown_end);
+#endif
         }
         game_state.player.selected_active_ability = (game_state.player.selected_active_ability + kd.b + 2) % 2;
         // 2. Update player
@@ -211,9 +286,15 @@ int single_player(mzapo_state* hw_state)
                 }
             }
         }
+#if DEBUG_GAME_INFORMATION
+        fprintf(stderr, "Enemy count: %d, Projectile Count: %d\n", game_state.enemy_count, game_state.projectile_count);
+#endif
         // 6. draw frame
         // draw background and player
         draw_tiled_background(fb, (Vertex_2D){.x = -game_state.cam.x, .y = -game_state.cam.y}, get_bg_sprite());
+#if DEBUG_HITBOXES
+        draw_hitboxes_debug(&game_state, fb);
+#endif
         draw_player(&game_state.player, &game_state.cam, sprite_animator_current_frame(&game_state.player_animator),
                     fb);
         // draw enemies
@@ -228,6 +309,7 @@ int single_player(mzapo_state* hw_state)
                 draw_projectile(&game_state.projectiles[i], &game_state.cam, fb, get_arrow_sprites());
             }
         }
+
         draw_ui(fb, hw_state, &game_state.player);
         parlcd_write_screen(hw_state, fb);
         // 7. update rgb leds
