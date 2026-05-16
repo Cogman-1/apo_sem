@@ -1,5 +1,5 @@
 #include "settings.h"
 
-void settings()
+void settings_menu()
 {
 }
