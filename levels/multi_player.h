@@ -5,6 +5,6 @@
 #include "../Draw_lib/text.h"
 #include "../mzapo_lib/mzapo.h"
 
-void multi_player();
+void multi_player(mzapo_state* state);
 
 #endif // APO_SEM_MULTI_PLAYER_H

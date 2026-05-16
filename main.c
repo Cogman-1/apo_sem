@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
             settings();
             break;
         case MULTI_PLAYER:
-            multi_player();
+            multi_player(state);
             break;
         case CONTROLS:
             controls();

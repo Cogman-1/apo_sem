@@ -8,6 +8,7 @@
 #include "Title_Banner.c"
 #include "arrow.c"
 #include "bg.c"
+#include "cog.c"
 
 #include "Human_Soldier_Sword_Shield/Human_Soldier_Sword_Shield_Attack1/Human_Soldier_Sword_Shield_Attack1_000.c"
 #include "Human_Soldier_Sword_Shield/Human_Soldier_Sword_Shield_Attack1/Human_Soldier_Sword_Shield_Attack1_001.c"
@@ -79,6 +80,7 @@ static Sprite bg_sprite = FRAME_TO_SPRITE(bg);
 static Sprite arrow_sprite0 = FRAME_TO_SPRITE(arrow);
 static Sprite start_menu_sprite = FRAME_TO_SPRITE(start_menu);
 static Sprite title_banner_sprite = FRAME_TO_SPRITE(title_banner);
+static Sprite cog_wip_sprite = FRAME_TO_SPRITE(cog);
 Sprite arrow_sprite1;
 Sprite arrow_sprite2;
 Sprite arrow_sprite3;
@@ -249,4 +251,9 @@ Sprite* get_start_menu_sprite()
 Sprite* get_title_banner_sprite()
 {
     return &title_banner_sprite;
+}
+
+Sprite* get_cog_wip_sprite()
+{
+    return &cog_wip_sprite;
 }

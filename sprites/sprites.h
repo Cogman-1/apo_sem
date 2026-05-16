@@ -46,5 +46,6 @@ Sprite* get_bg_sprite();
 Sprite* get_arrow_sprites();
 Sprite* get_start_menu_sprite();
 Sprite* get_title_banner_sprite();
+Sprite* get_cog_wip_sprite();
 
 #endif

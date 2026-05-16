@@ -14,8 +14,8 @@ char* level_labels[NUMBER_OF_OPTIONS] = {"Increase Damage +10%!",     "Increase 
 
 static void draw_leveling(mzapo_state* state, int highlighted, lcdpixel* fb)
 {
-    lcdpixel t_color = {.raw=WHITE};
-    draw_text(fb, (Vertex_2D){SCREEN_WIDTH/2-90, 50}, "Level up!", t_color, FONT_ROM8x16);
+    lcdpixel t_color = {.raw = WHITE};
+    draw_text(fb, (Vertex_2D){SCREEN_WIDTH / 2 - 90, 50}, "Level up!", t_color, FONT_ROM8x16);
     Vertex_2D start = {20, 0};
     for (int i = 0; i < NUMBER_OF_OPTIONS; i++) {
         t_color.raw = i == highlighted ? HIGH_COLOR : TEXT_COLOR;

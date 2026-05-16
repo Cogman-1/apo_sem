@@ -114,7 +114,7 @@ int single_player(mzapo_state* hw_state)
                 exit = 1;
             }
         }
-        //trigger active abilities
+        // trigger active abilities
         ActiveAbility* ab = &game_state.player.activeAbilities[game_state.player.selected_active_ability];
         if (k.bdown && ab->cooldown_end < time_ms() / 1000.0) {
             ab->ability.effect((void*)&game_state);
@@ -131,7 +131,7 @@ int single_player(mzapo_state* hw_state)
             level(hw_state, fb, &game_state.player);
             reset_dt_timer();
         }
-        //update animations for player
+        // update animations for player
         if (fabsf(game_state.player.vx) + fabsf(game_state.player.vy) > 0.1f)
             sprite_animator_play(&game_state.player_animator, SPRITE_ANIM_WALK, 1);
         else
