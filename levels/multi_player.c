@@ -4,10 +4,10 @@
 
 #include "../Draw_lib/draw.h"
 #include "../Draw_lib/text.h"
+#include "../LEDRGB_Effects/effects.h"
 #include "../knobs.h"
 #include "../mzapo_lib/mzapo.h"
 #include "../sprites/sprites.h"
-#include "../LEDRGB_Effects/effects.h"
 
 static void draw_message(mzapo_state* state)
 {

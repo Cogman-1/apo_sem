@@ -58,19 +58,14 @@ static int AABBCollision(float ax, float ay, float aw, float ah, float bx, float
 #if DEBUG_HITBOXES
 static int clamp_int(int v, int min, int max)
 {
-    if (v < min) return min;
-    if (v > max) return max;
+    if (v < min)
+        return min;
+    if (v > max)
+        return max;
     return v;
 }
 
-static void draw_debug_rect(
-    lcdpixel* fb,
-    Camera* cam,
-    float world_x,
-    float world_y,
-    int w,
-    int h,
-    lcdpixel color)
+static void draw_debug_rect(lcdpixel* fb, Camera* cam, float world_x, float world_y, int w, int h, lcdpixel color)
 {
     int x0 = (int)(world_x - cam->x);
     int y0 = (int)(world_y - cam->y);
@@ -89,38 +84,20 @@ static void draw_debug_rect(
 
 static void draw_hitboxes_debug(GameState* game_state, lcdpixel* fb)
 {
-    draw_debug_rect(
-        fb,
-        &game_state->cam,
-        game_state->player.x,
-        game_state->player.y,
-        PLAYER_WIDTH,
-        PLAYER_HEIGHT,
-        (lcdpixel){GREEN});
+    draw_debug_rect(fb, &game_state->cam, game_state->player.x, game_state->player.y, PLAYER_WIDTH, PLAYER_HEIGHT,
+                    (lcdpixel){GREEN});
 
     for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
         if (game_state->enemies[i].active) {
-            draw_debug_rect(
-                fb,
-                &game_state->cam,
-                game_state->enemies[i].x,
-                game_state->enemies[i].y,
-                ENEMY_WIDTH,
-                ENEMY_HEIGHT,
-                (lcdpixel){RED});
+            draw_debug_rect(fb, &game_state->cam, game_state->enemies[i].x, game_state->enemies[i].y, ENEMY_WIDTH,
+                            ENEMY_HEIGHT, (lcdpixel){RED});
         }
     }
 
     for (int i = 0; i < MAX_PROJECTILE_COUNT; i++) {
         if (game_state->projectiles[i].active) {
-            draw_debug_rect(
-                fb,
-                &game_state->cam,
-                game_state->projectiles[i].x,
-                game_state->projectiles[i].y,
-                PROJECTILE_WIDTH,
-                PROJECTILE_HEIGHT,
-                (lcdpixel){YELLOW});
+            draw_debug_rect(fb, &game_state->cam, game_state->projectiles[i].x, game_state->projectiles[i].y,
+                            PROJECTILE_WIDTH, PROJECTILE_HEIGHT, (lcdpixel){YELLOW});
         }
     }
 }

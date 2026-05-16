@@ -64,6 +64,8 @@ int start_menu(mzapo_state* state)
         if (knobs_red_pressed(inputs)) {
             knobs_wait_for_buttons_released(state);
             free(inputs);
+            clear_effect();
+            update_effect(state, 1);
             return highlighted;
         }
     }

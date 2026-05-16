@@ -46,7 +46,7 @@ int pause(mzapo_state* state, lcdpixel* fb)
                 free(inputs);
                 return P_EXIT_MAIN_MENU;
             case P_CONTROLS:
-                controls();
+                controls(state);
                 break;
             case P_SETTINGS:
                 settings();

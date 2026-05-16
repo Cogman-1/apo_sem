@@ -5,6 +5,8 @@
 
 #include <stddef.h>
 
+typedef enum { K_RED = 0, K_GREEN, K_BLUE } KnobIconColors;
+
 typedef enum {
     SPRITE_CLASS_BACKGROUND,
     SPRITE_CLASS_HUMAN_SOLDIER = 0,
@@ -47,5 +49,7 @@ Sprite* get_arrow_sprites();
 Sprite* get_start_menu_sprite();
 Sprite* get_title_banner_sprite();
 Sprite* get_cog_wip_sprite();
+Sprite* get_knob_icon(KnobIconColors color);
+Sprite* get_controls_bckg_sprite();
 
 #endif

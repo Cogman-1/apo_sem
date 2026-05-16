@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
             multi_player(state);
             break;
         case CONTROLS:
-            controls();
+            controls(state);
             break;
         case EXIT_GAME:
             exit = 1;

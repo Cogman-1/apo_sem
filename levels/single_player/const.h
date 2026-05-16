@@ -97,7 +97,7 @@
 // active abilities constants
 #define ACTIVE_ABIlITY_COUNT 2
 
-//debug options
+// debug options
 #define DEBUG_HITBOXES 0
 #define DEBUG_ABILITY_MESSAGES 0
 #define DEBUG_GAME_INFORMATION 0
