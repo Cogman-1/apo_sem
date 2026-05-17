@@ -23,11 +23,11 @@ static char* off_on[2] = {"< Off >", "< On >"};
 
 // initialize the settings and
 static GameSettings settings = {
-    .diff = EASY, .UseHealthBar = BOTH, .UseScreenHealthbar = 1, .UseLEDHealthbar = 1, .UseLEDRGBEffects = 1};
+    .diff = HARD, .UseHealthBar = BOTH, .UseScreenHealthbar = 1, .UseLEDHealthbar = 1, .UseLEDRGBEffects = 1};
 
 static void reset_settings()
 {
-    settings.diff = EASY;
+    settings.diff = HARD;
     settings.UseHealthBar = BOTH;
     settings.UseScreenHealthbar = 1;
     settings.UseLEDHealthbar = 1;

@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include "projectile.h"
+#include "../settings.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -12,6 +13,7 @@ void initialize_enemy(Enemy* enemy)
 
 void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
 {
+    GameSettings* settings = get_settings();
     // death
     if (enemy->health <= 0) {
         enemy->active = 0;
@@ -25,8 +27,13 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
         float dy = player->y - enemy->y;
         float length = sqrt(dx * dx + dy * dy);
         if (length > 0.001f) {
-            enemy->vx = (dx / length) * ENEMY_SPEED;
-            enemy->vy = (dy / length) * ENEMY_SPEED;
+            if (settings->diff == HARD) {
+                enemy->vx = (dx / length) * ENEMY_SPEED;
+                enemy->vy = (dy / length) * ENEMY_SPEED;
+            } else {
+                enemy->vx = (dx / length) * (ENEMY_SPEED-EASY_DIFF_ENEMY_SPEED_DECREASE);
+                enemy->vy = (dy / length) * (ENEMY_SPEED-EASY_DIFF_ENEMY_SPEED_DECREASE);
+            }
         }
 
         enemy->x += (enemy->vx + enemy->kvx) * dt;
@@ -47,6 +54,7 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
 
 void spawn_enemy(Enemy* enemies, Player* player, Camera* cam, int* enemy_count)
 {
+
     int i = 0;
     while (i < MAX_ENEMY_COUNT && enemies[i].active)
         i++;

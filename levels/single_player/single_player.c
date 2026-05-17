@@ -2,6 +2,7 @@
 
 #include "../../knobs.h"
 #include "../../sprites/sprites.h"
+#include "../settings.h"
 
 #include <math.h>
 #include <stdint.h>
@@ -134,6 +135,7 @@ static void setup(GameState* state, uint32_t seed)
 int single_player(mzapo_state* hw_state)
 {
     GameState game_state;
+    GameSettings* settings = get_settings();
     setup(&game_state, (uint32_t)time_ms());
     // prepare and clear frame buffer and RGB LEDs
     lcdpixel fb[SCREEN_WIDTH * SCREEN_HEIGHT];
@@ -242,6 +244,8 @@ int single_player(mzapo_state* hw_state)
             game_state.enemy_spawn_cooldown = ENEMY_SPAWN_COOL_MIN + (ENEMY_SPAWN_COOL_MAX - ENEMY_SPAWN_COOL_MIN) *
                                                                          expf(-ENEMY_SPAWN_COOL_DECAY * t);
         }
+        if (settings->diff == EASY) game_state.enemy_spawn_cooldown += EASY_DIFF_ENEMY_SPAWN_COOLDOWN_INCREASE;
+
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {

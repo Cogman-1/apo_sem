@@ -3,6 +3,7 @@
 #include "ability.h"
 #include "enemy.h"
 #include "leveling.h"
+#include "../settings.h"
 #include <math.h>
 
 static void knockback_player(Player* player, Enemy* enemy)
@@ -20,6 +21,7 @@ static void knockback_player(Player* player, Enemy* enemy)
 
 void initialize_player(Player* player)
 {
+    GameSettings* settings = get_settings();
     player->x = (float)WORLD_WIDTH / 2;
     player->y = (float)WORLD_HEIGHT / 2;
     player->vx = 0;
@@ -36,6 +38,11 @@ void initialize_player(Player* player)
     player->stun_frames = 0;
     player->level = 0;
     player->requiredScore = PLAYER_BASE_XP_NEEDED;
+    if (settings->diff == EASY) {
+        player->maxHealth += EASY_DIFF_START_HEALTH_INCREASE;
+        player->damage += EASY_DIFF_PLAYER_DAMAGE_INCREASE;
+    }
+
     initialize_abilities(player);
 }
 
@@ -91,12 +98,16 @@ void update_player(Player* player, knob_directions inputs, float dt)
 
 void take_damage(Player* player, Enemy* enemy)
 {
+    GameSettings* settings = get_settings();
     if (player->invincible_frames <= 0) {
-        if (player->health >= 0)
+        if (player->health >= 0) {
+            if (settings->diff == EASY) player->health += EASY_DIFF_ENEMY_DMG_DECREASE;
             player->health -= ENEMY_DAMAGE + ENEMY_DAMAGE_SCALING_FACTOR * player->level;
+        }
         // set the LED_RGB Effect
         set_effect(DAMAGE);
         player->invincible_frames = PLAYER_INVINCIBLE_GAIN;
+        if (settings->diff == EASY) player->invincible_frames += EASY_DIFF_PLAYER_INVINCIBILITY_INCREASE;
         knockback_player(player, enemy);
     }
 }
