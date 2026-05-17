@@ -1,6 +1,7 @@
 #include "effects.h"
 
 #include <stddef.h>
+#include "../levels/settings.h"
 
 #define LEFT 0
 #define RIGHT 1
@@ -30,6 +31,11 @@ void set_effect(Effect_Type type)
 
 void update_effect(mzapo_state* hw_state, float dt)
 {
+    //get global settings to see if the effects are on
+    GameSettings* settings = get_settings();
+    if (!settings->UseLEDRGBEffects) {
+        current_effect = NONE;
+    }
     if (current_effect != NONE) {
         time += dt;
         // get the effect
