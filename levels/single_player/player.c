@@ -6,6 +6,19 @@
 #include "../settings.h"
 #include <math.h>
 
+static float approach_float(float current, float target, float max_delta)
+{
+    if (current < target) {
+        current += max_delta;
+        if (current > target) current = target;
+    } else if (current > target) {
+        current -= max_delta;
+        if (current < target) current = target;
+    }
+
+    return current;
+}
+
 static void knockback_player(Player* player, Enemy* enemy)
 {
     int dx = player->x - enemy->x;
@@ -49,21 +62,14 @@ void initialize_player(Player* player)
 void update_player(Player* player, knob_directions inputs, float dt)
 {
     if (player->stun_frames <= 0) {
-        // 1. Handle inputs
-        float dirx = inputs.rx;
-        float diry = inputs.ry;
-        // 2. Update physics
-        // update velocity
-        float new_vx = player->vx + PLAYER_ACCELERATION_MOD * dirx * dt;
-        float new_vy = player->vy + PLAYER_ACCELERATION_MOD * diry * dt;
-        // clamp velocity
-        if (fabsf(new_vx) > player->maxSpeed)
-            new_vx = (new_vx > 0) ? player->maxSpeed : -player->maxSpeed;
-        if (fabsf(new_vy) > player->maxSpeed)
-            new_vy = (new_vy > 0) ? player->maxSpeed : -player->maxSpeed;
-        // assign velocity to player
-        player->vx = new_vx;
-        player->vy = new_vy;
+        float target_vx = inputs.rx * player->maxSpeed;
+        float target_vy = inputs.ry * player->maxSpeed;
+
+        float max_delta = PLAYER_ACCELERATION_MOD * dt;
+
+        player->vx = approach_float(player->vx, target_vx, max_delta);
+        player->vy = approach_float(player->vy, target_vy, max_delta);
+
         // knockback friction
         player->kvx *= PLAYER_KNOCKBACK_FRICTION;
         player->kvy *= PLAYER_KNOCKBACK_FRICTION;
