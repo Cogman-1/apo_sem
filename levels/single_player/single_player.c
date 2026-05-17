@@ -180,6 +180,12 @@ int single_player(mzapo_state* hw_state)
         // 2. Update player
         knob_directions dirs = calculate_direction(ks);
         update_player(&game_state.player, dirs, dt);
+        if (ks->current_knobs.rdown && game_state.player.nextDashTime < time_ms()) {
+            // activate dash
+            game_state.player.vx *= 8;
+            game_state.player.vy *= 8;
+            game_state.player.nextDashTime = time_ms() + 3000;
+        }
         // check if player has enough Score to level up
         if (game_state.player.playerScore >= game_state.player.requiredScore) {
             level(hw_state, fb, &game_state.player);

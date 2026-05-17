@@ -32,7 +32,7 @@ static void draw_controls(mzapo_state* state)
     draw_text(fb, (Vertex_2D){30, TEXT_ABOVE_KNOBS_Y}, "Turn:\nChange\nmovement\ndirection",
               (lcdpixel){.raw = TEXT_COLOR}, FONT_PROP14x16);
     // below
-    draw_text(fb, (Vertex_2D){30, TEXT_UNDER_KNOBS_Y}, "Press:\nNone", (lcdpixel){.raw = TEXT_COLOR}, FONT_PROP14x16);
+    draw_text(fb, (Vertex_2D){30, TEXT_UNDER_KNOBS_Y}, "Press:\nDash", (lcdpixel){.raw = TEXT_COLOR}, FONT_PROP14x16);
     // green knob
     // above
     draw_text(fb, (Vertex_2D){210, TEXT_ABOVE_KNOBS_Y}, "Turn:\nNone", (lcdpixel){.raw = TEXT_COLOR}, FONT_PROP14x16);

@@ -57,6 +57,7 @@ void initialize_player(Player* player)
     }
 
     initialize_abilities(player);
+    player->nextDashTime = 0;
 }
 
 void update_player(Player* player, knob_directions inputs, float dt)

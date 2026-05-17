@@ -27,6 +27,7 @@ typedef struct Player {
     int requiredScore;
     ActiveAbility activeAbilities[2];
     int selected_active_ability;
+    float nextDashTime;
 } Player;
 
 void initialize_player(Player* player);

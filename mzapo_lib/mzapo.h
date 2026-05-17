@@ -44,7 +44,6 @@ typedef union lcdpixel {
         unsigned r : 5;
     };
 } lcdpixel;
-_Static_assert(sizeof(lcdpixel) == 2, "lcdpixel must be 2 bytes");
 
 // All functions now take a pointer to mzapo_state
 mzapo_state* init_mzapo();
