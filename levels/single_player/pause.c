@@ -49,7 +49,7 @@ int pause(mzapo_state* state, lcdpixel* fb)
                 controls(state);
                 break;
             case P_SETTINGS:
-                settings();
+                settings_menu(state);
                 break;
             default:
                 break;
