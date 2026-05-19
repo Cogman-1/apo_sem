@@ -1,5 +1,7 @@
 
 #include "../../sprites/sprites.h"
+#include "../../LEDRGB_Effects/effects.h"
+#include "const.h"
 #include "player.h"
 #include "single_player.h"
 
@@ -33,9 +35,11 @@ void spawn_many_projectiles(void* gs)
 void damage_all(void* gs)
 {
     GameState* game_state = (GameState*)gs;
-    for (int i = 0; i < game_state->enemy_count; i++) {
-        game_state->enemies[i].health -= 5;
+    for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
+        if (game_state->enemies[i].active)
+            game_state->enemies[i].health -= 5;
     }
+    set_effect(ABILITY);
 }
 
 void initialize_abilities(Player* player)
@@ -43,6 +47,6 @@ void initialize_abilities(Player* player)
     player->activeAbilities[0] =
         (ActiveAbility){(Ability){spawn_many_projectiles, 20.0f, &get_arrow_sprites()[0]}, time_ms() / 1000 + 5.0f};
     player->activeAbilities[1] =
-        (ActiveAbility){(Ability){damage_all, 10.0f, &get_arrow_sprites()[0]}, time_ms() / 1000 + 2.5f};
+        (ActiveAbility){(Ability){damage_all, 10.0f, &get_explosion_icon_sprite()[0]}, time_ms() / 1000 + 2.5f};
     player->selected_active_ability = 0;
 }

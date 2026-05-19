@@ -1,19 +1,21 @@
 #include "player.h"
 #include "../../knobs.h"
+#include "../settings.h"
 #include "ability.h"
 #include "enemy.h"
 #include "leveling.h"
-#include "../settings.h"
 #include <math.h>
 
 static float approach_float(float current, float target, float max_delta)
 {
     if (current < target) {
         current += max_delta;
-        if (current > target) current = target;
+        if (current > target)
+            current = target;
     } else if (current > target) {
         current -= max_delta;
-        if (current < target) current = target;
+        if (current < target)
+            current = target;
     }
 
     return current;
@@ -108,13 +110,15 @@ void take_damage(Player* player, Enemy* enemy)
     GameSettings* settings = get_settings();
     if (player->invincible_frames <= 0) {
         if (player->health >= 0) {
-            if (settings->diff == EASY) player->health += EASY_DIFF_ENEMY_DMG_DECREASE;
+            if (settings->diff == EASY)
+                player->health += EASY_DIFF_ENEMY_DMG_DECREASE;
             player->health -= ENEMY_DAMAGE + ENEMY_DAMAGE_SCALING_FACTOR * player->level;
         }
         // set the LED_RGB Effect
         set_effect(DAMAGE);
         player->invincible_frames = PLAYER_INVINCIBLE_GAIN;
-        if (settings->diff == EASY) player->invincible_frames += EASY_DIFF_PLAYER_INVINCIBILITY_INCREASE;
+        if (settings->diff == EASY)
+            player->invincible_frames += EASY_DIFF_PLAYER_INVINCIBILITY_INCREASE;
         knockback_player(player, enemy);
     }
 }

@@ -9,6 +9,7 @@
 #include "arrow.c"
 #include "bg.c"
 #include "cog.c"
+#include "explode.c"
 
 #include "controls_bckg.c"
 #include "knob_blue.c"
@@ -90,6 +91,7 @@ static Sprite controls_bckg_sprite = FRAME_TO_SPRITE(controls_bckg);
 static Sprite knob_red_sprite = FRAME_TO_SPRITE(knob_red_icon);
 static Sprite knob_green_sprite = FRAME_TO_SPRITE(knob_green_icon);
 static Sprite knob_blue_sprite = FRAME_TO_SPRITE(knob_blue_icon);
+static Sprite explosion_sprite = FRAME_TO_SPRITE(explosion_icon);
 Sprite arrow_sprite1;
 Sprite arrow_sprite2;
 Sprite arrow_sprite3;
@@ -284,4 +286,9 @@ Sprite* get_knob_icon(KnobIconColors color)
 Sprite* get_controls_bckg_sprite()
 {
     return &controls_bckg_sprite;
+}
+
+Sprite* get_explosion_icon_sprite()
+{
+    return &explosion_sprite;
 }

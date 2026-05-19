@@ -1,6 +1,6 @@
 #include "enemy.h"
-#include "projectile.h"
 #include "../settings.h"
+#include "projectile.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -31,8 +31,8 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
                 enemy->vx = (dx / length) * ENEMY_SPEED;
                 enemy->vy = (dy / length) * ENEMY_SPEED;
             } else {
-                enemy->vx = (dx / length) * (ENEMY_SPEED-EASY_DIFF_ENEMY_SPEED_DECREASE);
-                enemy->vy = (dy / length) * (ENEMY_SPEED-EASY_DIFF_ENEMY_SPEED_DECREASE);
+                enemy->vx = (dx / length) * (ENEMY_SPEED - EASY_DIFF_ENEMY_SPEED_DECREASE);
+                enemy->vy = (dy / length) * (ENEMY_SPEED - EASY_DIFF_ENEMY_SPEED_DECREASE);
             }
         }
 

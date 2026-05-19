@@ -163,7 +163,7 @@ int single_player(mzapo_state* hw_state)
             int p_ret = pause(hw_state, fb);
             reset_dt_timer();
 
-            //calibrate again knobs to account for the movement in menu
+            // calibrate again knobs to account for the movement in menu
             knobs_state_init(ks, knobs_read(hw_state));
 
             if (p_ret == P_EXIT_MAIN_MENU) {
@@ -255,7 +255,8 @@ int single_player(mzapo_state* hw_state)
             game_state.enemy_spawn_cooldown = ENEMY_SPAWN_COOL_MIN + (ENEMY_SPAWN_COOL_MAX - ENEMY_SPAWN_COOL_MIN) *
                                                                          expf(-ENEMY_SPAWN_COOL_DECAY * t);
         }
-        if (settings->diff == EASY) game_state.enemy_spawn_cooldown += EASY_DIFF_ENEMY_SPAWN_COOLDOWN_INCREASE;
+        if (settings->diff == EASY)
+            game_state.enemy_spawn_cooldown += EASY_DIFF_ENEMY_SPAWN_COOLDOWN_INCREASE;
 
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {

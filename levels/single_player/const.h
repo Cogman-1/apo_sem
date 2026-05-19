@@ -97,7 +97,7 @@
 // active abilities constants
 #define ACTIVE_ABIlITY_COUNT 2
 
-//difficulty modifiers
+// difficulty modifiers
 #define EASY_DIFF_START_HEALTH_INCREASE 50
 #define EASY_DIFF_PLAYER_DAMAGE_INCREASE 20
 #define EASY_DIFF_PLAYER_INVINCIBILITY_INCREASE 20

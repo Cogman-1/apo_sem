@@ -51,5 +51,6 @@ Sprite* get_title_banner_sprite();
 Sprite* get_cog_wip_sprite();
 Sprite* get_knob_icon(KnobIconColors color);
 Sprite* get_controls_bckg_sprite();
+Sprite* get_explosion_icon_sprite();
 
 #endif

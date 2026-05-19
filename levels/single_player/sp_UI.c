@@ -1,7 +1,7 @@
 #include "sp_UI.h"
 #include "../../Draw_lib/effect.h"
-#include "single_player.h"
 #include "../settings.h"
+#include "single_player.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -21,24 +21,27 @@ static uint64_t time_ms()
 static void draw_healthbar(mzapo_state* state, lcdpixel* fb, Player* player)
 {
     GameSettings* settings = get_settings();
-    if (settings->UseScreenHealthbar){
+    if (settings->UseScreenHealthbar) {
         // LCD health bar
         lcdpixel color = {HEALTH_BAR_BACKGROUND};
         // draw base
-        draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X, HEALTH_BAR_Y}, (Vertex_2D){HEALTH_BAR_ENDX, HEALTH_BAR_ENDY}, color);
+        draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X, HEALTH_BAR_Y}, (Vertex_2D){HEALTH_BAR_ENDX, HEALTH_BAR_ENDY},
+                       color);
         // draw red background
         color.raw = HEALTH_BAR_FOREGROUND_ONE;
         draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING, HEALTH_BAR_Y + HEALTH_BAR_SPACING},
                        (Vertex_2D){HEALTH_BAR_ENDX - HEALTH_BAR_SPACING, HEALTH_BAR_ENDY - HEALTH_BAR_SPACING}, color);
         // calculate and draw green part
         color.raw = HEALTH_BAR_FOREGROUND_TWO;
-        int health_pixels = (((float)player->health) / (player->maxHealth)) * (HEALTH_BAR_WIDTH - 2 * HEALTH_BAR_SPACING);
-        draw_rectangle(fb, (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING, HEALTH_BAR_Y + HEALTH_BAR_SPACING},
-                       (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING + health_pixels, HEALTH_BAR_ENDY - HEALTH_BAR_SPACING},
-                       color);
+        int health_pixels =
+            (((float)player->health) / (player->maxHealth)) * (HEALTH_BAR_WIDTH - 2 * HEALTH_BAR_SPACING);
+        draw_rectangle(
+            fb, (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING, HEALTH_BAR_Y + HEALTH_BAR_SPACING},
+            (Vertex_2D){HEALTH_BAR_X + HEALTH_BAR_SPACING + health_pixels, HEALTH_BAR_ENDY - HEALTH_BAR_SPACING},
+            color);
     }
 
-    if (settings->UseLEDHealthbar){
+    if (settings->UseLEDHealthbar) {
         // LED health bar
         int n = ((float)player->health) / (player->maxHealth) * 32;
         uint32_t leds;
@@ -51,8 +54,7 @@ static void draw_healthbar(mzapo_state* state, lcdpixel* fb, Player* player)
         }
 
         ledline_write(state, leds);
-    }
-    else {
+    } else {
         ledline_write(state, (uint32_t)0);
     }
 }

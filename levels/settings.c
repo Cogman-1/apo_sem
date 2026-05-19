@@ -48,59 +48,67 @@ static void draw_settings(mzapo_state* state, int highlighted)
     lcdpixel t_color;
     Vertex_2D start = {0, 0};
     for (int i = 0; i < NUMBER_OF_SETTINGS; i++) {
-        start.y = 80 + i*50;
-        draw_text(fb, start, settings_labels[i], (lcdpixel){.raw=TEXT_COLOR}, FONT_PROP14x16);
-        //draw option switch
+        start.y = 80 + i * 50;
+        draw_text(fb, start, settings_labels[i], (lcdpixel){.raw = TEXT_COLOR}, FONT_PROP14x16);
+        // draw option switch
         int idx;
         t_color.raw = i == highlighted ? HIGH_COLOR : TEXT_COLOR;
         switch (i) {
-            case S_DIFFICULTY:
-                idx = settings.diff == EASY ? 0 : 1;
-                draw_text(fb, (Vertex_2D){SCREEN_WIDTH - OPTIONS_OFFSET_X, start.y}, diff_labels[idx], t_color, FONT_PROP14x16);
-                break;
-            case S_HEALTHBAR:
-                idx = settings.UseHealthBar;
-                draw_text(fb, (Vertex_2D){SCREEN_WIDTH - OPTIONS_OFFSET_X, start.y}, labels_switch_healthbar[idx], t_color, FONT_PROP14x16);
-                break;
-            case S_LEDRGBEFFECTS:
-                idx = settings.UseLEDRGBEffects;
-                draw_text(fb, (Vertex_2D){SCREEN_WIDTH - OPTIONS_OFFSET_X, start.y}, off_on[idx], t_color, FONT_PROP14x16);
-                break;
-            default:
-                break;
+        case S_DIFFICULTY:
+            idx = settings.diff == EASY ? 0 : 1;
+            draw_text(fb, (Vertex_2D){SCREEN_WIDTH - OPTIONS_OFFSET_X, start.y}, diff_labels[idx], t_color,
+                      FONT_PROP14x16);
+            break;
+        case S_HEALTHBAR:
+            idx = settings.UseHealthBar;
+            draw_text(fb, (Vertex_2D){SCREEN_WIDTH - OPTIONS_OFFSET_X, start.y}, labels_switch_healthbar[idx], t_color,
+                      FONT_PROP14x16);
+            break;
+        case S_LEDRGBEFFECTS:
+            idx = settings.UseLEDRGBEffects;
+            draw_text(fb, (Vertex_2D){SCREEN_WIDTH - OPTIONS_OFFSET_X, start.y}, off_on[idx], t_color, FONT_PROP14x16);
+            break;
+        default:
+            break;
         }
         t_color.raw = TEXT_COLOR;
     }
 
-    if (highlighted == S_RESET) t_color.raw = HIGH_COLOR;
-    draw_text(fb, (Vertex_2D){SCREEN_WIDTH/3 - 120, OPTIONS_LOWER_LINE_Y}, "Reset to default", t_color, FONT_PROP14x16);
+    if (highlighted == S_RESET)
+        t_color.raw = HIGH_COLOR;
+    draw_text(fb, (Vertex_2D){SCREEN_WIDTH / 3 - 120, OPTIONS_LOWER_LINE_Y}, "Reset to default", t_color,
+              FONT_PROP14x16);
     t_color.raw = TEXT_COLOR;
 
-    if (highlighted == S_EXIT) t_color.raw = HIGH_COLOR;
-    draw_text(fb, (Vertex_2D){SCREEN_WIDTH/3 + 160, OPTIONS_LOWER_LINE_Y}, "Return to menu", t_color, FONT_PROP14x16);
+    if (highlighted == S_EXIT)
+        t_color.raw = HIGH_COLOR;
+    draw_text(fb, (Vertex_2D){SCREEN_WIDTH / 3 + 160, OPTIONS_LOWER_LINE_Y}, "Return to menu", t_color, FONT_PROP14x16);
     t_color.raw = TEXT_COLOR;
 
-    draw_text(fb, (Vertex_2D){SCREEN_HEIGHT/2 - 60, OPTIONS_LOWER_LINE_Y + 30}, "Turn red knob to navigate the settings.", t_color, FONT_PROP14x16);
-    draw_text(fb, (Vertex_2D){SCREEN_HEIGHT/2 - 60, OPTIONS_LOWER_LINE_Y + 50}, "Press red knob to change the settings/select option.", t_color, FONT_PROP14x16);
+    draw_text(fb, (Vertex_2D){SCREEN_HEIGHT / 2 - 60, OPTIONS_LOWER_LINE_Y + 30},
+              "Turn red knob to navigate the settings.", t_color, FONT_PROP14x16);
+    draw_text(fb, (Vertex_2D){SCREEN_HEIGHT / 2 - 60, OPTIONS_LOWER_LINE_Y + 50},
+              "Press red knob to change the settings/select option.", t_color, FONT_PROP14x16);
 
     parlcd_write_screen(state, fb);
 }
 
-static void cycle_healthbar_options() {
+static void cycle_healthbar_options()
+{
     settings.UseHealthBar = (settings.UseHealthBar + 1) % 3;
     switch (settings.UseHealthBar) {
-        case DISPLAY:
-            settings.UseLEDHealthbar = 0;
-            settings.UseScreenHealthbar = 1;
-            break;
-        case LED:
-            settings.UseLEDHealthbar = 1;
-            settings.UseScreenHealthbar = 0;
-            break;
-        case BOTH:
-            settings.UseLEDHealthbar = 1;
-            settings.UseScreenHealthbar = 1;
-            break;
+    case DISPLAY:
+        settings.UseLEDHealthbar = 0;
+        settings.UseScreenHealthbar = 1;
+        break;
+    case LED:
+        settings.UseLEDHealthbar = 1;
+        settings.UseScreenHealthbar = 0;
+        break;
+    case BOTH:
+        settings.UseLEDHealthbar = 1;
+        settings.UseScreenHealthbar = 1;
+        break;
     }
 }
 
@@ -120,23 +128,23 @@ void settings_menu(mzapo_state* state)
         if (knobs_red_pressed(inputs)) {
             knobs_wait_for_buttons_released(state);
             switch (highlighted) {
-                case S_DIFFICULTY:
-                    settings.diff = settings.diff == EASY ? HARD: EASY;
-                    break;
-                case S_HEALTHBAR:
-                    cycle_healthbar_options();
-                    break;
-                case S_LEDRGBEFFECTS:
-                    settings.UseLEDRGBEffects = settings.UseLEDRGBEffects ? 0 : 1;
-                    break;
-                case S_RESET:
-                    reset_settings();
-                    break;
-                case S_EXIT:
-                    exit = 1;
-                    break;
-                default:
-                    break;
+            case S_DIFFICULTY:
+                settings.diff = settings.diff == EASY ? HARD : EASY;
+                break;
+            case S_HEALTHBAR:
+                cycle_healthbar_options();
+                break;
+            case S_LEDRGBEFFECTS:
+                settings.UseLEDRGBEffects = settings.UseLEDRGBEffects ? 0 : 1;
+                break;
+            case S_RESET:
+                reset_settings();
+                break;
+            case S_EXIT:
+                exit = 1;
+                break;
+            default:
+                break;
             }
         }
     }
