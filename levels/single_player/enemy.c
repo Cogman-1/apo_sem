@@ -96,21 +96,21 @@ void draw_enemy(Enemy* enemy, Camera* cam, const Sprite* sprite, lcdpixel* fb)
     draw_sprite_centered(fb, enemy_center, sprite);
 }
 
-void deal_knockback_enemy(Enemy* enemy, Vertex_2D from)
+void deal_knockback_enemy(Enemy* enemy, Vertex_2D from, float multiplier)
 {
     int dx = enemy->x - from.x;
     int dy = enemy->y - from.y;
     float length = sqrtf(dx * dx + dy * dy);
     // prevent division by zero
     if (length > 0.001f) {
-        enemy->kvx = (dx / length) * ENEMY_KNOCKBACK_GAIN;
-        enemy->kvy = (dy / length) * ENEMY_KNOCKBACK_GAIN;
-        enemy->stun_frames = ENEMY_STUN_GAIN;
+        enemy->kvx = (dx / length) * ENEMY_KNOCKBACK_GAIN * multiplier;
+        enemy->kvy = (dy / length) * ENEMY_KNOCKBACK_GAIN * multiplier;
+        enemy->stun_frames = ENEMY_STUN_GAIN * multiplier;
     }
 }
 
 void deal_damage_enemy(Enemy* enemy, Projectile* projectile)
 {
     enemy->health -= projectile->damage;
-    deal_knockback_enemy(enemy, (Vertex_2D){projectile->x, projectile->y});
+    deal_knockback_enemy(enemy, (Vertex_2D){projectile->x, projectile->y}, 1.0);
 }

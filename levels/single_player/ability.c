@@ -4,6 +4,7 @@
 #include "const.h"
 #include "player.h"
 #include "single_player.h"
+#include "enemy.h"
 
 #include <math.h>
 #include <stdint.h>
@@ -37,7 +38,10 @@ void damage_all(void* gs)
     GameState* game_state = (GameState*)gs;
     for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
         if (game_state->enemies[i].active)
+        {
             game_state->enemies[i].health -= 5;
+            deal_knockback_enemy(&game_state->enemies[i], (Vertex_2D){game_state->player.x, game_state->player.y}, 16.0);
+        }
     }
     set_effect(ABILITY);
 }

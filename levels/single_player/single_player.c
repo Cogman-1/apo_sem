@@ -275,7 +275,7 @@ int single_player(mzapo_state* hw_state)
                 if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
                                   game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT)) {
                     take_damage(&game_state.player, &game_state.enemies[i]);
-                    deal_knockback_enemy(&game_state.enemies[i], (Vertex_2D){game_state.player.x, game_state.player.y});
+                    deal_knockback_enemy(&game_state.enemies[i], (Vertex_2D){game_state.player.x, game_state.player.y}, 1.0);
                 }
             }
         }
