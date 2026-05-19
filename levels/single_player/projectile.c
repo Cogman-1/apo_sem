@@ -75,7 +75,7 @@ void draw_projectile(Projectile* projectile, Camera* camera, lcdpixel* fb, Sprit
             direction = 3;
     } else {
         if (projectile->vx > 0)
-            direction = 1;
+            direction = 0;
         else
             direction = 2;
     }
