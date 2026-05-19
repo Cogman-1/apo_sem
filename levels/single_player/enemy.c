@@ -36,17 +36,23 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
             }
         }
 
-        enemy->x += (enemy->vx + enemy->kvx) * dt;
-        enemy->y += (enemy->vy + enemy->kvy) * dt;
+        enemy->x += enemy->vx * dt;
+        enemy->y += enemy->vy * dt;
 
-        // knockback friction
-        enemy->kvx *= ENEMY_KNOCKBACK_FRICTION;
-        enemy->kvy *= ENEMY_KNOCKBACK_FRICTION;
-        if (fabsf(enemy->kvx) < 0.001f)
-            enemy->kvx = 0;
-        if (fabsf(enemy->kvy) < 0.001f)
-            enemy->kvy = 0;
     }
+
+    enemy->x += enemy->kvx * dt;
+    enemy->y += enemy->kvy * dt;
+
+    // knockback friction
+    enemy->kvx *= ENEMY_KNOCKBACK_FRICTION;
+    enemy->kvy *= ENEMY_KNOCKBACK_FRICTION;
+    if (fabsf(enemy->kvx) < 0.001f)
+        enemy->kvx = 0;
+    if (fabsf(enemy->kvy) < 0.001f)
+        enemy->kvy = 0;
+
+    
     // stun decay
     if (enemy->stun_frames >= 0) {
         enemy->stun_frames--;
