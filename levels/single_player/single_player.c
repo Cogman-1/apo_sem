@@ -162,6 +162,10 @@ int single_player(mzapo_state* hw_state)
         if (k.gdown) {
             int p_ret = pause(hw_state, fb);
             reset_dt_timer();
+
+            //calibrate again knobs to account for the movement in menu
+            knobs_state_init(ks, knobs_read(hw_state));
+
             if (p_ret == P_EXIT_MAIN_MENU) {
                 exit = 1;
             }
@@ -189,6 +193,7 @@ int single_player(mzapo_state* hw_state)
         // check if player has enough Score to level up
         if (game_state.player.playerScore >= game_state.player.requiredScore) {
             level(hw_state, fb, &game_state.player);
+            knobs_state_init(ks, knobs_read(hw_state));
             reset_dt_timer();
         }
         // update animations for player
