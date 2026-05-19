@@ -9,8 +9,8 @@
 #include "arrow.c"
 #include "bg.c"
 #include "cog.c"
-#include "explode.c"
 #include "desert.c"
+#include "explode.c"
 
 #include "controls_bckg.c"
 #include "knob_blue.c"

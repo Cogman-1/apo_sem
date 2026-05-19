@@ -38,7 +38,6 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
 
         enemy->x += enemy->vx * dt;
         enemy->y += enemy->vy * dt;
-
     }
 
     enemy->x += enemy->kvx * dt;
@@ -52,7 +51,6 @@ void update_enemy(Enemy* enemy, Player* player, int* enemy_count, float dt)
     if (fabsf(enemy->kvy) < 0.001f)
         enemy->kvy = 0;
 
-    
     // stun decay
     if (enemy->stun_frames >= 0) {
         enemy->stun_frames--;

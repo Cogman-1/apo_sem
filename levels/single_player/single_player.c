@@ -257,7 +257,22 @@ int single_player(mzapo_state* hw_state)
         }
         if (settings->diff == EASY)
             game_state.enemy_spawn_cooldown += EASY_DIFF_ENEMY_SPAWN_COOLDOWN_INCREASE;
-
+        // check for collisions enemy vs enemy to prevent clumping
+        for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
+            for (int j = 0; j < MAX_ENEMY_COUNT; j++) {
+                if (i != j && game_state.enemies[i].active && game_state.enemies[j].active) {
+                    if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
+                                      game_state.enemies[j].x, game_state.enemies[j].y, ENEMY_WIDTH, ENEMY_HEIGHT)) {
+                        deal_knockback_enemy(&game_state.enemies[i],
+                                             (Vertex_2D){game_state.enemies[j].x, game_state.enemies[j].y},
+                                             ENEMY_REPULSION_MODIFIER);
+                        deal_knockback_enemy(&game_state.enemies[j],
+                                             (Vertex_2D){game_state.enemies[i].x, game_state.enemies[i].y},
+                                             ENEMY_REPULSION_MODIFIER);
+                    }
+                }
+            }
+        }
         // update enemies
         for (int i = 0; i < MAX_ENEMY_COUNT; i++) {
             if (game_state.enemies[i].active) {
@@ -275,7 +290,8 @@ int single_player(mzapo_state* hw_state)
                 if (AABBCollision(game_state.enemies[i].x, game_state.enemies[i].y, ENEMY_WIDTH, ENEMY_HEIGHT,
                                   game_state.player.x, game_state.player.y, PLAYER_WIDTH, PLAYER_HEIGHT)) {
                     take_damage(&game_state.player, &game_state.enemies[i]);
-                    deal_knockback_enemy(&game_state.enemies[i], (Vertex_2D){game_state.player.x, game_state.player.y}, 1.0);
+                    deal_knockback_enemy(&game_state.enemies[i], (Vertex_2D){game_state.player.x, game_state.player.y},
+                                         1.0);
                 }
             }
         }
