@@ -10,6 +10,7 @@
 #include "bg.c"
 #include "cog.c"
 #include "explode.c"
+#include "desert.c"
 
 #include "controls_bckg.c"
 #include "knob_blue.c"
@@ -92,6 +93,7 @@ static Sprite knob_red_sprite = FRAME_TO_SPRITE(knob_red_icon);
 static Sprite knob_green_sprite = FRAME_TO_SPRITE(knob_green_icon);
 static Sprite knob_blue_sprite = FRAME_TO_SPRITE(knob_blue_icon);
 static Sprite explosion_sprite = FRAME_TO_SPRITE(explosion_icon);
+static Sprite desert_sprite = FRAME_TO_SPRITE(desert);
 Sprite arrow_sprite1;
 Sprite arrow_sprite2;
 Sprite arrow_sprite3;
@@ -246,7 +248,7 @@ Sprite* sprite_animator_current_frame(const SpriteAnimator* animator)
 
 Sprite* get_bg_sprite()
 {
-    return &bg_sprite;
+    return &desert_sprite;
 }
 
 Sprite* get_arrow_sprites()
