@@ -40,7 +40,7 @@ void damage_all(void* gs)
         if (game_state->enemies[i].active)
         {
             game_state->enemies[i].health -= 5;
-            deal_knockback_enemy(&game_state->enemies[i], (Vertex_2D){game_state->player.x, game_state->player.y}, 16.0);
+            deal_knockback_enemy(&game_state->enemies[i], (Vertex_2D){game_state->player.x, game_state->player.y}, 4.0);
         }
     }
     set_effect(ABILITY);
