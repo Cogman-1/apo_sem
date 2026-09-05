@@ -1,4 +1,10 @@
-# apo_sem
+# Apo Survivor
+
+This project was made as a semestral project and developed for MicroZed Evaluation Kit - [https://cw.fel.cvut.cz/wiki/courses/b35apo/documentation/mz_apo/start](mzapo). The assignment was to create an application that interacts with Memory-Mapped I/O-
+
+## Credits
+
+The project was developed by Jan Kolář and Dan Šuman.
 
 ## Make
 
